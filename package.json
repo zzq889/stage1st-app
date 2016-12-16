@@ -1,22 +1,21 @@
 {
   "name": "Stage1st",
-  "author": "Futurice",
-  "description": "React Native App Starter Kit for Android and iOS",
+  "author": "MixSlice",
+  "description": "Stage1st Official App written in React Native",
   "license": "MIT",
-  "homepage": "http://getpepperoni.com",
-  "bugs": "https://github.com/futurice/pepperoni-app-kit/issues",
+  "homepage": "http://saraba1st.com",
+  "bugs": "https://github.com/mixslice/stage1st-app/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/futurice/pepperoni-app-kit"
+    "url": "https://github.com/mixslice/stage1st-app"
   },
   "keywords": [
     "React Native",
-    "Starter Kit",
     "Bitrise",
     "Redux"
   ],
   "version": "1.0.0",
-  "private": false,
+  "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "bundle:ios": "node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.ios.js --bundle-output ios/Stage1st/main.jsbundle --dev=false --minify --verbose",
