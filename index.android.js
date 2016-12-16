@@ -43,6 +43,4 @@ class Stage1st extends Component {
   }
 }
 
-const WrapperApp = codePush(Stage1st);
-
-AppRegistry.registerComponent('Stage1st', () => WrapperApp);
+AppRegistry.registerComponent('Stage1st', () => codePush(Stage1st));
