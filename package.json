@@ -1,5 +1,5 @@
 {
-  "name": "DemoApp",
+  "name": "Stage1st",
   "author": "Futurice",
   "description": "React Native App Starter Kit for Android and iOS",
   "license": "MIT",
@@ -19,7 +19,7 @@
   "private": false,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "bundle:ios": "node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.ios.js --bundle-output ios/DemoApp/main.jsbundle --dev=false --minify --verbose",
+    "bundle:ios": "node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.ios.js --bundle-output ios/Stage1st/main.jsbundle --dev=false --minify --verbose",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint src test",

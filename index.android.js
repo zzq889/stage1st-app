@@ -7,7 +7,7 @@ import store from './src/redux/store';
 import AppViewContainer from './src/modules/AppViewContainer';
 import * as NavigationStateActions from './src/modules/navigation/NavigationState';
 
-class DemoApp extends Component {
+class Stage1st extends Component {
   componentWillMount() {
     BackAndroid.addEventListener('hardwareBackPress', this.navigateBack);
   }
@@ -43,6 +43,6 @@ class DemoApp extends Component {
   }
 }
 
-const WrapperApp = codePush(DemoApp);
+const WrapperApp = codePush(Stage1st);
 
-AppRegistry.registerComponent('DemoApp', () => WrapperApp);
+AppRegistry.registerComponent('Stage1st', () => WrapperApp);

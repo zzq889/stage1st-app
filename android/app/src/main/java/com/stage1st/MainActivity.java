@@ -1,4 +1,4 @@
-package com.demoapp;
+package com.stage1st;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "DemoApp";
+        return "Stage1st";
     }
 }

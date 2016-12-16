@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-oldAppName=DemoApp
+oldAppName=Stage1st
 oldLowerCaseName=`echo $oldAppName | tr '[:upper:]' '[:lower:]'`
 newAppName=$1
 newLowerCaseName=`echo $newAppName | tr '[:upper:]' '[:lower:]'`

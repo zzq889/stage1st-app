@@ -1,4 +1,4 @@
-package com.demoapp;
+package com.stage1st;
 
 import android.app.Application;
 import android.util.Log;

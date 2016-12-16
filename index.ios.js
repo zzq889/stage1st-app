@@ -5,10 +5,10 @@ import codePush from 'react-native-code-push';
 import store from './src/redux/store';
 import AppViewContainer from './src/modules/AppViewContainer';
 
-const DemoApp = codePush(() => (
+const Stage1st = codePush(() => (
   <Provider store={store}>
     <AppViewContainer />
   </Provider>
 ));
 
-AppRegistry.registerComponent('DemoApp', () => DemoApp);
+AppRegistry.registerComponent('Stage1st', () => Stage1st);

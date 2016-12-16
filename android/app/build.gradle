@@ -88,7 +88,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.demoapp"
+        applicationId "com.stage1st"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
