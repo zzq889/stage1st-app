@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+oldAppName=DemoApp
+oldLowerCaseName=`echo $oldAppName | tr '[:upper:]' '[:lower:]'`
 newAppName=$1
 newLowerCaseName=`echo $newAppName | tr '[:upper:]' '[:lower:]'`
 
@@ -8,12 +10,12 @@ appRoot=`dirname $0`/..
 [ -z "${newAppName}" ] && echo 'Missing required parameter newAppName' && exit 1
 
 # gather all modification targets
-filesToModify=$(grep -riIl 'demoapp' --exclude='rename.sh' $appRoot/*)
-filesToRename=$(find "${appRoot}/ios" "${appRoot}/android" -type f -ipath '*demoapp*')
+filesToModify=$(grep -riIl "$oldLowerCaseName" --exclude='rename.sh' $appRoot/*)
+filesToRename=$(find "${appRoot}/ios" "${appRoot}/android" -type f -ipath "*${oldLowerCaseName}*")
 
 # replace strings in files
 for fileToModify in $filesToModify; do
-  sed -i.bak "s/DemoApp/${newAppName}/g;s/demoapp/${newLowerCaseName}/g" $fileToModify
+  sed -i.bak "s/${oldAppName}/${newAppName}/g;s/${oldLowerCaseName}/${newLowerCaseName}/g" $fileToModify
 done
 find "${appRoot}" -name '*.bak' -exec rm {} \;
 
@@ -26,12 +28,12 @@ else
 fi
 
 for fileToRename in $filesToRename; do
-  newName=$(echo $fileToRename | sed "s/DemoApp/$newAppName/g;s/demoapp/$newLowerCaseName/g")
+  newName=$(echo $fileToRename | sed "s/$oldAppName/$newAppName/g;s/$oldLowerCaseName/$newLowerCaseName/g")
   mkdir -p $(dirname "$newName") && $mvCmd "$fileToRename" "$newName"
 done
 
 # remove leftover empty directories
-rmdir -p $(find "$appRoot" -ipath '*demoapp*' -type d) 2>/dev/null
+rmdir -p $(find "$appRoot" -ipath "*${oldLowerCaseName}*" -type d) 2>/dev/null
 
 YELLOW='\033[1;33m'
 CLEAR='\033[0m'
