@@ -19,46 +19,46 @@ const TabScreen = () => (
   <TabNavigation
     id="main"
     navigatorUID="main"
-    initialTab="home"
+    initialTab="threads"
     tabBarHeight={45}
   >
     <TabItem
-      id="home"
+      id="threads"
       renderIcon={isSelected => (isSelected
         ? <Icon name="ios-paper" size={30} color="#000" />
         : <Icon name="ios-paper-outline" size={30} color="#000" />)
       }
     >
       <StackNavigation
-        id="home"
+        id="threads"
         defaultRouteConfig={defaultRouteConfig.toJS()}
-        initialRoute={Router.getRoute('counter')}
+        initialRoute={Router.getRoute('threads')}
       />
     </TabItem>
 
     <TabItem
-      id="channel"
+      id="forums"
       renderIcon={isSelected => (isSelected
         ? <Icon name="ios-heart" size={30} color="#000" />
         : <Icon name="ios-heart-outline" size={30} color="#000" />)
       }
     >
       <StackNavigation
-        id="channel"
+        id="forums"
         defaultRouteConfig={defaultRouteConfig.toJS()}
-        initialRoute={Router.getRoute('color')}
+        initialRoute={Router.getRoute('forums')}
       />
     </TabItem>
 
     <TabItem
-      id="person"
+      id="personal"
       renderIcon={isSelected => (isSelected
         ? <Icon name="ios-person" size={35} color="#000" />
         : <Icon name="ios-person-outline" size={35} color="#000" />)
       }
     >
       <StackNavigation
-        id="person"
+        id="personal"
         defaultRouteConfig={defaultRouteConfig.toJS()}
         initialRoute={Router.getRoute('color')}
       />
