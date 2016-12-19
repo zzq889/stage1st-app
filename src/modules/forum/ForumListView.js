@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   View,
   ListView,
   StyleSheet,
 } from 'react-native';
 import { fromJS, is } from 'immutable';
-import * as ForumState from './ForumState';
-import Row from '../../components/ForumRow';
-
+import Router from '../AppRouter';
+// import * as ForumState from './ForumState';
+import Row from './ForumRow';
 
 const forums = fromJS([
   { id: 140, name: '页游S1官方联运', subscribed: true },
@@ -17,17 +17,10 @@ const forums = fromJS([
   { id: 111, name: '英雄联盟(LOL)', subscribed: false },
 ]);
 
-const renderRow = rowData => (
-  <Row
-    name={rowData.get('name')}
-    subscribed={rowData.get('subscribed')}
-  />
-);
-
 class ForumListView extends Component {
   static route = {
     navigationBar: {
-      title: 'Forums',
+      title: '论坛',
     },
   }
 
@@ -43,16 +36,33 @@ class ForumListView extends Component {
     };
   }
 
+  renderRow = (rowData, sectionID, rowID, highlightRow) => (
+    <Row
+      name={rowData.get('name')}
+      subscribed={rowData.get('subscribed')}
+      onPress={() => {
+        this.props.navigator.push(Router.getRoute('threads', { title: rowData.get('name') }));
+        highlightRow(sectionID, rowID);
+      }}
+    />
+  )
+
   render() {
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={renderRow}
+        renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       />
     );
   }
 }
+
+ForumListView.propTypes = {
+  navigator: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 const styles = StyleSheet.create({
   iconContainer: {

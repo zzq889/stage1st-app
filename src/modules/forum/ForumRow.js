@@ -4,24 +4,31 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const ForumRow = ({ name, subscribed }) => (
-  <View style={styles.row}>
-    <Text style={styles.title}>{name}</Text>
-    <TouchableOpacity style={styles.iconContainer}>
-      {subscribed
-        ? <Icon style={styles.icon} name="ios-heart" size={20} color="#f00" />
-        : <Icon style={styles.icon} name="ios-add" size={28} color="#000" />
-      }
-    </TouchableOpacity>
-  </View>
+const ForumRow = ({ name, subscribed, onPress }) => (
+  <TouchableHighlight
+    underlayColor="#ccc"
+    onPress={onPress}
+  >
+    <View style={styles.row} ref={(component) => { this._root = component; }} {...this.props}>
+      <Text style={styles.title}>{name}</Text>
+      <TouchableOpacity style={styles.iconContainer}>
+        {subscribed
+          ? <Icon style={styles.icon} name="ios-heart" size={20} color="#f00" />
+          : <Icon style={styles.icon} name="ios-add" size={28} color="#000" />
+        }
+      </TouchableOpacity>
+    </View>
+  </TouchableHighlight>
 );
 
 ForumRow.propTypes = {
   name: PropTypes.string.isRequired,
   subscribed: PropTypes.bool,
+  onPress: PropTypes.func.isRequired,
 };
 
 ForumRow.defaultProps = {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {
   View,
   ListView,
@@ -8,9 +8,9 @@ import {
 import { fromJS, is } from 'immutable';
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
-import * as ThreadState from './ThreadState';
-import Row from '../../components/ThreadRow';
-
+// import * as ThreadState from './ThreadState';
+import Row from './ThreadRow';
+import Router from '../AppRouter';
 
 const threads = fromJS([
   { subject: '我又来招人了，这次是直播主持和运营主管', author: 'snoopy', updatedAt: Moment.unix(1479378120) },
@@ -20,18 +20,10 @@ const threads = fromJS([
   { subject: '锤子公司濒临倒闭 - 被裁员工谈在锤子科技工作感受', author: 'dx2', updatedAt: Moment.unix(1478362692) },
 ]);
 
-const renderRow = rowData => (
-  <Row
-    subject={rowData.get('subject')}
-    author={rowData.get('author')}
-    updatedAt={rowData.get('updatedAt')}
-  />
-);
-
 class ThreadListView extends Component {
   static route = {
     navigationBar: {
-      title: 'Threads',
+      title: ({ title }) => title || 'Threads',
       renderRight: () => (
         <TouchableOpacity style={styles.iconContainer}>
           <Icon style={styles.icon} name="ios-create-outline" size={28} color="#fff" />
@@ -52,16 +44,36 @@ class ThreadListView extends Component {
     };
   }
 
+  renderRow = (rowData, sectionID, rowID, highlightRow) => (
+    <Row
+      subject={rowData.get('subject')}
+      author={rowData.get('author')}
+      updatedAt={rowData.get('updatedAt')}
+      onPress={() => {
+        this.props.navigator.push(Router.getRoute('posts', {
+          title: rowData.get('subject'),
+        }));
+        highlightRow(sectionID, rowID);
+      }}
+    />
+  )
+
   render() {
     return (
       <ListView
         dataSource={this.state.dataSource}
-        renderRow={renderRow}
+        renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       />
     );
   }
 }
+
+ThreadListView.propTypes = {
+  navigator: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 
 const styles = StyleSheet.create({
   iconContainer: {
