@@ -7,9 +7,15 @@ import {
   View,
 } from 'react-native';
 import * as CounterState from './CounterState';
-import * as NavigationState from '../../modules/navigation/NavigationState';
+import Router from '../AppRouter';
 
 class CounterView extends Component {
+  static route = {
+    navigationBar: {
+      title: 'Counter',
+    },
+  }
+
   increment = () => {
     this.props.dispatch(CounterState.increment());
   }
@@ -23,8 +29,8 @@ class CounterView extends Component {
   }
 
   bored = () => {
-    this.props.dispatch(NavigationState.pushRoute({
-      key: 'Color',
+    this.props.navigator.push(Router.getRoute('color', {
+      index: 0,
       title: 'Color Screen',
     }));
   }
@@ -98,6 +104,9 @@ CounterView.propTypes = {
   userName: PropTypes.string,
   userProfilePhoto: PropTypes.string,
   loading: PropTypes.bool.isRequired,
+  navigator: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

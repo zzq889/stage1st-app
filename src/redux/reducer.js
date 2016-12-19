@@ -1,6 +1,6 @@
 import { Map, fromJS } from 'immutable';
 import { loop, combineReducers } from 'redux-loop';
-import NavigationStateReducer from '../modules/navigation/NavigationState';
+import { NavigationReducer } from '@exponent/ex-navigation';
 import CounterStateReducer from '../modules/counter/CounterState';
 import SessionStateReducer, { RESET_STATE } from '../modules/session/SessionState';
 
@@ -9,8 +9,8 @@ const reducers = {
   counter: CounterStateReducer,
 
   // @NOTE: By convention, the navigation state must live in a subtree called
-  // `navigationState`
-  navigationState: NavigationStateReducer,
+  // `navigation`
+  navigation: NavigationReducer,
 
   session: SessionStateReducer,
 
