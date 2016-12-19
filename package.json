@@ -28,6 +28,7 @@
     "preset": "jest-react-native"
   },
   "dependencies": {
+    "@exponent/ex-navigation": "^2.3.0",
     "bluebird": "^3.3.5",
     "es6-symbol": "^3.0.2",
     "event-emitter": "^0.3.4",
@@ -52,7 +53,7 @@
     "babel-eslint": "^7.1.0",
     "babel-jest": "^17.0.2",
     "babel-polyfill": "^6.9.0",
-    "babel-preset-react-native": "^1.9.0",
+    "babel-preset-react-native-stage-0": "^1.0.1",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.9.0",
     "enzyme": "^2.2.0",

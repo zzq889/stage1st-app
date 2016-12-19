@@ -4,8 +4,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-
-import * as NavigationState from '../../modules/navigation/NavigationState';
+import Router from '../AppRouter';
 
 const color = () => Math.floor(255 * Math.random());
 
@@ -14,18 +13,20 @@ const color = () => Math.floor(255 * Math.random());
  * @TODO remove this module in a live application.
  */
 class ColorView extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      background: `rgba(${color()},${color()},${color()}, 1)`,
-    };
+  static route = {
+    navigationBar: {
+      title: ({ title }) => title,
+    },
   }
+
+  state = {
+    background: `rgba(${color()},${color()},${color()}, 1)`,
+  };
 
   onNextPress = () => {
     const index = this.props.index;
-    this.props.dispatch(NavigationState.pushRoute({
-      key: `Color_${index + 1}`,
+    this.props.navigator.push(Router.getRoute('color', {
+      index: index + 1,
       title: `Color Screen #${index + 1}`,
     }));
   }
@@ -45,7 +46,14 @@ class ColorView extends Component {
 
 ColorView.propTypes = {
   index: PropTypes.number.isRequired,
+  navigator: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   dispatch: PropTypes.func.isRequired,
+};
+
+ColorView.defaultProps = {
+  index: 0,
 };
 
 const styles = StyleSheet.create({
