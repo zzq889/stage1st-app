@@ -6,6 +6,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Moment from 'moment';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const ThreadRow = ({ subject, author, updatedAt, onPress }) => (
   <TouchableHighlight
@@ -15,8 +16,14 @@ const ThreadRow = ({ subject, author, updatedAt, onPress }) => (
     <View style={styles.row}>
       <Text style={styles.title}>{subject}</Text>
       <View style={styles.content}>
-        <Text style={styles.detail}>{author}</Text>
-        <Text style={styles.detail}>{Moment().from(updatedAt)}</Text>
+        <View style={styles.iconText}>
+          <Icon name="md-person" size={15} color="#888" />
+          <Text style={styles.detail}>{author}</Text>
+        </View>
+        <View style={styles.iconText}>
+          <Icon name="md-time" size={15} color="#888" />
+          <Text style={styles.detail}>{Moment().from(updatedAt)}</Text>
+        </View>
       </View>
     </View>
   </TouchableHighlight>
@@ -38,6 +45,12 @@ const styles = StyleSheet.create({
   },
   detail: {
     color: '#888',
+    marginLeft: 5,
+  },
+  iconText: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   content: {
     marginTop: 10,
