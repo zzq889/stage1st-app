@@ -15,7 +15,7 @@ const color = () => Math.floor(255 * Math.random());
 class ColorView extends Component {
   static route = {
     navigationBar: {
-      title: ({ title }) => title,
+      title: ({ title }) => title || 'Color Screen',
     },
   }
 
