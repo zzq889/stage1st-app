@@ -31,6 +31,14 @@ class ForumListView extends Component {
     this.props.loadForumPage();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!is(nextProps.forums, this.props.forums)) {
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(nextProps.forums),
+      });
+    }
+  }
+
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
