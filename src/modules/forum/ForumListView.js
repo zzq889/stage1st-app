@@ -31,7 +31,7 @@ class ForumListView extends Component {
     });
     // Shallow convert to a JS array, leaving immutable row data.
     this.state = {
-      dataSource: ds.cloneWithRows(forums.toArray()),
+      dataSource: ds.cloneWithRows(this.props.forums.toArray()),
     };
   }
 

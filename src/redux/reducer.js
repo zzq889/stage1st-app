@@ -1,6 +1,7 @@
-import { Map, fromJS } from 'immutable';
-import { loop, combineReducers } from 'redux-loop';
+import { fromJS } from 'immutable';
+import { loop } from 'redux-loop';
 import { NavigationReducer } from '@exponent/ex-navigation';
+import immutableReducers from '../utils/immutableReducers';
 import SessionStateReducer, { RESET_STATE } from '../modules/session/SessionState';
 import ErrorStateReducer from '../modules/error/ErrorState';
 import EntitiesStateReducer from '../modules/entities/EntitiesState';
@@ -20,17 +21,8 @@ const reducers = {
   counter: CounterStateReducer,
 };
 
-// initial state, accessor and mutator for supporting root-level
-// immutable data with redux-loop reducer combinator
-const immutableStateContainer = Map();
-const getImmutable = (child, key) => (child ? child.get(key) : undefined);
-const setImmutable = (child, key, value) => child.set(key, value);
-
-const namespacedReducer = combineReducers(
+const namespacedReducer = immutableReducers(
   reducers,
-  immutableStateContainer,
-  getImmutable,
-  setImmutable,
 );
 
 export default function mainReducer(state, action) {
