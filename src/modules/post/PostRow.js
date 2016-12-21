@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 15,
-    lineHeight: 15 * 1.25,
   },
   inline: {
     color: '#888',

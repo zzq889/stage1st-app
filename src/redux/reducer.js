@@ -1,32 +1,28 @@
-import { Map, fromJS } from 'immutable';
-import { loop, combineReducers } from 'redux-loop';
+import { fromJS } from 'immutable';
+import { loop } from 'redux-loop';
 import { NavigationReducer } from '@exponent/ex-navigation';
-import CounterStateReducer from '../modules/counter/CounterState';
+import immutableReducers from '../utils/immutableReducers';
 import SessionStateReducer, { RESET_STATE } from '../modules/session/SessionState';
+import ErrorStateReducer from '../modules/error/ErrorState';
+import EntitiesStateReducer from '../modules/entities/EntitiesState';
+import PaginationStateReducer from '../modules/pagination/PaginationState';
+import CounterStateReducer from '../modules/counter/CounterState';
 
 const reducers = {
-  // Counter sample app state. This can be removed in a live application
-  counter: CounterStateReducer,
-
   // @NOTE: By convention, the navigation state must live in a subtree called
   // `navigation`
   navigation: NavigationReducer,
-
   session: SessionStateReducer,
+  errorMessage: ErrorStateReducer,
+  entities: EntitiesStateReducer,
+  pagination: PaginationStateReducer,
 
+  // others
+  counter: CounterStateReducer,
 };
 
-// initial state, accessor and mutator for supporting root-level
-// immutable data with redux-loop reducer combinator
-const immutableStateContainer = Map();
-const getImmutable = (child, key) => (child ? child.get(key) : undefined);
-const setImmutable = (child, key, value) => child.set(key, value);
-
-const namespacedReducer = combineReducers(
+const namespacedReducer = immutableReducers(
   reducers,
-  immutableStateContainer,
-  getImmutable,
-  setImmutable,
 );
 
 export default function mainReducer(state, action) {

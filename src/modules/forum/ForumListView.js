@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import { fromJS, is } from 'immutable';
 import Router from '../AppRouter';
-// import * as ForumState from './ForumState';
 import Row from './ForumRow';
 
 const forums = fromJS([
@@ -32,8 +31,12 @@ class ForumListView extends Component {
     });
     // Shallow convert to a JS array, leaving immutable row data.
     this.state = {
-      dataSource: ds.cloneWithRows(forums.toArray()),
+      dataSource: ds.cloneWithRows(this.props.forums.toArray()),
     };
+  }
+
+  componentWillMount() {
+    this.props.loadForumPage();
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
@@ -62,6 +65,7 @@ ForumListView.propTypes = {
   navigator: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  loadForumPage: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
