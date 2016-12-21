@@ -1,13 +1,17 @@
 import React, { Component, PropTypes } from 'react';
+import { withNavigation } from '@exponent/ex-navigation';
 import {
   View,
-  ListView,
   StyleSheet,
 } from 'react-native';
-import { List, is } from 'immutable';
+import ImmutableListView from 'react-native-immutable-list-view';
+import { List } from 'immutable';
+
+// import ImmutableDataSource from '../../components/ImmutableDataSource';
 import Router from '../AppRouter';
 import Row from './ForumRow';
 
+@withNavigation
 class ForumListView extends Component {
   static route = {
     navigationBar: {
@@ -15,34 +19,14 @@ class ForumListView extends Component {
     },
   }
 
-  constructor(props, context) {
-    super(props, context);
-
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => !is(r1, r2),
-    });
-    // Shallow convert to a JS array, leaving immutable row data.
-    this.state = {
-      dataSource: ds.cloneWithRows(props.forums.toArray()),
-    };
-  }
-
   componentWillMount() {
     this.props.loadForumPage();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!is(nextProps.forums, this.props.forums)) {
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(nextProps.forums),
-      });
-    }
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
-      subscribed={rowData.get('subscribed')}
+      // subscribed={rowData.get('subscribed')}
       onPress={() => {
         this.props.navigator.push(Router.getRoute('threads', { title: rowData.get('name') }));
         highlightRow(sectionID, rowID);
@@ -52,8 +36,8 @@ class ForumListView extends Component {
 
   render() {
     return (
-      <ListView
-        dataSource={this.state.dataSource}
+      <ImmutableListView
+        immutableData={this.props.forums}
         renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         enableEmptySections

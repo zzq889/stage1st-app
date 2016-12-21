@@ -1,5 +1,5 @@
-import { NavigationReducer } from '@exponent/ex-navigation';
 import { combineReducers } from 'redux-immutable';
+import { NavigationReducer } from '@exponent/ex-navigation';
 import ErrorStateReducer from '../modules/error/ErrorState';
 import EntitiesStateReducer from '../modules/entities/EntitiesState';
 import PaginationStateReducer from '../modules/pagination/PaginationState';
