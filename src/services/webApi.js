@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
-// import * as api from '../utils/api';
+import { put, call } from 'redux-saga/effects';
 import * as Schemas from './schema';
 
 // Extracts the next page URL from Github API response.
@@ -48,6 +48,22 @@ function callApi(endpoint, schema) {
       error => ({ error: error.message || 'Something bad happened' }),
     );
 }
+
+// resuable fetch Subroutine
+// entity :  user | repo | starred | stargazers
+// apiFn  : api.fetchUser | api.fetchRepo | ...
+// id     : login | fullName
+// url    : next page url. If not provided will use pass it to apiFn
+export function* fetchEntity(entity, apiFn, id, url) {
+  yield put(entity.request(id));
+  const { response, error } = yield call(apiFn, url || id);
+  if (response) {
+    yield put(entity.success(id, response));
+  } else {
+    yield put(entity.failure(id, error));
+  }
+}
+
 
 // api services
 export const fetchForums = (fid) => {

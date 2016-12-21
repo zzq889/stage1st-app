@@ -60,7 +60,7 @@ const TabScreen = () => (
       <StackNavigation
         id="personal"
         defaultRouteConfig={defaultRouteConfig.toJS()}
-        initialRoute={Router.getRoute('counter')}
+        initialRoute={Router.getRoute('color')}
       />
     </TabItem>
   </TabNavigation>

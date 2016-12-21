@@ -1,9 +1,9 @@
 import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
+  fetchEntity,
   fetchForums as apifetchForums,
 } from '../../services/webApi';
-import { fetchEntity } from '../../utils/sagaHelper';
 
 // Actions
 export const FORUM = createRequestTypes('FORUM');
