@@ -51,6 +51,7 @@
     "redux-logger": "^2.6.1",
     "redux-persist-immutable": "^4.2.0",
     "redux-saga": "^0.13.0",
+    "remote-redux-devtools": "^0.5.7",
     "standard-http-error": "^2.0.0"
   },
   "devDependencies": {
@@ -75,7 +76,6 @@
     "react-addons-test-utils": "~15.3.2",
     "react-native-mock": "~0.2.5",
     "react-test-renderer": "~15.3.2",
-    "remote-redux-devtools": "^0.5.7",
     "remote-redux-devtools-on-debugger": "^0.7.0",
     "rimraf": "^2.5.2"
   }

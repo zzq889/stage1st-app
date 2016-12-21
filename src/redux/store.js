@@ -1,4 +1,4 @@
-/* eslint-disable global-require, import/no-extraneous-dependencies */
+/* eslint-disable global-require */
 
 import { applyMiddleware, createStore } from 'redux';
 import { Map } from 'immutable';
@@ -7,12 +7,12 @@ import { createNavigationEnabledStore } from '@exponent/ex-navigation';
 import createSagaMiddleware, { END } from 'redux-saga';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import { AsyncStorage } from 'react-native';
-import middleware from '../middleware';
-import reducer from '../reducer';
-import rootSaga from '../sagas';
+import middleware from './middleware';
+import reducer from './reducer';
+import rootSaga from './sagas';
 
 const sagaMiddleware = createSagaMiddleware();
-const composeEnhancers = composeWithDevTools({ realtime: true, port: 5678 });
+const composeEnhancers = composeWithDevTools({ realtime: __DEV__, port: 5678 });
 const enhancer = composeEnhancers(
   autoRehydrate(),
   applyMiddleware(sagaMiddleware, ...middleware),
@@ -32,8 +32,8 @@ const store = createStoreWithNavigation(
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('../reducer', () => {
-    const nextRootReducer = require('../reducer').default;
+  module.hot.accept('./reducer', () => {
+    const nextRootReducer = require('./reducer').default;
     store.replaceReducer(nextRootReducer);
   });
 }
@@ -41,7 +41,7 @@ if (module.hot) {
 store.close = () => store.dispatch(END);
 sagaMiddleware.run(rootSaga);
 
-persistStore(store, {
+export const persistor = persistStore(store, {
   storage: AsyncStorage,
 });
 
