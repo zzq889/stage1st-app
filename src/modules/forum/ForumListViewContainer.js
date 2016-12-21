@@ -1,12 +1,15 @@
 import { connect } from 'react-redux';
+import { List } from 'immutable';
 import ForumListView from './ForumListView';
 import { loadForumPage } from './ForumState';
 
 export default connect(
   (state) => {
-    const forumIds = state.getIn(['pagination', 'forumsByFid', 'root', 'ids'], []);
-    const forumEntities = state.getIn(['entities', 'forums'], {});
-    const forums = forumIds.map(fid => forumEntities.get(String(fid)));
+    const forums = state
+      .getIn(['pagination', 'forumsByFid', 'root', 'ids'], List())
+      .map(fid => state.getIn(['entities', 'forums', String(fid)]))
+      .toList();
+
     return { forums };
   }, {
     loadForumPage,
