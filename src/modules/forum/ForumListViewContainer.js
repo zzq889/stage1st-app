@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
 import ForumListView from './ForumListView';
 import { loadForumPage } from './ForumState';
 
