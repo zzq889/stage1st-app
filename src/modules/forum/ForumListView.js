@@ -6,7 +6,6 @@ import {
 } from 'react-native';
 import { fromJS, is } from 'immutable';
 import Router from '../AppRouter';
-// import * as ForumState from './ForumState';
 import Row from './ForumRow';
 
 const forums = fromJS([
@@ -36,6 +35,10 @@ class ForumListView extends Component {
     };
   }
 
+  componentWillMount() {
+    this.props.loadForumPage();
+  }
+
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
@@ -62,6 +65,7 @@ ForumListView.propTypes = {
   navigator: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  loadForumPage: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

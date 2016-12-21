@@ -1,13 +1,14 @@
-import { applyMiddleware, createStore, compose } from 'redux';
-import * as reduxLoop from 'redux-loop';
-import { createNavigationEnabledStore } from '@exponent/ex-navigation';
+/* eslint-disable global-require */
 
-import middleware from './middleware';
-import reducer from './reducer';
+import { applyMiddleware, createStore, compose } from 'redux';
+import { createNavigationEnabledStore } from '@exponent/ex-navigation';
+import { install as installReduxLoop } from 'redux-loop';
+import middleware from '../middleware';
+import reducer from '../reducer';
 
 const enhancer = compose(
   applyMiddleware(...middleware),
-  reduxLoop.install(),
+  installReduxLoop(),
 );
 
 const createStoreWithNavigation = createNavigationEnabledStore({

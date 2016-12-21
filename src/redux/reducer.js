@@ -1,19 +1,24 @@
 import { Map, fromJS } from 'immutable';
 import { loop, combineReducers } from 'redux-loop';
 import { NavigationReducer } from '@exponent/ex-navigation';
-import CounterStateReducer from '../modules/counter/CounterState';
 import SessionStateReducer, { RESET_STATE } from '../modules/session/SessionState';
+import ErrorStateReducer from '../modules/error/ErrorState';
+import EntitiesStateReducer from '../modules/entities/EntitiesState';
+import PaginationStateReducer from '../modules/pagination/PaginationState';
+import ForumStateReducer from '../modules/forum/ForumState';
+import CounterStateReducer from '../modules/counter/CounterState';
 
 const reducers = {
-  // Counter sample app state. This can be removed in a live application
-  counter: CounterStateReducer,
-
   // @NOTE: By convention, the navigation state must live in a subtree called
   // `navigation`
   navigation: NavigationReducer,
-
   session: SessionStateReducer,
+  errorMessage: ErrorStateReducer,
+  entities: EntitiesStateReducer,
+  pagination: PaginationStateReducer,
 
+  forum: ForumStateReducer,
+  counter: CounterStateReducer,
 };
 
 // initial state, accessor and mutator for supporting root-level

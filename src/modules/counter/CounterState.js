@@ -29,7 +29,7 @@ export function random() {
   };
 }
 
-export async function requestRandomNumber() {
+async function requestRandomNumber() {
   return {
     type: RANDOM_RESPONSE,
     payload: await generateRandomNumber(),
