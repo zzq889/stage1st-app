@@ -5,7 +5,6 @@ import SessionStateReducer, { RESET_STATE } from '../modules/session/SessionStat
 import ErrorStateReducer from '../modules/error/ErrorState';
 import EntitiesStateReducer from '../modules/entities/EntitiesState';
 import PaginationStateReducer from '../modules/pagination/PaginationState';
-import ForumStateReducer from '../modules/forum/ForumState';
 import CounterStateReducer from '../modules/counter/CounterState';
 
 const reducers = {
@@ -17,7 +16,7 @@ const reducers = {
   entities: EntitiesStateReducer,
   pagination: PaginationStateReducer,
 
-  forum: ForumStateReducer,
+  // others
   counter: CounterStateReducer,
 };
 

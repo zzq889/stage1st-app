@@ -1,47 +1,38 @@
-import { Map } from 'immutable';
-import { loop, Effects } from 'redux-loop';
+import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchForums as apifetchForums,
 } from '../../services/webApi';
+import { fetchEntity } from '../../utils/sagaHelper';
 
-// Initial state
-const initialState = Map();
-
+// Actions
 export const FORUM = createRequestTypes('FORUM');
-export const LOAD_FORUM_PAGE = 'ForumState/LOAD_FORUM_PAGE';
-
 export const forum = {
-  request: fid => createAction(FORUM.REQUEST, fid),
+  request: fid => createAction(FORUM.REQUEST, { fid }),
   success: (fid, response) => createAction(FORUM.SUCCESS, { fid, response }),
   failure: (fid, error) => createAction(FORUM.FAILURE, { fid, error }),
 };
 
-export const loadForumPage = (fid, requiredFields = []) =>
+export const LOAD_FORUM_PAGE = 'ForumState/LOAD_FORUM_PAGE';
+export const loadForumPage = (fid = 'root', requiredFields = []) =>
   createAction(LOAD_FORUM_PAGE, { fid, requiredFields });
 
-// Reducer
-async function fetchEntity(entity, apiFn, id, url) {
-  Effects.constant(entity.request(id));
-  const { response, error } = await apiFn(id || url);
-  if (response) {
-    return Effects.constant(entity.success(id, response));
+// Saga
+const fetchForums = fetchEntity.bind(null, forum, apifetchForums);
+const getForums = (state, fid) => state.getIn(['pagination', 'forumsByFid', fid]);
+
+// load repo unless it is cached
+function* loadForums(fid, requiredFields) {
+  const forums = yield select(getForums, fid);
+  if (!forums || requiredFields.some(key => !Object.prototype.hasOwnProperty.call(forum, key))) {
+    yield call(fetchForums, fid);
   }
-  console.warn(error);
-  return Effects.constant(entity.failure(id, error));
 }
 
-const fetchForums = fetchEntity.bind(null, forum, apifetchForums);
-
-export default function ForumStateReducer(state = initialState, action = {}) {
-  switch (action.type) {
-    case LOAD_FORUM_PAGE:
-      return loop(
-        state,
-        Effects.promise(fetchForums, action.fid),
-      );
-
-    default:
-      return state;
+// Fetches forum list
+export function* watchLoadForumPage() {
+  while (true) {
+    const { fid, requiredFields = [] } = yield take(LOAD_FORUM_PAGE);
+    yield fork(loadForums, fid, requiredFields);
   }
 }

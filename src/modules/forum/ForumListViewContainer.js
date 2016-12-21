@@ -4,9 +4,9 @@ import { loadForumPage } from './ForumState';
 
 export default connect(
   (state) => {
-    const forumIds = state.getIn(['pagination', 'forumsByFid'], []);
+    const forumIds = state.getIn(['pagination', 'forumsByFid', 'root', 'ids'], []);
     const forumEntities = state.getIn(['entities', 'forums'], {});
-    const forums = forumIds.map(fid => forumEntities[fid]);
+    const forums = forumIds.map(fid => forumEntities.get(fid));
     return { forums };
   }, {
     loadForumPage,

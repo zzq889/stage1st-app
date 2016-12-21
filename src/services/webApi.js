@@ -30,15 +30,16 @@ function callApi(endpoint, schema) {
       response.json().then(json => ({ json, response })),
     )
     .then(({ json, response }) => {
-      if (!response.ok) {
+      if (!response.ok || !json.success) {
         return Promise.reject(json);
       }
 
       const camelizedJson = camelizeKeys(json);
       const nextPageUrl = getNextPageUrl(response);
+      const normalizedJson = normalize(camelizedJson.data, schema);
 
       return {
-        ...normalize(camelizedJson, schema),
+        ...normalizedJson,
         nextPageUrl,
       };
     })
@@ -50,6 +51,6 @@ function callApi(endpoint, schema) {
 
 // api services
 export const fetchForums = (fid) => {
-  const url = fid ? `forum?fid=${fid}` : 'forum/all';
-  return callApi(url, Schemas.forumSchema);
+  const url = fid === 'root' ? 'forum/all' : `forum?fid=${fid}`;
+  return callApi(url, Schemas.forumSchemaArray);
 };
