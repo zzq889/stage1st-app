@@ -33,6 +33,7 @@
     "bluebird": "^3.3.5",
     "es6-symbol": "^3.0.2",
     "event-emitter": "^0.3.4",
+    "hoist-non-react-statics": "^1.2.0",
     "humps": "^2.0.0",
     "immutable": "^3.7.6",
     "lodash": "^4.11.0",
