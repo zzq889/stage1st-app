@@ -7,7 +7,7 @@ import PaginationStateReducer from '../modules/pagination/PaginationState';
 export default combineReducers({
   // @NOTE: By convention, the navigation state must live in a subtree called
   // `navigation`
-  // navigation: NavigationReducer,
+  navigation: NavigationReducer,
   errorMessage: ErrorStateReducer,
   entities: EntitiesStateReducer,
   pagination: PaginationStateReducer,

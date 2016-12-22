@@ -57,7 +57,7 @@ export function* fetchEntity(entity, apiFn, id, url) {
     yield put(entity.success(id, response));
   } catch (error) {
     const message = error.message || 'Something bad happened';
-    console.warn(message);
+    // console.warn(message);
     yield put(entity.failure(id, message));
   }
 }

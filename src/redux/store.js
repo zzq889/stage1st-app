@@ -14,7 +14,7 @@ import rootSaga from './sagas';
 const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = composeWithDevTools({ realtime: __DEV__, port: 5678 });
 const enhancer = composeEnhancers(
-  // autoRehydrate(),
+  autoRehydrate(),
   applyMiddleware(sagaMiddleware, ...middleware),
 );
 
@@ -43,6 +43,7 @@ sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store, {
   storage: AsyncStorage,
+  blacklist: ['errorMessage', 'navigation'],
 });
 
 export default store;

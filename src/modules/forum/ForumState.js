@@ -19,12 +19,13 @@ export const loadForumPage = (fid = 'root', requiredFields = []) =>
 
 // Saga
 const fetchForums = fetchEntity.bind(null, forum, apifetchForums);
-const getForums = (state, fid) => state.getIn(['pagination', 'forumsByFid', fid]);
+const getForums = (state, fid) =>
+  state.getIn(['pagination', 'forumsByFid', fid]);
 
 // load repo unless it is cached
 function* loadForums(fid, requiredFields) {
   const forums = yield select(getForums, fid);
-  if (!forums || requiredFields.some(key => !Object.prototype.hasOwnProperty.call(forum, key))) {
+  if (!forums || !forums.get('ids').size || requiredFields.some(key => !forums.has(key))) {
     yield call(fetchForums, fid);
   }
 }
