@@ -6,11 +6,13 @@ import {
 } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { List } from 'immutable';
+import withMessage from '../../components/withMessage';
 
 // import ImmutableDataSource from '../../components/ImmutableDataSource';
 import Router from '../AppRouter';
 import Row from './ForumRow';
 
+@withMessage
 @withNavigation
 class ForumListView extends Component {
   static route = {

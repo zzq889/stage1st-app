@@ -42,11 +42,7 @@ function callApi(endpoint, schema) {
         ...normalizedJson,
         nextPageUrl,
       };
-    })
-    .then(
-      response => ({ response }),
-      error => ({ error: error.message || 'Something bad happened' }),
-    );
+    });
 }
 
 // resuable fetch Subroutine
@@ -55,18 +51,20 @@ function callApi(endpoint, schema) {
 // id     : login | fullName
 // url    : next page url. If not provided will use pass it to apiFn
 export function* fetchEntity(entity, apiFn, id, url) {
-  yield put(entity.request(id));
-  const { response, error } = yield call(apiFn, url || id);
-  if (response) {
+  try {
+    yield put(entity.request(id));
+    const response = yield call(apiFn, url || id);
     yield put(entity.success(id, response));
-  } else {
-    yield put(entity.failure(id, error));
+  } catch (error) {
+    const message = error.message || 'Something bad happened';
+    console.warn(message);
+    yield put(entity.failure(id, message));
   }
 }
 
 
 // api services
 export const fetchForums = (fid) => {
-  const url = fid === 'root' ? 'forum/all' : `forum?fid=${fid}`;
+  const url = fid === 'root' ? 'forum/all1' : `forum?fid=${fid}`;
   return callApi(url, Schemas.forumSchemaArray);
 };

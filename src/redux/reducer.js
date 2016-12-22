@@ -8,7 +8,7 @@ export default combineReducers({
   // @NOTE: By convention, the navigation state must live in a subtree called
   // `navigation`
   // navigation: NavigationReducer,
-  // errorMessage: ErrorStateReducer,
+  errorMessage: ErrorStateReducer,
   entities: EntitiesStateReducer,
   pagination: PaginationStateReducer,
   // others
