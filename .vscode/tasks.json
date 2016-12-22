@@ -24,6 +24,10 @@
       "args": ["run", "coverage"]
     },
     {
+      "taskName": "lint",
+      "args": ["run", "lint"]
+    },
+    {
       "taskName": "remotedev",
       "args": ["remotedev"]
     }
