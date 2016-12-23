@@ -30,7 +30,10 @@ class ForumListView extends Component {
       name={rowData.get('name')}
       // subscribed={rowData.get('subscribed')}
       onPress={() => {
-        this._push(Router.getRoute('threads', { title: rowData.get('name') }));
+        this._push(Router.getRoute('threads', {
+          fid: rowData.get('fid'),
+          title: rowData.get('name'),
+        }));
         highlightRow(sectionID, rowID);
       }}
     />
@@ -52,10 +55,6 @@ ForumListView.propTypes = {
   navigation: PropTypes.shape({
     performAction: PropTypes.func.isRequired,
   }),
-};
-
-ForumListView.defaultProps = {
-  forums: List(),
 };
 
 const styles = StyleSheet.create({

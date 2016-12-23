@@ -8,7 +8,7 @@ import {
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const ThreadRow = ({ subject, author, updatedAt, onPress }) => (
+const ThreadRow = ({ subject, author, timestamp, onPress }) => (
   <TouchableHighlight
     underlayColor="#ccc"
     onPress={onPress}
@@ -22,7 +22,7 @@ const ThreadRow = ({ subject, author, updatedAt, onPress }) => (
         </View>
         <View style={styles.iconText}>
           <Icon name="md-time" size={15} color="#888" />
-          <Text style={styles.detail}>{Moment().from(updatedAt)}</Text>
+          <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
         </View>
       </View>
     </View>
@@ -32,7 +32,7 @@ const ThreadRow = ({ subject, author, updatedAt, onPress }) => (
 ThreadRow.propTypes = {
   subject: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  updatedAt: PropTypes.instanceOf(Moment).isRequired,
+  timestamp: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
 };
 
