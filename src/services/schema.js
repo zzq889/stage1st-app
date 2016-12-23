@@ -9,12 +9,28 @@ import { Schema, arrayOf } from 'normalizr';
 // Read more about Normalizr: https://github.com/gaearon/normalizr
 
 // Schemas for Github API responses.
+export const channelSchema = new Schema('channels', {
+  idAttribute: 'fid',
+});
+
 export const forumSchema = new Schema('forums', {
   idAttribute: 'fid',
 });
 
-forumSchema.define({
+channelSchema.define({
   child: arrayOf(forumSchema),
 });
 
-export const forumSchemaArray = arrayOf(forumSchema);
+const forumOrChannel = {
+  channel: channelSchema,
+  forum: forumSchema,
+};
+
+export const forumSchemaArray = arrayOf(forumOrChannel, {
+  schemaAttribute: (entity) => {
+    if (entity.child) {
+      return 'channel';
+    }
+    return 'forum';
+  },
+});

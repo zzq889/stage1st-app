@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { View, StyleSheet, StatusBar, Platform } from 'react-native';
 import { NavigationProvider } from '@exponent/ex-navigation';
 import Router from './AppRouter';
-import TabScreen from '../components/TabScreen';
+import TabScreen from '../modules/navigation/TabScreen';
 import DeveloperMenu from '../components/DeveloperMenu';
 
 const AppView = () => (

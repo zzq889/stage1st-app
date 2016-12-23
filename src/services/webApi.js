@@ -64,7 +64,8 @@ export function* fetchEntity(entity, apiFn, id, url) {
 
 
 // api services
-export const fetchForums = (fid) => {
-  const url = fid === 'root' ? 'forum/all' : `forum?fid=${fid}`;
-  return callApi(url, Schemas.forumSchemaArray);
-};
+export const fetchChannels = () =>
+  callApi('forum/all', Schemas.forumSchemaArray);
+
+export const fetchForums = fid =>
+  callApi(`forum?fid=${fid}`, Schemas.forumSchema);
