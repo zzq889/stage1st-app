@@ -10,31 +10,32 @@ import {
 /** ***************************** Actions *************************************/
 /** ****************************************************************************/
 
-export const channelRequestTypes = createRequestTypes('CHANNEL');
+export const CHANNEL = createRequestTypes('CHANNEL');
+export const FORUM = createRequestTypes('FORUM');
+export const LOAD_CHANNEL_PAGE = 'ForumState/LOAD_CHANNEL_PAGE';
+export const LOAD_FORUM_PAGE = 'ForumState/LOAD_FORUM_PAGE';
+
 export const channelEntity = {
   request: () => createAction(
-    channelRequestTypes.REQUEST),
+    CHANNEL.REQUEST),
   success: (_, response) => createAction(
-    channelRequestTypes.SUCCESS, { response }),
+    CHANNEL.SUCCESS, { response }),
   failure: (_, error) => createAction(
-    channelRequestTypes.FAILURE, { error }),
+    CHANNEL.FAILURE, { error }),
 };
 
-export const forumRequestTypes = createRequestTypes('FORUM');
 export const forumEntity = {
   request: fid => createAction(
-    forumRequestTypes.REQUEST, { fid }),
+    FORUM.REQUEST, { fid }),
   success: (fid, response) => createAction(
-    forumRequestTypes.SUCCESS, { fid, response }),
+    FORUM.SUCCESS, { fid, response }),
   failure: (fid, error) => createAction(
-    forumRequestTypes.FAILURE, { fid, error }),
+    FORUM.FAILURE, { fid, error }),
 };
 
-export const LOAD_CHANNEL_PAGE = 'ForumState/LOAD_CHANNEL_PAGE';
 export const loadChannelPage = (requiredFields = []) =>
   createAction(LOAD_CHANNEL_PAGE, { requiredFields });
 
-export const LOAD_FORUM_PAGE = 'ForumState/LOAD_FORUM_PAGE';
 export const loadForumPage = (fid, requiredFields = []) =>
   createAction(LOAD_FORUM_PAGE, { fid, requiredFields });
 
