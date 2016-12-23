@@ -27,7 +27,7 @@ const renderNode = (node, index, parent, style) => {
   return undefined;
 };
 
-const PostRow = ({ message, position, author, authorId, createdAt }) => (
+const PostRow = ({ message, position, author, authorId, timestamp }) => (
   <View style={styles.row}>
     <View style={styles.header}>
       <Avatar style={styles.avatar} authorId={authorId} />
@@ -36,12 +36,12 @@ const PostRow = ({ message, position, author, authorId, createdAt }) => (
           <Text style={styles.title}>{author}</Text>
           <Text style={styles.position}>{`#${position}`}</Text>
         </View>
-        <Text style={styles.detail}>{Moment().from(createdAt)}</Text>
+        <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
       </View>
     </View>
     <HtmlRender
       value={message}
-      onLinkPress={(url) => { console.log(url); }}
+      onLinkPress={(url) => { console.warn(url); }}
       renderNode={renderNode}
     />
   </View>
@@ -52,7 +52,7 @@ PostRow.propTypes = {
   position: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,
   authorId: PropTypes.number.isRequired,
-  createdAt: React.PropTypes.instanceOf(Moment).isRequired,
+  timestamp: PropTypes.number.isRequired,
 };
 
 const styles = StyleSheet.create({

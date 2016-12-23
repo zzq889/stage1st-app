@@ -37,6 +37,7 @@ class ThreadListView extends Component {
       timestamp={rowData.get('lastpost')}
       onPress={() => {
         this.props.navigator.push(Router.getRoute('posts', {
+          tid: rowData.get('tid'),
           title: rowData.get('subject'),
         }));
         highlightRow(sectionID, rowID);

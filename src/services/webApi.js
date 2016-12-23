@@ -71,4 +71,7 @@ export const fetchForums = fid =>
   callApi(`forum?fid=${fid}`, Schemas.forumSchema, res => res.data);
 
 export const fetchThreads = fid =>
-  callApi(`/forum/page?fid=${fid}`, Schemas.threadSchemaArray, res => res.data.list);
+  callApi(`forum/page?fid=${fid}`, Schemas.threadSchemaArray, res => res.data.list);
+
+export const fetchPosts = tid =>
+  callApi(`thread/page?tid=${tid}`, Schemas.postSchemaArray, res => res.data.list);

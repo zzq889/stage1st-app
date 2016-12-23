@@ -31,6 +31,10 @@ export const threadSchema = new Schema('threads', {
   idAttribute: 'tid',
 });
 
+export const postSchema = new Schema('posts', {
+  idAttribute: 'pid',
+});
+
 channelSchema.define({
   child: arrayOf(forumSchema),
 });
@@ -50,3 +54,5 @@ export const forumSchemaArray = arrayOf(forumOrChannel, {
 });
 
 export const threadSchemaArray = arrayOf(threadSchema);
+
+export const postSchemaArray = arrayOf(postSchema);
