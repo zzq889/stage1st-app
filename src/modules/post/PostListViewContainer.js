@@ -9,6 +9,7 @@ const PostListViewContainer = connect(
     const posts = state
       .getIn(['pagination', 'postsByTid', tid, 'ids'], List())
       .map(pid => state.getIn(['entities', 'posts', String(pid)]))
+      .sortBy(post => post.get('position'))
       .toList();
 
     return {

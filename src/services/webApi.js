@@ -1,6 +1,7 @@
 import { normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import { put, call } from 'redux-saga/effects';
+import { getConfiguration } from '../utils/configuration';
 import * as Schemas from './schema';
 
 // Extracts the next page URL from Github API response.
@@ -18,7 +19,7 @@ function getNextPageUrl(response) {
   return nextLink.split(';')[0].slice(1, -1);
 }
 
-const API_ROOT = 'http://saraba1st.asuscomm.com:20080/2b/api/app/';
+const API_ROOT = getConfiguration('API_ROOT');
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
@@ -72,6 +73,9 @@ export const fetchForums = fid =>
 
 export const fetchThreads = fid =>
   callApi(`forum/page?fid=${fid}`, Schemas.threadSchemaArray, res => res.data.list);
+
+export const fetchThreadInfo = tid =>
+  callApi(`thread?tid=${tid}`, Schemas.threadSchema, res => res.data);
 
 export const fetchPosts = tid =>
   callApi(`thread/page?tid=${tid}`, Schemas.postSchemaArray, res => res.data.list);

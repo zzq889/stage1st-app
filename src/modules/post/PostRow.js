@@ -2,28 +2,61 @@ import React, { PropTypes } from 'react';
 import {
   View,
   Text,
+  Image,
   StyleSheet,
 } from 'react-native';
 import Moment from 'moment';
-import HtmlRender from 'react-native-html-render';
+import entities from 'entities';
+import HtmlView from '../../components/HtmlView';
 import Avatar from '../../components/Avatar';
+import { getConfiguration } from '../../utils/configuration';
 
-// node, index, parent, type
-const renderNode = (node, index, parent, style) => {
+// node, index, parent, renderChild
+const renderNode = (node, index, parent, renderChild) => {
+  const attribs = node.attribs;
+
   if (node.name === 'br') {
     return null;
   }
-  if (node.name === 'text' && style === 'block') {
-    const isQuote = parent && parent.name === 'blockquote';
-    const quoteStyle = [styles.content, styles.inline];
+
+  if (node.type === 'text') {
     return (
-      <Text
-        key={index}
-        style={isQuote ? quoteStyle : styles.content}
-      >{node.text}
+      <Text key={index} style={styles.content}>
+        {entities.decodeHTML(node.data)}
       </Text>
     );
   }
+
+  if (node.attribs && node.attribs.class === 'quote') {
+    return <Text key={index} style={styles.inline}>{renderChild()}{'\n'}</Text>;
+  }
+
+  if (node.name === 'img') {
+    const defaultSize = attribs.smilieid ? 32 : 100;
+    const imgWidth = Number(attribs.width || attribs['data-width'] || defaultSize);
+    const imgHeight = Number(attribs.height || attribs['data-height'] || defaultSize);
+
+    const imgStyle = {
+      width: imgWidth,
+      height: imgHeight,
+    };
+
+    const uri = attribs.src;
+    const assembledUri = uri.match(/^\//)
+      ? `${getConfiguration('STATIC_ROOT')}${uri}`
+      : `${getConfiguration('STATIC_ROOT')}/${uri}`;
+
+    const source = {
+      uri: uri.match(/^http/) ? uri : assembledUri,
+      width: imgWidth,
+      height: imgHeight,
+    };
+
+    return (
+      <Image key={index} source={source} style={imgStyle} />
+    );
+  }
+
   return undefined;
 };
 
@@ -39,10 +72,10 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
         <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
       </View>
     </View>
-    <HtmlRender
+    <HtmlView
       value={message}
-      onLinkPress={(url) => { console.warn(url); }}
       renderNode={renderNode}
+      onLinkPress={url => console.log('clicked link: ', url)}
     />
   </View>
 );

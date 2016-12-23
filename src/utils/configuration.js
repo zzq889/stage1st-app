@@ -1,6 +1,11 @@
 import { Map } from 'immutable';
 
-let configuration = Map();
+const URL_ROOT = __DEV__ ? 'saraba1st.asuscomm.com:20080' : 'app.saraba1st.com';
+
+let configuration = Map({
+  API_ROOT: `http://${URL_ROOT}/2b/api/app/`,
+  STATIC_ROOT: `http://${URL_ROOT}/2b/`,
+});
 
 export function setConfiguration(name, value) {
   configuration = configuration.set(name, value);
