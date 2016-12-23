@@ -6,9 +6,13 @@ import { loadThreadPage } from './ThreadState';
 
 const ThreadListViewContainer = connect(
   (state, { fid }) => {
+    const forumName = state.getIn(['entities', 'forums', String(fid), 'name']);
     const threads = state
       .getIn(['pagination', 'threadsByFid', fid, 'ids'], List())
-      .map(tid => state.getIn(['entities', 'threads', String(tid)]))
+      .map(tid =>
+        state
+        .getIn(['entities', 'threads', String(tid)])
+        .set('forumName', forumName))
       .toList();
 
     return {

@@ -32,6 +32,7 @@ class ThreadListView extends Component {
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       subject={rowData.get('subject')}
+      forumName={rowData.get('forumName')}
       author={rowData.get('author')}
       timestamp={rowData.get('lastpost')}
       onPress={() => {

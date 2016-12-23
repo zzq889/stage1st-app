@@ -8,13 +8,13 @@ import {
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const ThreadRow = ({ subject, author, timestamp, onPress }) => (
+const ThreadRow = ({ subject, forumName, author, timestamp, onPress }) => (
   <TouchableHighlight
     underlayColor="#ccc"
     onPress={onPress}
   >
     <View style={styles.row}>
-      <Text style={styles.title}>{subject}</Text>
+      <Text style={styles.title}>{`${subject} [${forumName}]`}</Text>
       <View style={styles.content}>
         <View style={styles.iconText}>
           <Icon name="md-person" size={15} color="#888" />
@@ -31,6 +31,7 @@ const ThreadRow = ({ subject, author, timestamp, onPress }) => (
 
 ThreadRow.propTypes = {
   subject: PropTypes.string.isRequired,
+  forumName: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
@@ -42,6 +43,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#aaa',
   },
   detail: {
     color: '#888',
