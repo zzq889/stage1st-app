@@ -29,7 +29,7 @@
     "preset": "jest-react-native"
   },
   "dependencies": {
-    "@exponent/ex-navigation": "^2.3.0",
+    "@exponent/ex-navigation": "^2.4.0",
     "bluebird": "^3.3.5",
     "es6-symbol": "^3.0.2",
     "event-emitter": "^0.3.4",

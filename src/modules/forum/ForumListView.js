@@ -6,13 +6,11 @@ import {
 } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { List } from 'immutable';
-import withMessage from '../../components/withMessage';
 
 // import ImmutableDataSource from '../../components/ImmutableDataSource';
 import Router from '../AppRouter';
 import Row from './ForumRow';
 
-@withMessage
 @withNavigation
 class ForumListView extends Component {
   static route = {
@@ -21,16 +19,18 @@ class ForumListView extends Component {
     },
   }
 
-  componentWillMount() {
-    this.props.loadForumPage();
-  }
+  _push = (route) => {
+    this.props.navigation.performAction(({ stacks }) => {
+      stacks('forums').push(route);
+    });
+  };
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
       // subscribed={rowData.get('subscribed')}
       onPress={() => {
-        this.props.navigator.push(Router.getRoute('threads', { title: rowData.get('name') }));
+        this._push(Router.getRoute('threads', { title: rowData.get('name') }));
         highlightRow(sectionID, rowID);
       }}
     />
@@ -42,7 +42,6 @@ class ForumListView extends Component {
         immutableData={this.props.forums}
         renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        enableEmptySections
       />
     );
   }
@@ -50,10 +49,9 @@ class ForumListView extends Component {
 
 ForumListView.propTypes = {
   forums: PropTypes.instanceOf(List).isRequired,
-  navigator: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  loadForumPage: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    performAction: PropTypes.func.isRequired,
+  }),
 };
 
 ForumListView.defaultProps = {

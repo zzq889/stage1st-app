@@ -6,7 +6,7 @@ import {
 } from '@exponent/ex-navigation';
 import { fromJS } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Router from '../modules/AppRouter';
+import Router from '../AppRouter';
 
 const defaultRouteConfig = fromJS({
   navigationBar: {
@@ -19,18 +19,19 @@ const TabScreen = () => (
   <TabNavigation
     id="main"
     navigatorUID="main"
-    initialTab="threads"
+    initialTab="forums"
     tabBarHeight={45}
   >
     <TabItem
       id="threads"
       renderIcon={isSelected => (isSelected
-        ? <Icon name="ios-paper" size={30} color="#000" />
-        : <Icon name="ios-paper-outline" size={30} color="#000" />)
+        ? <Icon name="ios-heart" size={30} color="#000" />
+        : <Icon name="ios-heart-outline" size={30} color="#000" />)
       }
     >
       <StackNavigation
         id="threads"
+        navigatorUID="threads"
         defaultRouteConfig={defaultRouteConfig.toJS()}
         initialRoute={Router.getRoute('threads')}
       />
@@ -39,12 +40,13 @@ const TabScreen = () => (
     <TabItem
       id="forums"
       renderIcon={isSelected => (isSelected
-        ? <Icon name="ios-heart" size={30} color="#000" />
-        : <Icon name="ios-heart-outline" size={30} color="#000" />)
+        ? <Icon name="ios-folder" size={30} color="#000" />
+        : <Icon name="ios-folder-outline" size={30} color="#000" />)
       }
     >
       <StackNavigation
         id="forums"
+        navigatorUID="forums"
         defaultRouteConfig={defaultRouteConfig.toJS()}
         initialRoute={Router.getRoute('forums')}
       />
@@ -59,6 +61,7 @@ const TabScreen = () => (
     >
       <StackNavigation
         id="personal"
+        navigatorUID="personal"
         defaultRouteConfig={defaultRouteConfig.toJS()}
         initialRoute={Router.getRoute('color')}
       />

@@ -1,17 +1,20 @@
-import { connect } from 'react-redux';
+import { PropTypes } from 'react';
 import { List } from 'immutable';
+import { connect } from 'react-redux';
 import ForumListView from './ForumListView';
-import { loadForumPage } from './ForumState';
 
-export default connect(
-  (state) => {
-    const forums = state
-      .getIn(['pagination', 'forumsByFid', 'root', 'ids'], List())
+const ForumListViewContainer = connect(
+  (state, { forumIds }) => {
+    const forums = forumIds
       .map(fid => state.getIn(['entities', 'forums', String(fid)]))
       .toList();
 
     return { forums };
-  }, {
-    loadForumPage,
   },
 )(ForumListView);
+
+ForumListViewContainer.propTypes = {
+  forumIds: PropTypes.instanceOf(List).isRequired,
+};
+
+export default ForumListViewContainer;

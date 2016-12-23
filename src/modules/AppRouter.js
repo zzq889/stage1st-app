@@ -1,6 +1,6 @@
 import { createRouter } from '@exponent/ex-navigation';
 import ColorViewContainer from './colors/ColorViewContainer';
-import ForumListViewContainer from './forum/ForumListViewContainer';
+import ForumTabViewContainer from './forum/ForumTabViewContainer';
 import ThreadListViewContainer from './thread/ThreadListViewContainer';
 import PostListViewContainer from './post/PostListViewContainer';
 
@@ -10,7 +10,7 @@ import PostListViewContainer from './post/PostListViewContainer';
 const AppRouter = createRouter(() => ({
   color: () => ColorViewContainer,
   threads: () => ThreadListViewContainer,
-  forums: () => ForumListViewContainer,
+  forums: () => ForumTabViewContainer,
   posts: () => PostListViewContainer,
 }));
 
