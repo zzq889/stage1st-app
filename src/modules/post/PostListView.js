@@ -36,6 +36,7 @@ class PostListView extends Component {
         immutableData={posts}
         renderRow={renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+        rowsDuringInteraction={5}
       />
     );
   }
