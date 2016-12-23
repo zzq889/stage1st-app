@@ -22,7 +22,7 @@ const API_ROOT = 'http://saraba1st.asuscomm.com:20080/2b/api/app/';
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, schema) {
+function callApi(endpoint, schema, mapResponseToKey) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
 
   return fetch(fullUrl)
@@ -36,7 +36,7 @@ function callApi(endpoint, schema) {
 
       const camelizedJson = camelizeKeys(json);
       const nextPageUrl = getNextPageUrl(response);
-      const normalizedJson = normalize(camelizedJson.data, schema);
+      const normalizedJson = normalize(mapResponseToKey(camelizedJson), schema);
 
       return {
         ...normalizedJson,
@@ -65,7 +65,13 @@ export function* fetchEntity(entity, apiFn, id, url) {
 
 // api services
 export const fetchChannels = () =>
-  callApi('forum/all', Schemas.forumSchemaArray);
+  callApi('forum/all', Schemas.forumSchemaArray, res => res.data);
 
 export const fetchForums = fid =>
-  callApi(`forum?fid=${fid}`, Schemas.forumSchema);
+  callApi(`forum?fid=${fid}`, Schemas.forumSchema, res => res.data);
+
+export const fetchThreads = fid =>
+  callApi(`forum/page?fid=${fid}`, Schemas.threadSchemaArray, res => res.data.list);
+
+export const fetchPosts = tid =>
+  callApi(`thread/page?tid=${tid}`, Schemas.postSchemaArray, res => res.data.list);

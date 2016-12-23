@@ -1,25 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+import { withNavigation } from '@exponent/ex-navigation';
 import {
   View,
-  ListView,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { fromJS, is } from 'immutable';
-import Moment from 'moment';
+import ImmutableListView from 'react-native-immutable-list-view';
+import { List } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
 // import * as ThreadState from './ThreadState';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
 
-const threads = fromJS([
-  { subject: '我又来招人了，这次是直播主持和运营主管', author: 'snoopy', updatedAt: Moment.unix(1479378120) },
-  { subject: '招聘手游运营经理', author: 'Mufasa', updatedAt: Moment.unix(1478782200) },
-  { subject: '广州青宫动漫嘉年华暨Comic Member04', author: '亚里士缺德', updatedAt: Moment.unix(1478764500) },
-  { subject: '山贺博之上海交流会&amp;《王立宇宙军》上映会11月8日开场', author: '白鹅君', updatedAt: Moment.unix(1478674320) },
-  { subject: '锤子公司濒临倒闭 - 被裁员工谈在锤子科技工作感受', author: 'dx2', updatedAt: Moment.unix(1478362692) },
-]);
-
+@withNavigation
 class ThreadListView extends Component {
   static route = {
     navigationBar: {
@@ -32,25 +25,19 @@ class ThreadListView extends Component {
     },
   }
 
-  constructor(props, context) {
-    super(props, context);
-
-    const ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => !is(r1, r2),
-    });
-    // Shallow convert to a JS array, leaving immutable row data.
-    this.state = {
-      dataSource: ds.cloneWithRows(threads.toArray()),
-    };
+  componentWillMount() {
+    this.props.loadThreadPage(this.props.fid);
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       subject={rowData.get('subject')}
+      forumName={rowData.get('forumName')}
       author={rowData.get('author')}
-      updatedAt={rowData.get('updatedAt')}
+      timestamp={rowData.get('lastpost')}
       onPress={() => {
         this.props.navigator.push(Router.getRoute('posts', {
+          tid: rowData.get('tid'),
           title: rowData.get('subject'),
         }));
         highlightRow(sectionID, rowID);
@@ -59,20 +46,29 @@ class ThreadListView extends Component {
   )
 
   render() {
+    const { threads } = this.props;
     return (
-      <ListView
-        dataSource={this.state.dataSource}
+      <ImmutableListView
+        immutableData={threads}
         renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+        rowsDuringInteraction={30}
       />
     );
   }
 }
 
 ThreadListView.propTypes = {
+  fid: PropTypes.number.isRequired,
+  threads: PropTypes.instanceOf(List).isRequired,
+  loadThreadPage: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+};
+
+ThreadListView.defaultProps = {
+  threads: List(),
 };
 
 const styles = StyleSheet.create({
