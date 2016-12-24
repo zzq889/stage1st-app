@@ -1,4 +1,5 @@
 import { take, call, fork, select } from 'redux-saga/effects';
+import uuid from 'uuid';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
@@ -18,7 +19,7 @@ export const postEntity = {
   success: (tid, response) => createAction(
     POST.SUCCESS, { tid, response }),
   failure: (tid, error) => createAction(
-    POST.FAILURE, { tid, error }),
+    POST.FAILURE, { tid, error, id: uuid() }),
 };
 
 export const loadPostPage = (tid, requiredFields = []) =>

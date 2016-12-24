@@ -1,4 +1,5 @@
 import { take, call, fork, select } from 'redux-saga/effects';
+import uuid from 'uuid';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
@@ -19,7 +20,7 @@ export const threadEntity = {
   success: (fid, response) => createAction(
     THREAD.SUCCESS, { fid, response }),
   failure: (fid, error) => createAction(
-    THREAD.FAILURE, { fid, error }),
+    THREAD.FAILURE, { fid, error, id: uuid() }),
 };
 
 export const loadThreadPage = (fid, requiredFields = []) =>

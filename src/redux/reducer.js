@@ -11,7 +11,7 @@ export default combineReducers({
   // `navigation`
   navigation: NavigationReducer,
   session: SessionStateReducer,
-  errorMessage: ErrorStateReducer,
+  error: ErrorStateReducer,
   entities: EntitiesStateReducer,
   pagination: PaginationStateReducer,
   auth: AuthStateReducer,

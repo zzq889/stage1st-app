@@ -55,7 +55,8 @@
     "redux-persist-immutable": "^4.2.0",
     "redux-saga": "^0.13.0",
     "remote-redux-devtools": "^0.5.7",
-    "standard-http-error": "^2.0.0"
+    "standard-http-error": "^2.0.0",
+    "uuid": "3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.9.0",
