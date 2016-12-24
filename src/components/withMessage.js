@@ -34,7 +34,7 @@ export default function withMessage(WrappedComponent) {
     }).isRequired,
   };
 
-  InnerComponent.displayName = `withMessage(${getDisplayName(WrappedComponent)})`;
+  InnerComponent.displayName = `WithMessage(${getDisplayName(WrappedComponent)})`;
 
   return hoistStatics(InnerComponent, WrappedComponent);
 }

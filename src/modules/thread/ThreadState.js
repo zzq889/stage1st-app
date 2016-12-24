@@ -46,6 +46,10 @@ function* loadThreads(fid, requiredFields) {
 export function* watchLoadThreadPage() {
   while (true) {
     const { fid, requiredFields = [] } = yield take(LOAD_THREAD_PAGE);
-    yield fork(loadThreads, fid, requiredFields);
+    if (fid) {
+      yield fork(loadThreads, fid, requiredFields);
+    } else {
+      // TODO: load faved threads
+    }
   }
 }

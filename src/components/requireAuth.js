@@ -36,7 +36,7 @@ export default function requireAuth(WrappedComponent) {
     }).isRequired,
   };
 
-  InnerComponent.displayName = `requireAuth(${getDisplayName(WrappedComponent)})`;
+  InnerComponent.displayName = `RequireAuth(${getDisplayName(WrappedComponent)})`;
 
   return hoistStatics(InnerComponent, WrappedComponent);
 }

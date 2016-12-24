@@ -59,7 +59,7 @@ class ThreadListView extends Component {
 }
 
 ThreadListView.propTypes = {
-  fid: PropTypes.number.isRequired,
+  fid: PropTypes.number,
   threads: PropTypes.instanceOf(List).isRequired,
   loadThreadPage: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
