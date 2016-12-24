@@ -47,26 +47,24 @@ async function callApi(method, endpoint, body, schema, mapResponseToKey) {
   const normalizeKey = mapResponseToKey
     || (res => (res.data && res.data.list) || res.data);
 
-  return fetch(fullUrl, options)
-    .then(response =>
-      response.json().then(json => ({ json, response })),
-    )
-    .then(({ json, response }) => {
-      if (!response.ok || !json.success) {
-        return Promise.reject(json);
-      }
+  const response = await fetch(fullUrl, options);
+  const json = await response.json();
+  if (!response.ok || !json.success) {
+    const err = new Error(json.message);
+    err.json = json;
+    throw err;
+  }
 
-      const camelizedJson = camelizeKeys(json);
-      const nextPageUrl = getNextPageUrl(response);
-      const responseJson = schema
-        ? normalize(normalizeKey(camelizedJson), schema)
-        : camelizedJson;
+  const camelizedJson = camelizeKeys(json);
+  const nextPageUrl = getNextPageUrl(response);
+  const responseJson = schema
+    ? normalize(normalizeKey(camelizedJson), schema)
+    : camelizedJson;
 
-      return {
-        ...responseJson,
-        nextPageUrl,
-      };
-    });
+  return {
+    ...responseJson,
+    nextPageUrl,
+  };
 }
 
 export async function get(endpoint, params, ...otherParams) {
