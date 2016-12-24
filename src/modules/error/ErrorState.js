@@ -1,13 +1,18 @@
+import { Map } from 'immutable';
+import { createAction } from '../../utils/actionHelper';
+
 const RESET_ERROR_MESSAGE = 'ErrorState/RESET_ERROR_MESSAGE';
 
+export const resetErrorMessage = () => createAction(RESET_ERROR_MESSAGE);
+
 // Updates error message to notify about the failed fetches.
-export default function errorMessage(state = null, action) {
+export default function errorMessage(state = Map(), action) {
   const { type, error } = action;
 
   if (type === RESET_ERROR_MESSAGE) {
-    return null;
+    return Map();
   } else if (error) {
-    return action.error;
+    return state.set('message', error);
   }
 
   return state;

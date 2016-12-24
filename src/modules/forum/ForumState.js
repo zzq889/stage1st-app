@@ -2,8 +2,8 @@ import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
-  fetchForums as apifetchForums,
-  fetchChannels as apifetchChannels,
+  fetchForums as apiFetchForums,
+  fetchChannels as apiFetchChannels,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -43,10 +43,10 @@ export const loadForumPage = (fid, requiredFields = []) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchChannels = fetchEntity.bind(null, channelEntity, apifetchChannels);
+const fetchChannels = fetchEntity.bind(null, channelEntity, apiFetchChannels);
 const getChannels = state => state.getIn(['entities', 'channels']);
 
-const fetchForums = fetchEntity.bind(null, forumEntity, apifetchForums);
+const fetchForums = fetchEntity.bind(null, forumEntity, apiFetchForums);
 const getForums = (state, fid) => state.getIn(['pagination', 'forumsByFid', fid]);
 
 // load repo unless it is cached

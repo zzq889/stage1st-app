@@ -2,7 +2,7 @@ import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
-  fetchPosts as apifetchPosts,
+  fetchPosts as apiFetchPosts,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -28,7 +28,7 @@ export const loadPostPage = (tid, requiredFields = []) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchPosts = fetchEntity.bind(null, postEntity, apifetchPosts);
+const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
 const getPosts = (state, tid) => state.getIn(['pagination', 'postsByTid', tid]);
 
 // load repo unless it is cached
