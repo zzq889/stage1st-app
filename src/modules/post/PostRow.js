@@ -43,7 +43,7 @@ const renderNode = (node, index, parent, renderChild) => {
 
     const uri = attribs.src;
     const assembledUri = uri.match(/^\//)
-      ? `${getConfiguration('STATIC_ROOT')}${uri}`
+      ? getConfiguration('STATIC_ROOT') + uri
       : `${getConfiguration('STATIC_ROOT')}/${uri}`;
 
     const source = {
@@ -75,7 +75,7 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
     <HtmlView
       value={message}
       renderNode={renderNode}
-      onLinkPress={url => console.log('clicked link: ', url)}
+      onLinkPress={url => console.warn('clicked link: ', url)}
     />
   </View>
 );

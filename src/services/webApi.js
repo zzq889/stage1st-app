@@ -2,7 +2,8 @@ import { normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import { put, call } from 'redux-saga/effects';
 import { getConfiguration } from '../utils/configuration';
-import * as Schemas from './schema';
+import { getAuthenticationToken } from '../utils/authentication';
+import * as SCHEMA from './schema';
 
 // Extracts the next page URL from Github API response.
 function getNextPageUrl(response) {
@@ -21,12 +22,32 @@ function getNextPageUrl(response) {
 
 const API_ROOT = getConfiguration('API_ROOT');
 
+function getRequestHeaders(body, token) {
+  const headers = body
+    ? { Accept: 'application/json', 'Content-Type': 'application/json' }
+    : { Accept: 'application/json' };
+
+  if (token) {
+    return { ...headers, Authorization: token };
+  }
+
+  return headers;
+}
+
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(endpoint, schema, mapResponseToKey) {
+async function callApi(method, endpoint, body, schema, mapResponseToKey) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
+  const token = await getAuthenticationToken();
+  const headers = getRequestHeaders(body, token);
+  const options = body
+    ? { method, headers, body: JSON.stringify(body) }
+    : { method, headers };
 
-  return fetch(fullUrl)
+  const normalizeKey = mapResponseToKey
+    || (res => (res.data && res.data.list) || res.data);
+
+  return fetch(fullUrl, options)
     .then(response =>
       response.json().then(json => ({ json, response })),
     )
@@ -37,13 +58,27 @@ function callApi(endpoint, schema, mapResponseToKey) {
 
       const camelizedJson = camelizeKeys(json);
       const nextPageUrl = getNextPageUrl(response);
-      const normalizedJson = normalize(mapResponseToKey(camelizedJson), schema);
+      const responseJson = schema
+        ? normalize(normalizeKey(camelizedJson), schema)
+        : camelizedJson;
 
       return {
-        ...normalizedJson,
+        ...responseJson,
         nextPageUrl,
       };
     });
+}
+
+export async function get(endpoint, params, ...otherParams) {
+  const paramsString = params
+    ? Object.keys(params).reduce((str, key) =>
+      `${str}&${key}=${encodeURIComponent(params[key])}`, '?')
+    : '';
+  return callApi('GET', endpoint + paramsString, null, ...otherParams);
+}
+
+export async function post(endpoint, body, ...otherParams) {
+  return callApi('POST', ...otherParams);
 }
 
 // resuable fetch Subroutine
@@ -64,18 +99,66 @@ export function* fetchEntity(entity, apiFn, id, url) {
 }
 
 
-// api services
+/** ****************************************************************************/
+/** ***************************** API Services *********************************/
+/** ****************************************************************************/
+
+// user
+export const userLogin = ({ username, password }) =>
+  post('user/login', { username, password }, SCHEMA.userSchema);
+
+export const userRegister = ({ username, password, email }) =>
+  post('user/register', { username, password, email }, SCHEMA.userSchema);
+
+export const userLogout = uid =>
+  post('user/logout', { uid });
+
+export const userSign = uid =>
+  post('user/sign', { uid });
+
+export const fetchUserInfo = uid =>
+  get('user', { uid }, SCHEMA.userSchema);
+
+// notification
+export const fetchNotication = uid =>
+  get(`notice/${uid}`, null);
+
+export const fetchHistory = uid =>
+  get(`history/${uid}`, null);
+
+// forum
 export const fetchChannels = () =>
-  callApi('forum/all', Schemas.forumSchemaArray, res => res.data);
+  get('forum/all', null, SCHEMA.forumSchemaArray);
 
 export const fetchForums = fid =>
-  callApi(`forum?fid=${fid}`, Schemas.forumSchema, res => res.data);
+  get('forum', { fid }, SCHEMA.forumSchema);
 
+// thread
 export const fetchThreads = fid =>
-  callApi(`forum/page?fid=${fid}`, Schemas.threadSchemaArray, res => res.data.list);
+  get('forum/page', { fid }, SCHEMA.threadSchemaArray);
 
 export const fetchThreadInfo = tid =>
-  callApi(`thread?tid=${tid}`, Schemas.threadSchema, res => res.data);
+  get('thread', { tid }, SCHEMA.threadSchema);
 
-export const fetchPosts = tid =>
-  callApi(`thread/page?tid=${tid}`, Schemas.postSchemaArray, res => res.data.list);
+export const favThread = tid =>
+  post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);
+
+export const fetchFavedThreads = () =>
+  get('thread/favor', null, SCHEMA.threadSchemaArray);
+
+export const createThread = ({ fid, typeid, title, content }) =>
+  post('post/thread', { fid, typeid, title, content }, SCHEMA.postSchema);
+
+// post
+export const fetchPosts = (tid, uid) =>
+  get('thread/page', { tid, uid }, SCHEMA.postSchemaArray);
+
+export const createPost = ({ tid, pid, typeid, title, content }) =>
+  post('post/post', { tid, pid, typeid, title, content }, SCHEMA.postSchema);
+
+export const reportPost = ({ pid, message }) =>
+  post('post/report', { pid, message });
+
+// smiles
+export const fetchSmiles = () =>
+  get('post/smiles', null, SCHEMA.smileySchema);

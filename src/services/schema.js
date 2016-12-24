@@ -19,6 +19,10 @@ import { Schema, arrayOf } from 'normalizr';
 // }
 
 // Schemas
+export const userSchema = new Schema('users', {
+  idAttribute: 'uid',
+});
+
 export const channelSchema = new Schema('channels', {
   idAttribute: 'fid',
 });
