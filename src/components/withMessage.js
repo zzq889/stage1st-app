@@ -9,10 +9,9 @@ function getDisplayName(WrappedComponent): string {
 
 export default function withMessage(WrappedComponent) {
   @withNavigation
-  @connect((state) => {
-    const errorMessage = state.get('errorMessage');
-    return { errorMessage };
-  })
+  @connect(state => ({
+    errorMessage: state.get('errorMessage'),
+  }))
   class InnerComponent extends PureComponent {
     componentWillReceiveProps({ errorMessage }) {
       if (errorMessage !== this.props.errorMessage) {
@@ -35,7 +34,7 @@ export default function withMessage(WrappedComponent) {
     }).isRequired,
   };
 
-  InnerComponent.displayName = `WithMessage(${getDisplayName(WrappedComponent)})`;
+  InnerComponent.displayName = `withMessage(${getDisplayName(WrappedComponent)})`;
 
   return hoistStatics(InnerComponent, WrappedComponent);
 }

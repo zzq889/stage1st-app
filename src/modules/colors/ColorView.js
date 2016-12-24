@@ -5,6 +5,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import Router from '../AppRouter';
+import requireAuth from '../../components/requireAuth';
 
 const color = () => Math.floor(255 * Math.random());
 
@@ -12,6 +13,7 @@ const color = () => Math.floor(255 * Math.random());
  * Sample view to demonstrate navigation patterns.
  * @TODO remove this module in a live application.
  */
+@requireAuth
 class ColorView extends Component {
   static route = {
     navigationBar: {
