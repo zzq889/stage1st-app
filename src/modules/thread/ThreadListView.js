@@ -6,10 +6,9 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import ImmutableListView from 'react-native-immutable-list-view';
 import { List } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
-// import * as ThreadState from './ThreadState';
+import ImmutableListView from '../../components/ImmutableListView';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
 

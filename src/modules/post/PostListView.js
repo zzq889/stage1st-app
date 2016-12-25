@@ -3,9 +3,8 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import ImmutableListView from 'react-native-immutable-list-view';
 import { List } from 'immutable';
-// import * as PostState from './PostState';
+import ImmutableListView from '../../components/ImmutableListView';
 import Row from './PostRow';
 
 const renderRow = rowData => (
@@ -36,7 +35,7 @@ class PostListView extends Component {
         immutableData={posts}
         renderRow={renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        rowsDuringInteraction={5}
+        rowsDuringInteraction={10}
       />
     );
   }
