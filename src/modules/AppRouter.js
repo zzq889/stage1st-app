@@ -3,6 +3,7 @@ import ColorViewContainer from './colors/ColorViewContainer';
 import ForumTabViewContainer from './forum/ForumTabViewContainer';
 import ThreadListViewContainer from './thread/ThreadListViewContainer';
 import FavedThreadListViewContainer from './thread/FavedThreadListViewContainer';
+import SubscribedThreadListViewContainer from './thread/SubscribedThreadListViewContainer';
 import PostListViewContainer from './post/PostListViewContainer';
 
 /**
@@ -12,6 +13,7 @@ const AppRouter = createRouter(() => ({
   color: () => ColorViewContainer,
   threads: () => ThreadListViewContainer,
   favedThreads: () => FavedThreadListViewContainer,
+  subscribedThreads: () => SubscribedThreadListViewContainer,
   forums: () => ForumTabViewContainer,
   posts: () => PostListViewContainer,
 }));

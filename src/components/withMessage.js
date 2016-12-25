@@ -17,7 +17,7 @@ const alertStyle = {
 export default function withMessage(WrappedComponent) {
   @withNavigation
   @connect(state => ({
-    errorId: state.getIn(['error', 'id']),
+    errorId: state.getIn(['error', 'eid']),
     errorMessage: state.getIn(['error', 'message']),
   }), {
     resetErrorMessage,

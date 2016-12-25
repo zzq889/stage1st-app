@@ -135,6 +135,9 @@ export const fetchForums = fid =>
 export const fetchThreads = fid =>
   get('forum/page', { fid }, SCHEMA.threadSchemaArray);
 
+export const fetchSubscribedThreads = () =>
+  get('forum/subscribed', null, SCHEMA.threadSchemaArray);
+
 export const fetchThreadInfo = tid =>
   get('thread', { tid }, SCHEMA.threadSchema);
 
@@ -142,7 +145,7 @@ export const favThread = tid =>
   post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);
 
 export const fetchFavedThreads = () =>
-  get('thread/favor', null, SCHEMA.threadSchemaArray);
+  get('favor/page', null, SCHEMA.threadSchemaArray);
 
 export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.postSchema);

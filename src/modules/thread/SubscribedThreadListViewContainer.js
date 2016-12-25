@@ -1,12 +1,12 @@
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import ThreadListView from './ThreadListView';
-import { loadFavedThreadPage } from './ThreadState';
+import { loadSubscribedThreadPage } from './ThreadState';
 
-const FavedThreadListViewContainer = connect(
+const SubscribedThreadListViewContainer = connect(
   state => ({
     threads: state
-      .getIn(['pagination', 'threadsById', 'fav', 'ids'], List())
+      .getIn(['pagination', 'threadsById', 'subscribed', 'ids'], List())
       .map((tid) => {
         const thread = state.getIn(['entities', 'threads', String(tid)]);
         const fid = thread.get('fid');
@@ -16,8 +16,8 @@ const FavedThreadListViewContainer = connect(
       .toList(),
   }),
   {
-    loadThreadPage: loadFavedThreadPage,
+    loadThreadPage: loadSubscribedThreadPage,
   },
 )(ThreadListView);
 
-export default FavedThreadListViewContainer;
+export default SubscribedThreadListViewContainer;
