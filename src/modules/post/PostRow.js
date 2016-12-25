@@ -39,6 +39,7 @@ const renderNode = (node, index, parent, renderChild) => {
     const imgStyle = {
       width: imgWidth,
       height: imgHeight,
+      backgroundColor: '#eee',
     };
 
     const uri = attribs.src;

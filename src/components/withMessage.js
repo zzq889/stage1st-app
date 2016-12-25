@@ -11,6 +11,7 @@ function getDisplayName(WrappedComponent): string {
 const alertStyle = {
   text: { color: '#000' },
   container: { backgroundColor: '#FFEB3B' },
+  duration: 1000,
 };
 
 export default function withMessage(WrappedComponent) {
