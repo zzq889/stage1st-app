@@ -15,7 +15,7 @@ export default combineReducers({
     ],
   }),
   threadsByFid: paginate({
-    mapActionToKey: action => action.fid,
+    mapActionToKey: action => action.fid || 'fav',
     types: [
       THREAD.REQUEST,
       THREAD.SUCCESS,

@@ -1,8 +1,9 @@
 import { take, call, fork, select } from 'redux-saga/effects';
+import uuid from 'uuid';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
-  fetchPosts as apifetchPosts,
+  fetchPosts as apiFetchPosts,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -18,7 +19,7 @@ export const postEntity = {
   success: (tid, response) => createAction(
     POST.SUCCESS, { tid, response }),
   failure: (tid, error) => createAction(
-    POST.FAILURE, { tid, error }),
+    POST.FAILURE, { tid, error, id: uuid() }),
 };
 
 export const loadPostPage = (tid, requiredFields = []) =>
@@ -28,7 +29,7 @@ export const loadPostPage = (tid, requiredFields = []) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchPosts = fetchEntity.bind(null, postEntity, apifetchPosts);
+const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
 const getPosts = (state, tid) => state.getIn(['pagination', 'postsByTid', tid]);
 
 // load repo unless it is cached

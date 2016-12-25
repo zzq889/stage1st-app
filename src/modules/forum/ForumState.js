@@ -1,9 +1,10 @@
 import { take, call, fork, select } from 'redux-saga/effects';
+import uuid from 'uuid';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
-  fetchForums as apifetchForums,
-  fetchChannels as apifetchChannels,
+  fetchForums as apiFetchForums,
+  fetchChannels as apiFetchChannels,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -21,7 +22,7 @@ export const channelEntity = {
   success: (_, response) => createAction(
     CHANNEL.SUCCESS, { response }),
   failure: (_, error) => createAction(
-    CHANNEL.FAILURE, { error }),
+    CHANNEL.FAILURE, { error, id: uuid() }),
 };
 
 export const forumEntity = {
@@ -30,7 +31,7 @@ export const forumEntity = {
   success: (fid, response) => createAction(
     FORUM.SUCCESS, { fid, response }),
   failure: (fid, error) => createAction(
-    FORUM.FAILURE, { fid, error }),
+    FORUM.FAILURE, { fid, error, id: uuid() }),
 };
 
 export const loadChannelPage = (requiredFields = []) =>
@@ -43,10 +44,10 @@ export const loadForumPage = (fid, requiredFields = []) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchChannels = fetchEntity.bind(null, channelEntity, apifetchChannels);
+const fetchChannels = fetchEntity.bind(null, channelEntity, apiFetchChannels);
 const getChannels = state => state.getIn(['entities', 'channels']);
 
-const fetchForums = fetchEntity.bind(null, forumEntity, apifetchForums);
+const fetchForums = fetchEntity.bind(null, forumEntity, apiFetchForums);
 const getForums = (state, fid) => state.getIn(['pagination', 'forumsByFid', fid]);
 
 // load repo unless it is cached
