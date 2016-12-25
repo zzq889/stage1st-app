@@ -14,6 +14,7 @@ const ThreadListViewContainer = connect(
           .getIn(['entities', 'threads', String(tid)])
           .set('forumName', forumName))
         .toList(),
+      loading: state.getIn(['pagination', 'threadsByFid', fid, 'isFetching']),
     };
   },
   {

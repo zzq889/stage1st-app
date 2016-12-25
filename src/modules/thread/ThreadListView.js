@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { List } from 'immutable';
@@ -46,7 +47,14 @@ class ThreadListView extends Component {
   )
 
   render() {
-    const { threads } = this.props;
+    const { threads, loading } = this.props;
+    if (loading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator style={styles.centered} />
+        </View>
+      );
+    }
     return (
       <ImmutableListView
         immutableData={threads}
@@ -61,6 +69,7 @@ class ThreadListView extends Component {
 ThreadListView.propTypes = {
   fid: PropTypes.number,
   threads: PropTypes.instanceOf(List).isRequired,
+  loading: PropTypes.bool,
   loadThreadPage: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
     push: PropTypes.func.isRequired,
@@ -72,6 +81,13 @@ ThreadListView.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  centered: {
+    flex: 1,
+    alignSelf: 'center',
+  },
   iconContainer: {
     flex: 1,
     alignItems: 'center',
