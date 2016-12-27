@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   Linking,
+  Dimensions,
 } from 'react-native';
 import SafariView from 'react-native-safari-view';
 import Moment from 'moment';
@@ -28,7 +29,8 @@ const renderNode = (node, index, parent, opts, renderChild) => {
   } else if (node.attribs && node.attribs.class === 'quote') {
     return <Text key={index} style={[styles.content, styles.quote]}>{renderChild()}{'\n'}</Text>;
   } else if (node.name === 'img') {
-    const defaultSize = attribs.smilieid ? 32 : 100;
+    const { width: screenWidth } = Dimensions.get('window');
+    const defaultSize = attribs.smilieid ? 32 : (screenWidth - 30);
     const imgWidth = Number(attribs.width || attribs['data-width'] || defaultSize);
     const imgHeight = Number(attribs.height || attribs['data-height'] || defaultSize);
 
@@ -54,8 +56,8 @@ const renderNode = (node, index, parent, opts, renderChild) => {
 
     return (
       <Text key={index}>
-        {`${source.uri}\n`}
         <Image key={index} source={source} style={{ ...imgStyle, backgroundColor: '#eee' }} />
+        {`${source.uri}\n\n`}
       </Text>
     );
   }
