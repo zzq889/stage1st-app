@@ -5,7 +5,15 @@ import { getConfiguration } from '../utils/configuration';
 import { getAuthenticationToken } from '../utils/authentication';
 import * as SCHEMA from './schema';
 
-// Extracts the next page URL from Github API response.
+//
+export function url(path) {
+  const apiRoot = getConfiguration('API_ROOT');
+  return path.indexOf('/') === 0
+    ? apiRoot + path
+    : `${apiRoot}/${path}`;
+}
+
+// Extracts the next page URL from API response.
 function getNextPageUrl(response) {
   const link = response.headers.get('link');
   if (!link) {
@@ -19,8 +27,6 @@ function getNextPageUrl(response) {
 
   return nextLink.split(';')[0].slice(1, -1);
 }
-
-const API_ROOT = getConfiguration('API_ROOT');
 
 function getRequestHeaders(body, token) {
   const headers = body
@@ -37,7 +43,7 @@ function getRequestHeaders(body, token) {
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 async function callApi(method, endpoint, body, schema, mapResponseToKey) {
-  const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
+  const fullUrl = endpoint.match(/^http/) ? endpoint : url(endpoint);
   const token = await getAuthenticationToken();
   const headers = getRequestHeaders(body, token);
   const options = body

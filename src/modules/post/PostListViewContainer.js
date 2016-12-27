@@ -5,17 +5,14 @@ import PostListView from './PostListView';
 import { loadPostPage } from './PostState';
 
 const PostListViewContainer = connect(
-  (state, { tid }) => {
-    const posts = state
+  (state, { tid }) => ({
+    posts: state
       .getIn(['pagination', 'postsByTid', tid, 'ids'], List())
       .map(pid => state.getIn(['entities', 'posts', String(pid)]))
       .sortBy(post => post.get('position'))
-      .toList();
-
-    return {
-      posts,
-    };
-  },
+      .toList(),
+    loading: state.getIn(['pagination', 'postsByTid', tid, 'isFetching']),
+  }),
   {
     loadPostPage,
   },

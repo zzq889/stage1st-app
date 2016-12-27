@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { List } from 'immutable';
 import ImmutableListView from '../../components/ImmutableListView';
@@ -29,7 +30,14 @@ class PostListView extends Component {
   }
 
   render() {
-    const { posts } = this.props;
+    const { posts, loading } = this.props;
+    if (loading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator style={styles.centered} />
+        </View>
+      );
+    }
     return (
       <ImmutableListView
         immutableData={posts}
@@ -44,6 +52,7 @@ class PostListView extends Component {
 PostListView.propTypes = {
   tid: PropTypes.number.isRequired,
   posts: PropTypes.instanceOf(List).isRequired,
+  loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
 };
 
@@ -52,6 +61,13 @@ PostListView.defaultProps = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  centered: {
+    flex: 1,
+    alignSelf: 'center',
+  },
   iconContainer: {
     flex: 1,
     alignItems: 'center',
