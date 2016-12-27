@@ -55,9 +55,9 @@ const renderNode = (node, index, parent, opts, renderChild) => {
     }
 
     return (
-      <Text key={index}>
-        <Image key={index} source={source} style={{ ...imgStyle, backgroundColor: '#eee' }} />
-        {`${source.uri}\n\n`}
+      <Text key={index} style={styles.imgWrapper}>
+        <Image key={index} source={source} style={imgStyle} />
+        {`${source.uri}\n`}
       </Text>
     );
   }
@@ -148,6 +148,9 @@ const styles = StyleSheet.create({
   },
   quote: {
     color: '#888',
+  },
+  imgWrapper: {
+    backgroundColor: '#eee',
   },
 });
 
