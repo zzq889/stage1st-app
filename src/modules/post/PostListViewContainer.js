@@ -11,6 +11,7 @@ const PostListViewContainer = connect(
       .map(pid => state.getIn(['entities', 'posts', String(pid)]))
       .sortBy(post => post.get('position'))
       .toList(),
+    thread: state.getIn(['entities', 'threads', String(tid)]),
     loading: state.getIn(['pagination', 'postsByTid', tid, 'isFetching']),
   }),
   {
