@@ -26,7 +26,7 @@ class ThreadListView extends Component {
   }
 
   componentWillMount() {
-    this.props.loadThreadPage(this.props.fid);
+    this.props.loadThreadPage();
   }
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (

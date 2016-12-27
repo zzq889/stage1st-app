@@ -14,7 +14,7 @@ const ThreadRow = ({ subject, forumName, author, timestamp, onPress }) => (
     onPress={onPress}
   >
     <View style={styles.row}>
-      <Text style={styles.title}>{`${subject} [${forumName}]`}</Text>
+      <Text style={styles.title}>{subject}&nbsp;<Text style={styles.subtitle}>[{forumName}]</Text></Text>
       <View style={styles.content}>
         <View style={styles.iconText}>
           <Icon name="md-person" size={15} color="#888" />
@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
+    color: '#000',
   },
   subtitle: {
     fontSize: 16,
-    color: '#aaa',
+    color: '#888',
   },
   detail: {
     color: '#888',

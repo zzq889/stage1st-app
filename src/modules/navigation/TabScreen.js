@@ -33,7 +33,7 @@ const TabScreen = () => (
         id="threads"
         navigatorUID="threads"
         defaultRouteConfig={defaultRouteConfig.toJS()}
-        initialRoute={Router.getRoute('favedThreads')}
+        initialRoute={Router.getRoute('subscribedThreads')}
       />
     </TabItem>
 

@@ -17,7 +17,7 @@ function htmlToElement(rawHtml, opts, done) {
 
     return dom.map((node, index, list) => {
       if (opts.customRenderer) {
-        const rendered = opts.customRenderer(node, index, parent, () => domToElement(node.children, node));
+        const rendered = opts.customRenderer(node, index, parent, opts, () => domToElement(node.children, node));
         if (rendered || rendered === null) return rendered;
       }
 

@@ -2,44 +2,41 @@ import React, { PropTypes } from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
+  Linking,
+  Dimensions,
 } from 'react-native';
+import SafariView from 'react-native-safari-view';
 import Moment from 'moment';
 import entities from 'entities';
 import HtmlView from '../../components/HtmlView';
+import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
 import { getConfiguration } from '../../utils/configuration';
 
-// node, index, parent, renderChild
-const renderNode = (node, index, parent, renderChild) => {
+// node, index, parent, opts, renderChild
+const renderNode = (node, index, parent, opts, renderChild) => {
   const attribs = node.attribs;
-
-  if (node.name === 'br') {
-    return null;
-  }
 
   if (node.type === 'text') {
     return (
-      <Text key={index} style={styles.content}>
+      <Text key={index} style={parent ? opts.styles[parent.name] : styles.content}>
         {entities.decodeHTML(node.data)}
       </Text>
     );
-  }
-
-  if (node.attribs && node.attribs.class === 'quote') {
-    return <Text key={index} style={styles.inline}>{renderChild()}{'\n'}</Text>;
-  }
-
-  if (node.name === 'img') {
-    const defaultSize = attribs.smilieid ? 32 : 100;
+  } else if (node.name === 'br') {
+    return null;
+  } else if (node.attribs && node.attribs.class === 'quote') {
+    return <Text key={index} style={[styles.content, styles.quote]}>{renderChild()}{'\n'}</Text>;
+  } else if (node.name === 'img') {
+    const { width: screenWidth } = Dimensions.get('window');
+    const defaultSize = attribs.smilieid ? 32 : (screenWidth - 30);
     const imgWidth = Number(attribs.width || attribs['data-width'] || defaultSize);
     const imgHeight = Number(attribs.height || attribs['data-height'] || defaultSize);
 
     const imgStyle = {
       width: imgWidth,
       height: imgHeight,
-      backgroundColor: '#eee',
     };
 
     const uri = attribs.src;
@@ -53,13 +50,38 @@ const renderNode = (node, index, parent, renderChild) => {
       height: imgHeight,
     };
 
+    if (attribs.smilieid) {
+      return <Image key={index} source={source} style={imgStyle} />;
+    }
+
     return (
-      <Image key={index} source={source} style={imgStyle} />
+      <Text key={index} style={styles.imgWrapper}>
+        <Image key={index} source={source} style={imgStyle} />
+        {`${source.uri}\n`}
+      </Text>
     );
   }
 
   return undefined;
 };
+
+async function onLinkPress(url) {
+  try {
+    let available = true;
+    try {
+      await SafariView.isAvailable();
+    } catch (e) {
+      available = false;
+    }
+    if (available) {
+      SafariView.show({ url });
+    } else {
+      Linking.openURL(url);
+    }
+  } catch (err) {
+    console.error('An error occurred', err);
+  }
+}
 
 const PostRow = ({ message, position, author, authorId, timestamp }) => (
   <View style={styles.row}>
@@ -76,7 +98,7 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
     <HtmlView
       value={message}
       renderNode={renderNode}
-      onLinkPress={url => console.warn('clicked link: ', url)}
+      onLinkPress={onLinkPress}
     />
   </View>
 );
@@ -111,6 +133,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
+    color: '#000',
   },
   position: {
     color: '#888',
@@ -120,10 +143,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   content: {
-    fontSize: 15,
+    fontSize: 16,
+    color: '#000',
   },
-  inline: {
+  quote: {
     color: '#888',
+  },
+  imgWrapper: {
+    backgroundColor: '#eee',
   },
 });
 

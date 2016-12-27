@@ -14,8 +14,8 @@ export default combineReducers({
       FORUM.FAILURE,
     ],
   }),
-  threadsByFid: paginate({
-    mapActionToKey: action => action.fid || 'fav',
+  threadsById: paginate({
+    mapActionToKey: action => action.id,
     types: [
       THREAD.REQUEST,
       THREAD.SUCCESS,
