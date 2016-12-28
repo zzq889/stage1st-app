@@ -20,9 +20,7 @@ class ForumListView extends Component {
   }
 
   _push = (route) => {
-    this.props.navigation.performAction(({ stacks }) => {
-      stacks('forums').push(route);
-    });
+    this.props.navigation.getNavigator('forums').push(route);
   };
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
@@ -53,7 +51,7 @@ class ForumListView extends Component {
 ForumListView.propTypes = {
   forums: PropTypes.instanceOf(List).isRequired,
   navigation: PropTypes.shape({
-    performAction: PropTypes.func.isRequired,
+    getNavigator: PropTypes.func.isRequired,
   }),
 };
 
