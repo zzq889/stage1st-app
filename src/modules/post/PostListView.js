@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import {
   View,
+  Text,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import ImmutableListView from '../../components/ImmutableListView';
 import Row from './PostRow';
 
@@ -29,6 +30,12 @@ class PostListView extends Component {
     this.props.loadPostPage(this.props.tid);
   }
 
+  renderHeader = () => (
+    <View style={styles.header}>
+      <Text style={styles.headerText}>{this.props.thread.get('subject')}</Text>
+    </View>
+  );
+
   render() {
     const { posts, loading } = this.props;
     if (loading) {
@@ -42,6 +49,7 @@ class PostListView extends Component {
       <ImmutableListView
         immutableData={posts}
         renderRow={renderRow}
+        renderHeader={this.renderHeader}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={10}
       />
@@ -51,6 +59,7 @@ class PostListView extends Component {
 
 PostListView.propTypes = {
   tid: PropTypes.number.isRequired,
+  thread: PropTypes.instanceOf(Map).isRequired,
   posts: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
@@ -67,6 +76,14 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     alignSelf: 'center',
+  },
+  header: {
+    padding: 15,
+    backgroundColor: '#eee',
+  },
+  headerText: {
+    fontSize: 16,
+    color: '#000',
   },
   iconContainer: {
     flex: 1,
