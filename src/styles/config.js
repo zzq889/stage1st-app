@@ -31,6 +31,9 @@ export const defaultRouteConfig = fromJS({
     backgroundColor: palette.black,
     tintColor: palette.inverted,
   },
+  styles: {
+    gestures: null,
+  },
 });
 
 export const defaultAlertStyle = {
