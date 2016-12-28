@@ -4,16 +4,9 @@ import {
   TabNavigation,
   TabNavigationItem as TabItem,
 } from '@exponent/ex-navigation';
-import { fromJS } from 'immutable';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Router from '../AppRouter';
-
-const defaultRouteConfig = fromJS({
-  navigationBar: {
-    backgroundColor: '#000',
-    tintColor: '#fff',
-  },
-});
+import { defaultRouteConfig } from '../../styles/config';
 
 const TabScreen = () => (
   <TabNavigation

@@ -3,16 +3,11 @@ import { connect } from 'react-redux';
 import { withNavigation } from '@exponent/ex-navigation';
 import hoistStatics from 'hoist-non-react-statics';
 import { resetErrorMessage } from '../modules/error/ErrorState';
+import { defaultAlertStyle } from '../styles/config';
 
 function getDisplayName(WrappedComponent): string {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
-
-const alertStyle = {
-  text: { color: '#000' },
-  container: { backgroundColor: '#FFEB3B' },
-  duration: 1000,
-};
 
 export default function withMessage(WrappedComponent) {
   @withNavigation
@@ -25,7 +20,7 @@ export default function withMessage(WrappedComponent) {
   class InnerComponent extends PureComponent {
     componentWillReceiveProps({ errorId, errorMessage }) {
       if (errorId !== this.props.errorId) {
-        this.props.navigator.showLocalAlert(errorMessage, alertStyle);
+        this.props.navigator.showLocalAlert(errorMessage, defaultAlertStyle);
       }
     }
 
