@@ -1,8 +1,13 @@
 /* eslint-disable react/prefer-stateless-function */
 
 import React, { PropTypes, PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+} from 'react-native';
 import { withNavigation } from '@exponent/ex-navigation';
 import hoistStatics from 'hoist-non-react-statics';
 
@@ -16,6 +21,10 @@ export default function requireAuth(WrappedComponent) {
     isLoggedIn: state.getIn(['auth', 'isLoggedIn']),
   }))
   class InnerComponent extends PureComponent {
+    showLogin = () => {
+      this.props.navigation.getNavigator('master').push('login');
+    }
+
     render() {
       const { isLoggedIn, ...otherProps } = this.props;
       if (isLoggedIn) {
@@ -23,7 +32,9 @@ export default function requireAuth(WrappedComponent) {
       }
       return (
         <View style={styles.container}>
-          <Text>Require Login</Text>
+          <TouchableOpacity onPress={this.showLogin}>
+            <Text>Require Login</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -31,8 +42,8 @@ export default function requireAuth(WrappedComponent) {
 
   InnerComponent.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
-    navigator: PropTypes.shape({
-      performAction: PropTypes.func.isRequired,
+    navigation: PropTypes.shape({
+      getNavigator: PropTypes.func.isRequired,
     }).isRequired,
   };
 

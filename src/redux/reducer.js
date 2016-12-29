@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux-immutable';
+import Immutable from 'immutable';
 import { NavigationReducer } from '@exponent/ex-navigation';
+import { modelReducer } from 'react-redux-form/lib/immutable';
 import SessionStateReducer from '../modules/session/SessionState';
 import ErrorStateReducer from '../modules/error/ErrorState';
 import EntitiesStateReducer from '../modules/entities/EntitiesState';
@@ -11,6 +13,7 @@ export default combineReducers({
   // @NOTE: By convention, the navigation state must live in a subtree called
   // `navigation`
   navigation: NavigationReducer,
+  loginForm: modelReducer('login', Immutable.Map()),
   session: SessionStateReducer,
   error: ErrorStateReducer,
 
