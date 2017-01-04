@@ -1,6 +1,6 @@
 /* eslint-disable react/forbid-prop-types */
 
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import {
   View,
   KeyboardAvoidingView,
@@ -48,40 +48,26 @@ renderField.propTypes = {
   }),
 };
 
-class LoginView extends Component {
-  static route = {
-    navigationBar: {
-      title: 'Login',
-      backgroundColor: palette.black,
-      tintColor: palette.inverted,
-    },
-    styles: {
-      gestures: null,
-    },
-  }
-
-  render() {
-    const { handleSubmit, invalid, submitting } = this.props;
-    const disabled = invalid || submitting;
-    return (
-      <View style={styles.outerContainer}>
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
-          <Field name="username" type="text" component={renderField} label="用户名" />
-          <Field name="password" type="password" component={renderField} label="密码" />
-          <View>
-            <TouchableOpacity
-              style={disabled ? [styles.button, styles.disabled] : styles.button}
-              disabled={disabled}
-              onPress={handleSubmit}
-            >
-              <Text style={styles.buttonText}>登录</Text>
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </View>
-    );
-  }
-}
+const LoginView = ({ handleSubmit, invalid, submitting }) => {
+  const disabled = invalid || submitting;
+  return (
+    <View style={styles.outerContainer}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <Field name="username" type="text" component={renderField} label="用户名" />
+        <Field name="password" type="password" component={renderField} label="密码" />
+        <View>
+          <TouchableOpacity
+            style={disabled ? [styles.button, styles.disabled] : styles.button}
+            disabled={disabled}
+            onPress={handleSubmit}
+          >
+            <Text style={styles.buttonText}>登录</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </View>
+  );
+};
 
 LoginView.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

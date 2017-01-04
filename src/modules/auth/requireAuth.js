@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { withNavigation } from '@exponent/ex-navigation';
 import hoistStatics from 'hoist-non-react-statics';
+import { palette } from '../../styles/config';
 
 function getDisplayName(WrappedComponent): string {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -32,8 +33,9 @@ export default function requireAuth(WrappedComponent) {
       }
       return (
         <View style={styles.container}>
-          <TouchableOpacity onPress={this.showLogin}>
-            <Text>Require Login</Text>
+          <Text style={styles.beforeText}>Authentication Required</Text>
+          <TouchableOpacity onPress={this.showLogin} style={styles.button}>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
       );
@@ -55,7 +57,20 @@ export default function requireAuth(WrappedComponent) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 15,
     justifyContent: 'center',
+  },
+  beforeText: {
+    color: palette.grey,
+    marginBottom: 10,
+  },
+  button: {
+    height: 40,
     alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: palette.primary,
+  },
+  buttonText: {
+    color: palette.white,
   },
 });
