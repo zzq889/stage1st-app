@@ -6,9 +6,11 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import { NavigationProvider } from '@exponent/ex-navigation';
+import {
+  NavigationProvider,
+  StackNavigation,
+} from '@exponent/ex-navigation';
 import Router from './AppRouter';
-import TabScreen from '../modules/navigation/TabScreen';
 import DeveloperMenu from '../components/DeveloperMenu';
 
 const AppView = ({ isReady }) => {
@@ -23,7 +25,10 @@ const AppView = ({ isReady }) => {
   return (
     <View style={styles.container}>
       <NavigationProvider router={Router}>
-        <TabScreen />
+        <StackNavigation
+          id="master"
+          initialRoute={Router.getRoute('app')}
+        />
       </NavigationProvider>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" animated />}
       {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}

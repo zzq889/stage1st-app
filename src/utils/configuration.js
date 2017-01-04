@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 
-const URL_ROOT = __DEV__ ? 'saraba1st.asuscomm.com:20080' : 'app.saraba1st.com';
+// const URL_ROOT = __DEV__ ? 'saraba1st.asuscomm.com:20080' : 'app.saraba1st.com';
+const URL_ROOT = 'app.saraba1st.com';
 
 let configuration = Map({
   API_ROOT: `http://${URL_ROOT}/2b/api/app/`,

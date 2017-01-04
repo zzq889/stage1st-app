@@ -5,7 +5,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import Router from '../AppRouter';
-import requireAuth from '../../components/requireAuth';
+import requireAuth from '../auth/requireAuth';
 
 const color = () => Math.floor(255 * Math.random());
 
