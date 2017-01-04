@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import { NavigationStyles } from '@exponent/ex-navigation';
 import LoginView from './LoginView';
 import { palette } from '../../styles/config';
 
@@ -11,6 +12,7 @@ class LoginContainer extends PureComponent {
       tintColor: palette.inverted,
     },
     styles: {
+      ...NavigationStyles.SlideVertical,
       gestures: null,
     },
   }
