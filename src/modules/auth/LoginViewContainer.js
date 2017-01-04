@@ -3,13 +3,15 @@ import { connect } from 'react-redux';
 import { NavigationStyles } from '@exponent/ex-navigation';
 import LoginView from './LoginView';
 import { palette } from '../../styles/config';
+import DismissButton from '../../components/DismissButton';
 
-class LoginContainer extends PureComponent {
+class LoginViewContainer extends PureComponent {
   static route = {
     navigationBar: {
       title: 'Login',
       backgroundColor: palette.black,
       tintColor: palette.inverted,
+      renderLeft: () => <DismissButton />,
     },
     styles: {
       ...NavigationStyles.SlideVertical,
@@ -22,4 +24,4 @@ class LoginContainer extends PureComponent {
   }
 }
 
-export default connect()(LoginContainer);
+export default connect()(LoginViewContainer);

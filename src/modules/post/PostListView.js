@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { List, Map } from 'immutable';
+import { palette } from '../../styles/config';
 import ImmutableListView from '../../components/ImmutableListView';
 import Row from './PostRow';
 
@@ -23,6 +24,8 @@ class PostListView extends Component {
   static route = {
     navigationBar: {
       title: 'Posts',
+      backgroundColor: palette.black,
+      tintColor: palette.inverted,
     },
   }
 

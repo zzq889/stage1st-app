@@ -1,27 +1,20 @@
 import React, { Component, PropTypes } from 'react';
-import { withNavigation } from '@exponent/ex-navigation';
 import {
   View,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
 import { List } from 'immutable';
-import Icon from 'react-native-vector-icons/Ionicons';
 import ImmutableListView from '../../components/ImmutableListView';
+import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
 
-@withNavigation
 class ThreadListView extends Component {
   static route = {
     navigationBar: {
       title: ({ title }) => title || 'Threads',
-      renderRight: () => (
-        <TouchableOpacity style={styles.iconContainer}>
-          <Icon style={styles.icon} name="ios-create-outline" size={28} color="#fff" />
-        </TouchableOpacity>
-      ),
+      renderRight: () => <ComposeButton />,
     },
   }
 
@@ -36,7 +29,9 @@ class ThreadListView extends Component {
       author={rowData.get('author')}
       timestamp={rowData.get('lastpost')}
       onPress={() => {
-        this.props.navigator.push(Router.getRoute('posts', {
+        this.props.navigation
+        .getNavigator('master')
+        .push(Router.getRoute('posts', {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
         }));
@@ -70,8 +65,8 @@ ThreadListView.propTypes = {
   threads: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadThreadPage: PropTypes.func.isRequired,
-  navigator: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    getNavigator: PropTypes.func.isRequired,
   }).isRequired,
 };
 
@@ -86,16 +81,6 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     alignSelf: 'center',
-  },
-  iconContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    flex: 1,
-    margin: 8,
-    justifyContent: 'center',
   },
   separator: {
     flex: 1,
