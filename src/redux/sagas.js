@@ -11,6 +11,9 @@ import {
 import {
   watchLoadPostPage,
 } from '../modules/post/PostState';
+import {
+  watchAuthUser,
+} from '../modules/auth/AuthState';
 
 export default function* root() {
   yield [
@@ -20,5 +23,6 @@ export default function* root() {
     fork(watchLoadFavedThreadPage),
     fork(watchLoadSubscribedThreadPage),
     fork(watchLoadPostPage),
+    fork(watchAuthUser),
   ];
 }

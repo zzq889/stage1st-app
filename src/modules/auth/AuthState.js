@@ -1,4 +1,17 @@
-import { Map, fromJS } from 'immutable';
+import { take, call/* , fork, select*/ } from 'redux-saga/effects';
+import { Map } from 'immutable';
+import EventEmitter from 'event-emitter';
+import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import {
+  fetchEntity,
+  userLogin as apiUserLogin,
+} from '../../services/webApi';
+
+/** ****************************************************************************/
+/** ***************************** Actions *************************************/
+/** ****************************************************************************/
+
+export const authEmitter = new EventEmitter();
 
 // Initial state
 const initialState = Map({
@@ -8,36 +21,54 @@ const initialState = Map({
 });
 
 // Actions
-const USER_LOGIN_SUCCESS = 'AppState/USER_LOGIN_SUCCESS';
-const USER_LOGIN_ERROR = 'AppState/USER_LOGIN_ERROR';
+export const LOGIN = createRequestTypes('LOGIN');
+export const AUTH_USER = 'AuthState/AUTH_USER';
 
-export function onUserLoginSuccess(profile, token) {
-  return {
-    type: USER_LOGIN_SUCCESS,
-    payload: {
-      profile: fromJS(profile),
-      token: fromJS(token),
-    },
-  };
+export const loginEntity = {
+  request: () => createAction(
+    LOGIN.REQUEST),
+  success: (_, response) => createAction(
+    LOGIN.SUCCESS, { response }),
+  failure: (_, error) => createAction(
+    LOGIN.FAILURE, { error }),
+};
+
+export const authUser = (data, requiredFields = []) =>
+  createAction(AUTH_USER, { data, requiredFields });
+
+/** ****************************************************************************/
+/** ***************************** Sagas *************************************/
+/** ****************************************************************************/
+
+const loginRequest = fetchEntity.bind(null, loginEntity, apiUserLogin);
+
+/** ****************************************************************************/
+/** ***************************** WATCHERS *************************************/
+/** ****************************************************************************/
+
+export function* watchAuthUser() {
+  while (true) {
+    const { data } = yield take(AUTH_USER);
+    yield call(loginRequest, data);
+  }
 }
 
-export function onUserLoginError(error) {
-  return {
-    type: USER_LOGIN_ERROR,
-    payload: error,
-    error: true,
-  };
-}
+/** ****************************************************************************/
+/** ***************************** REDUCERS *************************************/
+/** ****************************************************************************/
 
-// Reducer
 export default function AuthStateReducer(state = initialState, action = {}) {
   switch (action.type) {
-    case USER_LOGIN_SUCCESS:
+    case LOGIN.SUCCESS: {
+      const { uid, username, sid } = action.response.data;
+      authEmitter.emit('dismiss');
       return state
         .set('isLoggedIn', true)
-        .set('currentUser', action.payload.profile)
-        .set('authenticationToken', action.payload.token);
-    case USER_LOGIN_ERROR:
+        .set('currentUser', { uid, username })
+        .set('authenticationToken', sid);
+    }
+    case LOGIN.FAILURE:
+      console.warn(action.error);
       return initialState;
     default:
       return state;
