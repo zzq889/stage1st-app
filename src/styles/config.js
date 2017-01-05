@@ -26,6 +26,10 @@ export const palette = {
   background: baseColors.white,
 };
 
+export const rounded = {
+  borderRadius: 4,
+};
+
 export const defaultRouteConfig = fromJS({
   navigationBar: {
     backgroundColor: palette.black,
