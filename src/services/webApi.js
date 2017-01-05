@@ -29,9 +29,10 @@ function getNextPageUrl(response) {
 }
 
 function getRequestHeaders(body, token) {
-  const headers = body
-    ? { Accept: 'application/json', 'Content-Type': 'application/json' }
-    : { Accept: 'application/json' };
+  // const headers = body
+  //   ? { Accept: 'application/json', 'Content-Type': 'application/json' }
+  //   : { Accept: 'application/json' };
+  const headers = { Accept: 'application/json' };
 
   if (token) {
     return { ...headers, Authorization: token };
@@ -47,7 +48,14 @@ async function callApi(method, endpoint, body, schema, mapResponseToKey) {
   const token = await getAuthenticationToken();
   const headers = getRequestHeaders(body, token);
   const options = body
-    ? { method, headers, body: JSON.stringify(body) }
+    ? {
+      method,
+      headers,
+      body: Object.keys(body).reduce(
+        (form, key) => { form.append(key, body[key]); return form; },
+        new FormData(),
+      ),
+    }
     : { method, headers };
 
   const normalizeKey = mapResponseToKey
@@ -82,7 +90,7 @@ export async function get(endpoint, params, ...otherParams) {
 }
 
 export async function post(endpoint, body, ...otherParams) {
-  return callApi('POST', ...otherParams);
+  return callApi('POST', endpoint, body, ...otherParams);
 }
 
 // resuable fetch Subroutine
@@ -90,10 +98,10 @@ export async function post(endpoint, body, ...otherParams) {
 // apiFn  : api.fetchUser | api.fetchRepo | ...
 // id     : login | fullName
 // url    : next page url. If not provided will use pass it to apiFn
-export function* fetchEntity(entity, apiFn, id, url) {
+export function* fetchEntity(entity, apiFn, id, nextUrl) {
   try {
     yield put(entity.request(id));
-    const response = yield call(apiFn, url || id);
+    const response = yield call(apiFn, nextUrl || id);
     yield put(entity.success(id, response));
   } catch (error) {
     const message = error.message || 'Something bad happened';
@@ -109,7 +117,7 @@ export function* fetchEntity(entity, apiFn, id, url) {
 
 // user
 export const userLogin = ({ username, password }) =>
-  post('user/login', { username, password }, SCHEMA.userSchema);
+  post('user/login', { username, password });
 
 export const userRegister = ({ username, password, email }) =>
   post('user/register', { username, password, email }, SCHEMA.userSchema);

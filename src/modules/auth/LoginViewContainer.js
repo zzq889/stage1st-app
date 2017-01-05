@@ -1,9 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { NavigationStyles } from '@exponent/ex-navigation';
 import LoginView from './LoginView';
 import { palette } from '../../styles/config';
 import DismissButton from '../../components/DismissButton';
+import { authUser, authEmitter } from './AuthState';
 
 class LoginViewContainer extends PureComponent {
   static route = {
@@ -19,9 +20,32 @@ class LoginViewContainer extends PureComponent {
     },
   }
 
+  componentWillMount() {
+    authEmitter.on('dismiss', this.dismissLogin);
+  }
+
+  dismissLogin = () => {
+    this.props.navigation.getNavigator('master').pop();
+  }
+
   render() {
-    return <LoginView {...this.props} onSubmit={s => console.warn(s)} />;
+    return (
+      <LoginView
+        onSubmit={data => this.props.authUser(data.toJS())}
+        {...this.props}
+      />
+    );
   }
 }
 
-export default connect()(LoginViewContainer);
+LoginViewContainer.propTypes = {
+  authUser: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    getNavigator: PropTypes.func.isRequired,
+  }),
+};
+
+export default connect(
+  () => ({}),
+  { authUser },
+)(LoginViewContainer);

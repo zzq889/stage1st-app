@@ -12,6 +12,7 @@
   ],
   "globals": {
     "fetch": true,
+    "FormData": false,
     "__DEV__": true
   },
   "rules": {
