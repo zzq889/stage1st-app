@@ -4,7 +4,7 @@ import { NavigationStyles } from '@exponent/ex-navigation';
 import LoginView from './LoginView';
 import { palette } from '../../styles/config';
 import DismissButton from '../../components/DismissButton';
-import { authUser, authEmitter } from './AuthState';
+import { userAuth, authEmitter } from './AuthState';
 
 class LoginViewContainer extends PureComponent {
   static route = {
@@ -31,7 +31,7 @@ class LoginViewContainer extends PureComponent {
   render() {
     return (
       <LoginView
-        onSubmit={data => this.props.authUser(data.toJS())}
+        onSubmit={data => this.props.userAuth(data.toJS())}
         {...this.props}
       />
     );
@@ -39,7 +39,7 @@ class LoginViewContainer extends PureComponent {
 }
 
 LoginViewContainer.propTypes = {
-  authUser: PropTypes.func.isRequired,
+  userAuth: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
   }),
@@ -47,5 +47,5 @@ LoginViewContainer.propTypes = {
 
 export default connect(
   () => ({}),
-  { authUser },
+  { userAuth },
 )(LoginViewContainer);

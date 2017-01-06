@@ -46,17 +46,17 @@ const TabScreen = () => (
     </TabItem>
 
     <TabItem
-      id="personal"
+      id="profile"
       renderIcon={isSelected => (isSelected
         ? <Icon name="ios-person" size={35} color="#000" />
         : <Icon name="ios-person-outline" size={35} color="#000" />)
       }
     >
       <StackNavigation
-        id="personal"
-        navigatorUID="personal"
+        id="profile"
+        navigatorUID="profile"
         defaultRouteConfig={defaultRouteConfig.toJS()}
-        initialRoute={Router.getRoute('color')}
+        initialRoute={Router.getRoute('profile')}
       />
     </TabItem>
   </TabNavigation>

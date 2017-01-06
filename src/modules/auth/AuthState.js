@@ -22,7 +22,8 @@ const initialState = Map({
 
 // Actions
 export const LOGIN = createRequestTypes('LOGIN');
-export const AUTH_USER = 'AuthState/AUTH_USER';
+export const USER_AUTH = 'AuthState/USER_AUTH';
+export const USER_LOGOUT = 'AuthState/USER_LOGOUT';
 
 export const loginEntity = {
   request: () => createAction(
@@ -33,8 +34,10 @@ export const loginEntity = {
     LOGIN.FAILURE, { error }),
 };
 
-export const authUser = (data, requiredFields = []) =>
-  createAction(AUTH_USER, { data, requiredFields });
+export const userAuth = (data, requiredFields = []) =>
+  createAction(USER_AUTH, { data, requiredFields });
+
+export const userLogout = () => createAction(USER_LOGOUT);
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
@@ -46,9 +49,9 @@ const loginRequest = fetchEntity.bind(null, loginEntity, apiUserLogin);
 /** ***************************** WATCHERS *************************************/
 /** ****************************************************************************/
 
-export function* watchAuthUser() {
+export function* watchUserAuth() {
   while (true) {
-    const { data } = yield take(AUTH_USER);
+    const { data } = yield take(USER_AUTH);
     yield call(loginRequest, data);
   }
 }
@@ -64,11 +67,14 @@ export default function AuthStateReducer(state = initialState, action = {}) {
       authEmitter.emit('dismiss');
       return state
         .set('isLoggedIn', true)
-        .set('currentUser', { uid, username })
+        .set('currentUser', Map({ uid, username }))
         .set('authenticationToken', sid);
     }
+    case USER_LOGOUT:
     case LOGIN.FAILURE:
-      console.warn(action.error);
+      if (action.error) {
+        console.warn(action.error);
+      }
       return initialState;
     default:
       return state;

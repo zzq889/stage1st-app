@@ -7,7 +7,7 @@ import {
 import Router from '../AppRouter';
 import requireAuth from '../auth/requireAuth';
 
-const color = () => Math.floor(255 * Math.random());
+const color = () => Math.floor(360 * Math.random());
 
 /**
  * Sample view to demonstrate navigation patterns.
@@ -22,7 +22,7 @@ class ColorView extends Component {
   }
 
   state = {
-    background: `rgba(${color()},${color()},${color()}, 1)`,
+    background: `hsl(${color()},50%,80%)`,
   };
 
   onNextPress = () => {

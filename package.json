@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@exponent/ex-navigation": "^2.5.0",
+    "@exponent/react-native-action-sheet": "^0.3.0",
     "bluebird": "^3.3.5",
     "entities": "^1.1.1",
     "es6-symbol": "^3.0.2",
@@ -45,7 +46,8 @@
     "react": "~15.3.2",
     "react-dom": "~15.3.2",
     "react-native": "~0.37.0",
-    "react-native-code-push": "^1.16.0-beta",
+    "react-native-code-push": "^1.16.1-beta",
+    "react-native-immutable-list-view": "0.2.2",
     "react-native-safari-view": "^1.2.0",
     "react-native-vector-icons": "^3.0.0",
     "react-redux": "^5.0.0",

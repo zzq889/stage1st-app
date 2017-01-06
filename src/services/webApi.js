@@ -47,13 +47,17 @@ async function callApi(method, endpoint, body, schema, mapResponseToKey) {
   const fullUrl = endpoint.match(/^http/) ? endpoint : url(endpoint);
   const token = await getAuthenticationToken();
   const headers = getRequestHeaders(body, token);
+  const initialForm = new FormData();
+  if (token) {
+    initialForm.append('sid', token);
+  }
   const options = body
     ? {
       method,
       headers,
       body: Object.keys(body).reduce(
         (form, key) => { form.append(key, body[key]); return form; },
-        new FormData(),
+        initialForm,
       ),
     }
     : { method, headers };
@@ -120,7 +124,7 @@ export const userLogin = ({ username, password }) =>
   post('user/login', { username, password });
 
 export const userRegister = ({ username, password, email }) =>
-  post('user/register', { username, password, email }, SCHEMA.userSchema);
+  post('user/register', { username, password, email });
 
 export const userLogout = uid =>
   post('user/logout', { uid });

@@ -10,6 +10,7 @@ import {
   NavigationProvider,
   StackNavigation,
 } from '@exponent/ex-navigation';
+import { ActionSheetProvider } from '@exponent/react-native-action-sheet';
 import Router from './AppRouter';
 import DeveloperMenu from '../components/DeveloperMenu';
 
@@ -24,12 +25,14 @@ const AppView = ({ isReady }) => {
 
   return (
     <View style={styles.container}>
-      <NavigationProvider router={Router}>
-        <StackNavigation
-          id="master"
-          initialRoute={Router.getRoute('app')}
-        />
-      </NavigationProvider>
+      <ActionSheetProvider>
+        <NavigationProvider router={Router}>
+          <StackNavigation
+            id="master"
+            initialRoute={Router.getRoute('app')}
+          />
+        </NavigationProvider>
+      </ActionSheetProvider>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" animated />}
       {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
       {__DEV__ && <DeveloperMenu />}

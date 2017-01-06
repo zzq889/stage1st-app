@@ -7,11 +7,13 @@ import {
   StyleSheet,
 } from 'react-native';
 import { getConfiguration } from '../utils/configuration';
+import { palette } from '../styles/config';
 
 const STATIC_ROOT = getConfiguration('STATIC_ROOT');
 
-const Avatar = ({ authorId, style, ...props }) => {
-  const uri = authorId && `${STATIC_ROOT}/uc_server/avatar.php?uid=${authorId}&size=middle`;
+const Avatar = ({ uid, style, ...props }) => {
+  const styles = getStyles(props);
+  const uri = uid && `${STATIC_ROOT}/uc_server/avatar.php?uid=${uid}&size=middle`;
   return (
     <View style={[styles.container, style]} {...props}>
       <Image
@@ -24,36 +26,36 @@ const Avatar = ({ authorId, style, ...props }) => {
 };
 
 Avatar.propTypes = {
-  authorId: PropTypes.number,
+  uid: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  size: PropTypes.number,
   style: PropTypes.any,
 };
 
-const circleSize = 50;
-const circleFixBorder = 25;
-const bgColor = '#fff';
-
-const styles = StyleSheet.create({
-  container: {
-    width: circleSize,
-    height: circleSize,
-    borderRadius: circleSize * 0.5,
-    overflow: 'hidden',
-    backgroundColor: '#ccc',
-  },
-  avatar: {
-    width: circleSize,
-    height: circleSize,
-  },
-  fixCircleClipping: {
-    position: 'absolute',
-    top: -circleFixBorder,
-    bottom: -circleFixBorder,
-    right: -circleFixBorder,
-    left: -circleFixBorder,
-    borderRadius: (circleSize * 0.5) + (circleFixBorder * 0.5),
-    borderWidth: circleFixBorder,
-    borderColor: bgColor,
-  },
-});
+const getStyles = ({ size = 50 }) => {
+  const circleFixBorder = size * 0.5;
+  return StyleSheet.create({
+    container: {
+      width: size,
+      height: size,
+      borderRadius: size * 0.5,
+      overflow: 'hidden',
+      backgroundColor: palette.lightGrey,
+    },
+    avatar: {
+      width: size,
+      height: size,
+    },
+    fixCircleClipping: {
+      position: 'absolute',
+      top: -circleFixBorder,
+      bottom: -circleFixBorder,
+      right: -circleFixBorder,
+      left: -circleFixBorder,
+      borderRadius: (size * 0.5) + (circleFixBorder * 0.5),
+      borderWidth: circleFixBorder,
+      borderColor: palette.background,
+    },
+  });
+};
 
 export default Avatar;

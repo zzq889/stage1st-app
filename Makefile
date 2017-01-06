@@ -17,3 +17,6 @@ clean.android:
 
 clean.ios:
 	rm -rf ios/build
+
+bundle.android:
+	cd android && ./gradlew assembleRelease

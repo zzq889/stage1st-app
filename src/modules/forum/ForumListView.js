@@ -5,7 +5,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { List } from 'immutable';
-import ImmutableListView from '../../components/ImmutableListView';
+import ImmutableListView from 'react-native-immutable-list-view';
 
 // import ImmutableDataSource from '../../components/ImmutableDataSource';
 import Router from '../AppRouter';

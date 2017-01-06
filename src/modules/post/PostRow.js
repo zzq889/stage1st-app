@@ -86,7 +86,7 @@ async function onLinkPress(url) {
 const PostRow = ({ message, position, author, authorId, timestamp }) => (
   <View style={styles.row}>
     <View style={styles.header}>
-      <Avatar style={styles.avatar} authorId={authorId} />
+      <Avatar style={styles.avatar} uid={authorId} />
       <View style={styles.headerText}>
         <View style={styles.rowOne}>
           <Text style={styles.title}>{author}</Text>

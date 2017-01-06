@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { List } from 'immutable';
-import ImmutableListView from '../../components/ImmutableListView';
+import ImmutableListView from 'react-native-immutable-list-view';
 import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
@@ -61,7 +61,7 @@ class ThreadListView extends Component {
 }
 
 ThreadListView.propTypes = {
-  fid: PropTypes.number,
+  // fid: PropTypes.number,
   threads: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadThreadPage: PropTypes.func.isRequired,

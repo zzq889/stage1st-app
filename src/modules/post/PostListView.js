@@ -6,8 +6,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { List, Map } from 'immutable';
+import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
-import ImmutableListView from '../../components/ImmutableListView';
 import Row from './PostRow';
 
 const renderRow = rowData => (
