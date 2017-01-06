@@ -43,7 +43,7 @@ export default function requireAuth(WrappedComponent) {
   }
 
   InnerComponent.propTypes = {
-    isLoggedIn: PropTypes.bool.isRequired,
+    isLoggedIn: PropTypes.bool,
     navigation: PropTypes.shape({
       getNavigator: PropTypes.func.isRequired,
     }).isRequired,

@@ -64,7 +64,7 @@ export default function AuthStateReducer(state = initialState, action = {}) {
       authEmitter.emit('dismiss');
       return state
         .set('isLoggedIn', true)
-        .set('currentUser', { uid, username })
+        .set('currentUser', Map({ uid, username }))
         .set('authenticationToken', sid);
     }
     case LOGIN.FAILURE:
