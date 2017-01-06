@@ -5,11 +5,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { List } from 'immutable';
+import { withNavigation } from '@exponent/ex-navigation';
 import ImmutableListView from 'react-native-immutable-list-view';
 import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
 
+@withNavigation
 class ThreadListView extends Component {
   static route = {
     navigationBar: {
@@ -67,7 +69,7 @@ ThreadListView.propTypes = {
   loadThreadPage: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
-  }).isRequired,
+  }),
 };
 
 ThreadListView.defaultProps = {

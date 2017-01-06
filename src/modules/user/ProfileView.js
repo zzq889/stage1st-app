@@ -23,19 +23,6 @@ const listData = fromJS([
 
 @connectActionSheet
 class ProfileView extends Component {
-  static route = {
-    navigationBar: {
-      title: ({ title }) => title || '个人中心',
-    },
-  }
-
-  componentWillMount() {
-    this.props.loadUserPage();
-    this.props.navigator.updateCurrentRouteParams({
-      title: this.props.username,
-    });
-  }
-
   logout = () => {
     // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
     const options = ['Logout', 'Cancel'];
@@ -109,9 +96,7 @@ class ProfileView extends Component {
 
 ProfileView.propTypes = {
   uid: PropTypes.string.isRequired,
-  username: PropTypes.string.isRequired,
   user: PropTypes.instanceOf(Map),
-  loadUserPage: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
     push: PropTypes.func.isRequired,
     updateCurrentRouteParams: PropTypes.func.isRequired,
