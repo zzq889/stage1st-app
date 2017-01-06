@@ -24,6 +24,8 @@ export const palette = {
   inverted: baseColors.white,
   foreground: baseColors.black,
   background: baseColors.white,
+  underlayColor: baseColors.lightGrey,
+  separator: '#8E8E8E',
 };
 
 export const rounded = {

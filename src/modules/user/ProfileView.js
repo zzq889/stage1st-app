@@ -1,9 +1,23 @@
 import React, { Component, PropTypes } from 'react';
 import {
   View,
-  Text,
+  StyleSheet,
 } from 'react-native';
-import { Map } from 'immutable';
+import ImmutableListView from 'react-native-immutable-list-view';
+import { Map, fromJS } from 'immutable';
+import TableCell from '../../components/TableCell';
+import Router from '../AppRouter';
+import ProfileHeader from './ProfileHeader';
+import { palette } from '../../styles/config';
+
+const listData = fromJS([
+  { title: '我的发言', route: 'color' },
+  { title: '我的消息', route: 'color' },
+  { title: '我的收藏', route: 'color' },
+  { title: '我的马甲', route: 'color' },
+  { title: '搜索', route: 'color' },
+  { title: '关于', route: 'color' },
+]);
 
 class ProfileView extends Component {
   static route = {
@@ -19,23 +33,62 @@ class ProfileView extends Component {
     });
   }
 
+  renderHeader = () => (
+    <View>
+      <ProfileHeader uid={this.props.uid} user={this.props.user} />
+      <View style={styles.separator} />
+    </View>
+  );
+
+  renderRow = (rowData, sectionID, rowID, highlightRow) => (
+    <TableCell
+      text={rowData.get('title')}
+      onPress={() => {
+        this.props.navigator
+        .push(Router.getRoute(rowData.get('route'), {
+          tid: rowData.get('tid'),
+          title: rowData.get('title'),
+        }));
+        highlightRow(sectionID, rowID);
+      }}
+    />
+  )
+
   render() {
+    const { user } = this.props;
+    if (!user) {
+      return <View />;
+    }
+
     return (
-      <View>
-        <Text>{JSON.stringify(this.props.user)}</Text>
-      </View>
+      <ImmutableListView
+        immutableData={listData}
+        renderRow={this.renderRow}
+        renderHeader={this.renderHeader}
+        renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+        rowsDuringInteraction={30}
+      />
     );
   }
 }
 
 ProfileView.propTypes = {
-  // uid: PropTypes.string.isRequired,
+  uid: PropTypes.string.isRequired,
   username: PropTypes.string.isRequired,
   user: PropTypes.instanceOf(Map),
   loadUserPage: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
+    push: PropTypes.func.isRequired,
     updateCurrentRouteParams: PropTypes.func.isRequired,
   }).isRequired,
 };
+
+const styles = StyleSheet.create({
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: palette.separator,
+  },
+});
 
 export default ProfileView;

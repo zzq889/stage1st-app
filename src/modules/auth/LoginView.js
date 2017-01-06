@@ -24,15 +24,17 @@ const validate = (values) => {
   return errors;
 };
 
-const renderField = ({ input, label, type }) => (
+const renderField = ({ input, label, type, autoFocus }) => (
   <View>
     <TextInput
-      style={styles.input} {...input}
+      {...input}
+      style={styles.input}
       autoCapitalize="none"
       autoCorrect={false}
       underlineColorAndroid="transparent"
       secureTextEntry={type === 'password'}
       placeholder={label}
+      autoFocus={autoFocus}
       clearButtonMode="while-editing"
     />
   </View>
@@ -42,10 +44,11 @@ renderField.propTypes = {
   input: PropTypes.any,
   label: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.shape({
-    touched: PropTypes.bool,
-    error: PropTypes.string,
-  }),
+  autoFocus: PropTypes.bool,
+  // meta: PropTypes.shape({
+  //   touched: PropTypes.bool,
+  //   error: PropTypes.string,
+  // }),
 };
 
 const LoginView = ({ handleSubmit, invalid, submitting }) => {
@@ -53,8 +56,19 @@ const LoginView = ({ handleSubmit, invalid, submitting }) => {
   return (
     <View style={styles.outerContainer}>
       <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Field name="username" type="text" component={renderField} label="用户名" />
-        <Field name="password" type="password" component={renderField} label="密码" />
+        <Field
+          name="username"
+          type="text"
+          component={renderField}
+          label="用户名"
+          autoFocus
+        />
+        <Field
+          name="password"
+          type="password"
+          component={renderField}
+          label="密码"
+        />
         <View>
           <TouchableOpacity
             style={disabled ? [styles.button, styles.disabled] : styles.button}
@@ -72,7 +86,7 @@ const LoginView = ({ handleSubmit, invalid, submitting }) => {
 LoginView.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool.isRequired,
-  reset: PropTypes.func.isRequired,
+  // reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
 };
 
