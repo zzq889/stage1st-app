@@ -17,6 +17,7 @@ const listData = fromJS([
   { title: '我的马甲', route: 'color' },
   { title: '搜索', route: 'color' },
   { title: '关于', route: 'color' },
+  { title: '退出登录', onPress: () => { console.warn('logout'); } },
 ]);
 
 class ProfileView extends Component {
@@ -40,19 +41,34 @@ class ProfileView extends Component {
     </View>
   );
 
-  renderRow = (rowData, sectionID, rowID, highlightRow) => (
-    <TableCell
-      text={rowData.get('title')}
-      onPress={() => {
-        this.props.navigator
-        .push(Router.getRoute(rowData.get('route'), {
-          tid: rowData.get('tid'),
-          title: rowData.get('title'),
-        }));
-        highlightRow(sectionID, rowID);
-      }}
-    />
-  )
+  renderRow = (rowData, sectionID, rowID, highlightRow) => {
+    const route = rowData.get('route');
+    if (route) {
+      return (
+        <TableCell
+          text={rowData.get('title')}
+          accessoryType="arrow"
+          onPress={() => {
+            this.props.navigator
+              .push(Router.getRoute(route, {
+                tid: rowData.get('tid'),
+                title: rowData.get('title'),
+              }));
+            highlightRow(sectionID, rowID);
+          }}
+        />
+      );
+    }
+    return (
+      <TableCell
+        text={rowData.get('title')}
+        color={palette.white}
+        backgroundColor={palette.red}
+        accessoryType="none"
+        onPress={rowData.get('onPress')}
+      />
+    );
+  }
 
   render() {
     const { user } = this.props;
