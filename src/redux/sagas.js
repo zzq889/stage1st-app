@@ -12,7 +12,7 @@ import {
   watchLoadPostPage,
 } from '../modules/post/PostState';
 import {
-  watchAuthUser,
+  watchUserAuth,
 } from '../modules/auth/AuthState';
 import {
   watchLoadUserPage,
@@ -26,7 +26,7 @@ export default function* root() {
     fork(watchLoadFavedThreadPage),
     fork(watchLoadSubscribedThreadPage),
     fork(watchLoadPostPage),
-    fork(watchAuthUser),
+    fork(watchUserAuth),
     fork(watchLoadUserPage),
   ];
 }

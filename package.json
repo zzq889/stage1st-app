@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@exponent/ex-navigation": "^2.5.0",
+    "@exponent/react-native-action-sheet": "^0.3.0",
     "bluebird": "^3.3.5",
     "entities": "^1.1.1",
     "es6-symbol": "^3.0.2",

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import ProfileView from './ProfileView';
 import { loadUserPage } from './UserState';
 import requireAuth from '../auth/requireAuth';
+import { userLogout } from '../auth/AuthState';
 
 const ProfileViewWrapper = connect(
   (state, { uid }) => ({
@@ -13,6 +14,7 @@ const ProfileViewWrapper = connect(
   }),
   (dispatch, { uid }) => ({
     loadUserPage: bindActionCreators(loadUserPage.bind(null, uid), dispatch),
+    userLogout: bindActionCreators(userLogout, dispatch),
   }),
 )(ProfileView);
 

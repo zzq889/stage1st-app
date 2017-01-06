@@ -4,6 +4,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
+import { connectActionSheet } from '@exponent/react-native-action-sheet';
 import { Map, fromJS } from 'immutable';
 import TableCell from '../../components/TableCell';
 import Router from '../AppRouter';
@@ -17,9 +18,10 @@ const listData = fromJS([
   { title: '我的马甲', route: 'color' },
   { title: '搜索', route: 'color' },
   { title: '关于', route: 'color' },
-  { title: '退出登录', onPress: () => { console.warn('logout'); } },
+  { title: '退出登录', name: 'logout' },
 ]);
 
+@connectActionSheet
 class ProfileView extends Component {
   static route = {
     navigationBar: {
@@ -31,6 +33,23 @@ class ProfileView extends Component {
     this.props.loadUserPage();
     this.props.navigator.updateCurrentRouteParams({
       title: this.props.username,
+    });
+  }
+
+  logout = () => {
+    // Same interface as https://facebook.github.io/react-native/docs/actionsheetios.html
+    const options = ['Logout', 'Cancel'];
+    const destructiveButtonIndex = 0;
+    const cancelButtonIndex = 1;
+    this.props.showActionSheetWithOptions({
+      options,
+      cancelButtonIndex,
+      destructiveButtonIndex,
+    },
+    (buttonIndex) => {
+      if (buttonIndex === 0) {
+        this.props.userLogout();
+      }
     });
   }
 
@@ -65,7 +84,7 @@ class ProfileView extends Component {
         color={palette.white}
         backgroundColor={palette.red}
         accessoryType="none"
-        onPress={rowData.get('onPress')}
+        onPress={this.logout}
       />
     );
   }
@@ -97,6 +116,8 @@ ProfileView.propTypes = {
     push: PropTypes.func.isRequired,
     updateCurrentRouteParams: PropTypes.func.isRequired,
   }).isRequired,
+  userLogout: PropTypes.func.isRequired,
+  showActionSheetWithOptions: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
