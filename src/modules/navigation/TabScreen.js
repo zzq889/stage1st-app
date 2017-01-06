@@ -26,7 +26,7 @@ const TabScreen = () => (
         id="threads"
         navigatorUID="threads"
         defaultRouteConfig={defaultRouteConfig.toJS()}
-        initialRoute={Router.getRoute('subscribedThreads')}
+        initialRoute={Router.getRoute('subscribed')}
       />
     </TabItem>
 

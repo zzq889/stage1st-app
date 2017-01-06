@@ -6,6 +6,7 @@ import { loadUserPage } from './UserState';
 import requireAuth from '../auth/requireAuth';
 import { userLogout } from '../auth/AuthState';
 
+@requireAuth
 @connect(
   state => ({
     uid: state.getIn(['auth', 'currentUser', 'uid']),
@@ -49,4 +50,4 @@ ProfileViewContainer.propTypes = {
   }),
 };
 
-export default requireAuth(ProfileViewContainer);
+export default ProfileViewContainer;
