@@ -8,6 +8,7 @@ import SubscribedTabViewContainer from './thread/SubscribedTabViewContainer';
 import ThreadComposeView from './thread/ThreadComposeView';
 import PostListViewContainer from './post/PostListViewContainer';
 import ProfileViewContainer from './user/ProfileViewContainer';
+import AboutView from './about/AboutView';
 
 /**
  * AppRouter is responsible for mapping a navigator scene to a view
@@ -22,6 +23,7 @@ const AppRouter = createRouter(() => ({
   forums: () => ForumTabViewContainer,
   posts: () => PostListViewContainer,
   profile: () => ProfileViewContainer,
+  about: () => AboutView,
 }));
 
 export default AppRouter;
