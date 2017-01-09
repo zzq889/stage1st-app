@@ -8,7 +8,7 @@ import { connectActionSheet } from '@exponent/react-native-action-sheet';
 import { Map, fromJS } from 'immutable';
 import TableCell from '../../components/TableCell';
 import Router from '../AppRouter';
-import ProfileHeader from './ProfileHeader';
+import ProfileHeaderContainer from './ProfileHeaderContainer';
 import { palette } from '../../styles/config';
 
 const listData = fromJS([
@@ -42,10 +42,9 @@ class ProfileView extends Component {
 
   renderHeader = () => (
     <View>
-      <ProfileHeader
+      <ProfileHeaderContainer
         uid={this.props.uid}
         user={this.props.user}
-        userSign={this.props.userSign}
       />
       <View style={styles.separator} />
     </View>
@@ -106,7 +105,6 @@ ProfileView.propTypes = {
     updateCurrentRouteParams: PropTypes.func.isRequired,
   }).isRequired,
   userLogout: PropTypes.func.isRequired,
-  userSign: PropTypes.func.isRequired,
   showActionSheetWithOptions: PropTypes.func,
 };
 

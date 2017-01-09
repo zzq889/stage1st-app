@@ -15,10 +15,6 @@ export default function withMessage(WrappedComponent) {
       errorEmitter.on('error', this.listener);
     }
 
-    componentWillUnmount() {
-      errorEmitter.removeListener('error', this.listener);
-    }
-
     listener = error => this.props.navigator.showLocalAlert(error, defaultAlertStyle);
 
     render() {
