@@ -9,7 +9,7 @@ import {
   SlidingTabNavigationItem,
 } from '@exponent/ex-navigation';
 import ThreadListViewContainer from './ThreadListViewContainer';
-import withMessage from '../../components/withMessage';
+import withMessage from '../error/withMessage';
 
 @withMessage
 export default class SubscribedTabView extends Component {

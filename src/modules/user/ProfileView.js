@@ -8,7 +8,7 @@ import { connectActionSheet } from '@exponent/react-native-action-sheet';
 import { Map, fromJS } from 'immutable';
 import TableCell from '../../components/TableCell';
 import Router from '../AppRouter';
-import ProfileHeader from './ProfileHeader';
+import ProfileHeaderContainer from './ProfileHeaderContainer';
 import { palette } from '../../styles/config';
 
 const listData = fromJS([
@@ -42,7 +42,10 @@ class ProfileView extends Component {
 
   renderHeader = () => (
     <View>
-      <ProfileHeader uid={this.props.uid} user={this.props.user} />
+      <ProfileHeaderContainer
+        uid={this.props.uid}
+        user={this.props.user}
+      />
       <View style={styles.separator} />
     </View>
   );

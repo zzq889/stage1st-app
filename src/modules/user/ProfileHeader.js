@@ -4,13 +4,13 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import { Map } from 'immutable';
 import { palette } from '../../styles/config';
 import Avatar from '../../components/Avatar';
 
-const ProfileHeader = ({ user, uid }) => {
-  const signed = user.get('signed');
+const ProfileHeader = ({ user, uid, userSign, isSigned, isSigning }) => {
   return (
     <View style={styles.header}>
       <Text style={styles.headerTitle}>UID: {uid} 用户组: {user.get('grouptitle')}</Text>
@@ -29,10 +29,14 @@ const ProfileHeader = ({ user, uid }) => {
           <Text>金币</Text>
         </View>
         <TouchableOpacity
-          style={signed ? [styles.button, styles.disabled] : styles.button}
-          disabled={signed}
+          style={isSigned ? [styles.button, styles.disabled] : styles.button}
+          disabled={isSigned || isSigning}
+          onPress={() => userSign()}
         >
-          <Text style={styles.buttonText}>{signed ? '已签到' : '签到'}</Text>
+          {isSigning
+            ? <ActivityIndicator />
+            : <Text style={styles.buttonText}>{isSigned ? '已签到' : '签到'}</Text>
+          }
         </TouchableOpacity>
       </View>
     </View>
@@ -42,6 +46,9 @@ const ProfileHeader = ({ user, uid }) => {
 ProfileHeader.propTypes = {
   uid: PropTypes.string.isRequired,
   user: PropTypes.instanceOf(Map),
+  userSign: PropTypes.func.isRequired,
+  isSigned: PropTypes.bool.isRequired,
+  isSigning: PropTypes.bool.isRequired,
 };
 
 const styles = StyleSheet.create({

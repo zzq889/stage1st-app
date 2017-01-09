@@ -1,8 +1,7 @@
 import { normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
-import { put, call } from 'redux-saga/effects';
+import { put, call, select } from 'redux-saga/effects';
 import { getConfiguration } from '../utils/configuration';
-import { getAuthenticationToken } from '../utils/authentication';
 import * as SCHEMA from './schema';
 
 //
@@ -43,9 +42,8 @@ function getRequestHeaders(body, token) {
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-async function callApi(method, endpoint, body, schema, mapResponseToKey) {
+async function callApi(token, method, endpoint, body, schema, mapResponseToKey) {
   const fullUrl = endpoint.match(/^http/) ? endpoint : url(endpoint);
-  const token = await getAuthenticationToken();
   const headers = getRequestHeaders(body, token);
   const initialForm = new FormData();
   if (token) {
@@ -85,16 +83,23 @@ async function callApi(method, endpoint, body, schema, mapResponseToKey) {
   };
 }
 
-export async function get(endpoint, params, ...otherParams) {
+const getToken = state => state.getIn(['auth', 'token']);
+
+export function* callApiAsync(...args) {
+  const token = yield select(getToken);
+  return yield call(callApi, token, ...args);
+}
+
+export function get(endpoint, params, ...otherArgs) {
   const paramsString = params
     ? Object.keys(params).reduce((str, key) =>
       `${str}&${key}=${encodeURIComponent(params[key])}`, '?')
     : '';
-  return callApi('GET', endpoint + paramsString, null, ...otherParams);
+  return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
 
-export async function post(endpoint, body, ...otherParams) {
-  return callApi('POST', endpoint, body, ...otherParams);
+export function post(endpoint, body, ...otherArgs) {
+  return callApiAsync('POST', endpoint, body, ...otherArgs);
 }
 
 // resuable fetch Subroutine
@@ -137,10 +142,10 @@ export const fetchUserInfo = uid =>
 
 // notification
 export const fetchNotication = uid =>
-  get(`notice/${uid}`, null);
+  get(`notice/${uid}`);
 
 export const fetchHistory = uid =>
-  get(`history/${uid}`, null);
+  get(`history/${uid}`);
 
 // forum
 export const fetchChannels = () =>

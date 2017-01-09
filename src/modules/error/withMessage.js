@@ -1,8 +1,8 @@
 import React, { PropTypes, PureComponent } from 'react';
 import { withNavigation } from '@exponent/ex-navigation';
 import hoistStatics from 'hoist-non-react-statics';
-import { defaultAlertStyle } from '../styles/config';
-import { errorEmitter } from '../modules/error/ErrorState';
+import { defaultAlertStyle } from '../../styles/config';
+import { errorEmitter } from './ErrorState';
 
 function getDisplayName(WrappedComponent): string {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -13,10 +13,6 @@ export default function withMessage(WrappedComponent) {
   class InnerComponent extends PureComponent {
     componentWillMount() {
       errorEmitter.on('error', this.listener);
-    }
-
-    componentWillUnmount() {
-      errorEmitter.removeListener('error', this.listener);
     }
 
     listener = error => this.props.navigator.showLocalAlert(error, defaultAlertStyle);

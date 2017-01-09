@@ -10,7 +10,7 @@ import {
   SlidingTabNavigationItem,
 } from '@exponent/ex-navigation';
 import ForumListViewContainer from './ForumListViewContainer';
-import withMessage from '../../components/withMessage';
+import withMessage from '../error/withMessage';
 
 @withMessage
 export default class ForumTabView extends Component {

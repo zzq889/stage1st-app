@@ -16,6 +16,7 @@ import {
 } from '../modules/auth/AuthState';
 import {
   watchLoadUserPage,
+  watchUserSign,
 } from '../modules/user/UserState';
 
 export default function* root() {
@@ -28,5 +29,6 @@ export default function* root() {
     fork(watchLoadPostPage),
     fork(watchUserAuth),
     fork(watchLoadUserPage),
+    fork(watchUserSign),
   ];
 }

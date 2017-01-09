@@ -6,19 +6,13 @@ import {
   fetchEntity,
   userLogin as apiUserLogin,
 } from '../../services/webApi';
+import { USER, USER_SIGN_REQ } from '../user/UserState';
 
 /** ****************************************************************************/
 /** ***************************** Actions *************************************/
 /** ****************************************************************************/
 
 export const authEmitter = new EventEmitter();
-
-// Initial state
-const initialState = Map({
-  isLoggedIn: false,
-  currentUser: null,
-  authenticationToken: null,
-});
 
 // Actions
 export const LOGIN = createRequestTypes('LOGIN');
@@ -60,6 +54,15 @@ export function* watchUserAuth() {
 /** ***************************** REDUCERS *************************************/
 /** ****************************************************************************/
 
+// Initial state
+const initialState = Map({
+  isLoggedIn: false,
+  isSigned: false,
+  isSigning: false,
+  currentUser: null,
+  token: null,
+});
+
 export default function AuthStateReducer(state = initialState, action = {}) {
   switch (action.type) {
     case LOGIN.SUCCESS: {
@@ -68,14 +71,33 @@ export default function AuthStateReducer(state = initialState, action = {}) {
       return state
         .set('isLoggedIn', true)
         .set('currentUser', Map({ uid, username }))
-        .set('authenticationToken', sid);
+        .set('token', sid);
     }
     case USER_LOGOUT:
-    case LOGIN.FAILURE:
+    case LOGIN.FAILURE: {
       if (action.error) {
         console.warn(action.error);
       }
       return initialState;
+    }
+    // sign status
+    case USER.SUCCESS: {
+      const uid = state.getIn(['currentUser', 'uid']);
+      if (uid) {
+        const { signed } = action.response.entities.users[uid];
+        return state.set('isSigned', signed);
+      }
+      return state;
+    }
+    // signing indicator
+    case USER_SIGN_REQ.REQUEST:
+      return state.set('isSigning', true);
+    case USER_SIGN_REQ.SUCCESS:
+      return state
+        .set('isSigned', true)
+        .set('isSigning', false);
+    case USER_SIGN_REQ.FAILURE:
+      return state.set('isSigning', false);
     default:
       return state;
   }

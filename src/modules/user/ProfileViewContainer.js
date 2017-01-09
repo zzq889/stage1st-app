@@ -5,8 +5,10 @@ import ProfileView from './ProfileView';
 import { loadUserPage } from './UserState';
 import requireAuth from '../auth/requireAuth';
 import { userLogout } from '../auth/AuthState';
+import withMessage from '../error/withMessage';
 
 @requireAuth
+@withMessage
 @connect(
   state => ({
     uid: state.getIn(['auth', 'currentUser', 'uid']),
