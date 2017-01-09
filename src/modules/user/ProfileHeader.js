@@ -9,7 +9,7 @@ import { Map } from 'immutable';
 import { palette } from '../../styles/config';
 import Avatar from '../../components/Avatar';
 
-const ProfileHeader = ({ user, uid }) => {
+const ProfileHeader = ({ user, uid, userSign }) => {
   const signed = user.get('signed');
   return (
     <View style={styles.header}>
@@ -31,6 +31,7 @@ const ProfileHeader = ({ user, uid }) => {
         <TouchableOpacity
           style={signed ? [styles.button, styles.disabled] : styles.button}
           disabled={signed}
+          onPress={() => userSign()}
         >
           <Text style={styles.buttonText}>{signed ? '已签到' : '签到'}</Text>
         </TouchableOpacity>
@@ -42,6 +43,7 @@ const ProfileHeader = ({ user, uid }) => {
 ProfileHeader.propTypes = {
   uid: PropTypes.string.isRequired,
   user: PropTypes.instanceOf(Map),
+  userSign: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

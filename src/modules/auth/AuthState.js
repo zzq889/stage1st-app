@@ -17,7 +17,7 @@ export const authEmitter = new EventEmitter();
 const initialState = Map({
   isLoggedIn: false,
   currentUser: null,
-  authenticationToken: null,
+  token: null,
 });
 
 // Actions
@@ -68,7 +68,7 @@ export default function AuthStateReducer(state = initialState, action = {}) {
       return state
         .set('isLoggedIn', true)
         .set('currentUser', Map({ uid, username }))
-        .set('authenticationToken', sid);
+        .set('token', sid);
     }
     case USER_LOGOUT:
     case LOGIN.FAILURE:

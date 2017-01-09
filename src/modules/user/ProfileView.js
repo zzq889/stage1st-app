@@ -42,7 +42,11 @@ class ProfileView extends Component {
 
   renderHeader = () => (
     <View>
-      <ProfileHeader uid={this.props.uid} user={this.props.user} />
+      <ProfileHeader
+        uid={this.props.uid}
+        user={this.props.user}
+        userSign={this.props.userSign}
+      />
       <View style={styles.separator} />
     </View>
   );
@@ -102,6 +106,7 @@ ProfileView.propTypes = {
     updateCurrentRouteParams: PropTypes.func.isRequired,
   }).isRequired,
   userLogout: PropTypes.func.isRequired,
+  userSign: PropTypes.func.isRequired,
   showActionSheetWithOptions: PropTypes.func,
 };
 

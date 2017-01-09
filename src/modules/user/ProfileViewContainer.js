@@ -2,11 +2,13 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ProfileView from './ProfileView';
-import { loadUserPage } from './UserState';
+import { loadUserPage, userSign } from './UserState';
 import requireAuth from '../auth/requireAuth';
 import { userLogout } from '../auth/AuthState';
+import withMessage from '../error/withMessage';
 
 @requireAuth
+@withMessage
 @connect(
   state => ({
     uid: state.getIn(['auth', 'currentUser', 'uid']),
@@ -20,6 +22,7 @@ import { userLogout } from '../auth/AuthState';
   }),
   (dispatch, { uid }) => ({
     loadUserPage: bindActionCreators(loadUserPage.bind(null, uid), dispatch),
+    userSign: bindActionCreators(userSign.bind(null, uid), dispatch),
     userLogout: bindActionCreators(userLogout, dispatch),
   }),
 )
