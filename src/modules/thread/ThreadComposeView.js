@@ -5,7 +5,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Field, reduxForm } from 'redux-form/immutable';
-import { palette } from '../../styles/config';
+import { palette, keyboardVerticalOffset } from '../../styles/config';
+import TextField from '../../components/TextField';
 
 const validate = (values) => {
   // IMPORTANT: values is an Immutable.Map here!
@@ -22,18 +23,45 @@ const validate = (values) => {
   return errors;
 };
 
+const renderField = props => (
+  <TextField
+    autoCapitalize="none"
+    autoCorrect={false}
+    underlineColorAndroid="transparent"
+    clearButtonMode="while-editing"
+    {...props}
+  />
+);
+
+const renderArea = props => (
+  <TextField
+    autoCapitalize="none"
+    autoCorrect={false}
+    underlineColorAndroid="transparent"
+    multiline
+    {...props}
+  />
+);
+
 const ThreadComposeView = () => (
-  <KeyboardAvoidingView behavior="padding" style={styles.container}>
+  <KeyboardAvoidingView
+    keyboardVerticalOffset={keyboardVerticalOffset}
+    behavior="padding"
+    style={styles.container}
+  >
     <Field
       name="title"
       type="text"
-      component={View}
+      component={renderField}
       label="请输入标题"
+      autoFocus
     />
+    <View style={styles.separator} />
     <Field
+      style={styles.textarea}
       name="content"
       type="text"
-      component={View}
+      component={renderArea}
       label="请输入正文"
     />
   </KeyboardAvoidingView>
@@ -50,12 +78,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  input: {
-    height: 40,
-    padding: 5,
-    borderColor: palette.grey,
-    borderWidth: 1,
-    marginBottom: 10,
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: palette.separator,
+  },
+  textarea: {
+    flex: 1,
   },
   button: {
     height: 40,

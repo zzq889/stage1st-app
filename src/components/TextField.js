@@ -12,7 +12,6 @@ const TextField = ({ style, input, label, type, ...otherProps }) => (
     style={[styles.input, style]}
     secureTextEntry={type === 'password'}
     placeholder={label}
-    clearButtonMode="while-editing"
     {...otherProps}
   />
 );
@@ -30,8 +29,12 @@ TextField.propTypes = {
 
 const styles = StyleSheet.create({
   input: {
-    height: 40,
-    padding: 5,
+    fontSize: 17,
+    height: 44,
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 });
 

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  Image,
   StyleSheet,
 } from 'react-native';
 import { getConfiguration } from '../../utils/configuration';
 import PreImage from '../../../images/pre.png';
 import { palette } from '../../styles/config';
+import CircleView from '../../components/CircleView';
 
 export default class AboutView extends Component {
   static route = {
@@ -24,10 +24,7 @@ export default class AboutView extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <View style={styles.imageContainer}>
-            <Image source={PreImage} style={styles.image} />
-            <View style={styles.fixCircleClipping} />
-          </View>
+          <CircleView size={200} source={PreImage} style={styles.image} />
           <Text style={styles.title}>{appName}</Text>
           <Text style={styles.text}>{site}</Text>
           <Text style={styles.text}>版本号: {version}</Text>
@@ -39,9 +36,6 @@ export default class AboutView extends Component {
     );
   }
 }
-
-const size = 200;
-const circleFixBorder = size * 0.5;
 
 const styles = StyleSheet.create({
   container: {
@@ -69,26 +63,7 @@ const styles = StyleSheet.create({
   bottomText: {
     color: palette.grey,
   },
-  imageContainer: {
-    width: size,
-    height: size,
-    borderRadius: size * 0.5,
-    overflow: 'hidden',
-    backgroundColor: palette.lightGrey,
-    marginBottom: 20,
-  },
   image: {
-    width: size,
-    height: size,
-  },
-  fixCircleClipping: {
-    position: 'absolute',
-    top: -circleFixBorder,
-    bottom: -circleFixBorder,
-    right: -circleFixBorder,
-    left: -circleFixBorder,
-    borderRadius: (size * 0.5) + (circleFixBorder * 0.5),
-    borderWidth: circleFixBorder,
-    borderColor: palette.background,
+    marginBottom: 20,
   },
 });

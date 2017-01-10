@@ -32,6 +32,8 @@ export const rounded = {
   borderRadius: 4,
 };
 
+export const keyboardVerticalOffset = 64;
+
 export const defaultRouteConfig = fromJS({
   navigationBar: {
     backgroundColor: palette.black,
