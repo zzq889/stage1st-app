@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    flex: 1,
     margin: 8,
     justifyContent: 'center',
   },

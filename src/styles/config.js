@@ -1,4 +1,7 @@
 import { fromJS } from 'immutable';
+import {
+  Platform,
+} from 'react-native';
 
 const baseColors = {
   black: '#000',
@@ -32,7 +35,7 @@ export const rounded = {
   borderRadius: 4,
 };
 
-export const keyboardVerticalOffset = 64;
+export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 
 export const defaultRouteConfig = fromJS({
   navigationBar: {

@@ -90,7 +90,6 @@ class ThreadComposeView extends Component {
           toggleExpand={() => { this.setState({ isExpand: !this.state.isExpand }); }}
           items={types.map(type => Map({ label: type.get('type'), value: type.get('typeid') }))}
           label="主题分类"
-          autoFocus
         />
         <View style={styles.separator} />
         <Field
