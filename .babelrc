@@ -1,5 +1,10 @@
 {
   "presets": ["react-native-stage-0/decorator-support"],
   "plugins": [],
-  "sourceMaps": true
+  "sourceMaps": true,
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  }
 }

@@ -99,17 +99,17 @@ export function* watchLoadThreadPage() {
 
 export function* watchLoadFavedThreadPage() {
   while (true) {
-    const { id } = yield take(LOAD_FAVED_THREAD_PAGE);
+    const { fid } = yield take(LOAD_FAVED_THREAD_PAGE);
     // yield fork(loadFavedThreads, id, requiredFields);
-    yield call(fetchFavedThreads, id);
+    yield call(fetchFavedThreads, fid);
   }
 }
 
 export function* watchLoadSubscribedThreadPage() {
   while (true) {
-    const { id } = yield take(LOAD_SUBSCRIBED_THREAD_PAGE);
+    const { fid } = yield take(LOAD_SUBSCRIBED_THREAD_PAGE);
     // yield fork(loadSubscribedThreads, id, requiredFields);
-    yield call(fetchSubscribedThreads, id);
+    yield call(fetchSubscribedThreads, fid);
   }
 }
 
