@@ -4,8 +4,13 @@ const URL_ROOT = __DEV__ ? 'saraba1st.asuscomm.com:20080' : 'app.saraba1st.com';
 // const URL_ROOT = 'app.saraba1st.com';
 
 let configuration = Map({
-  API_ROOT: `http://${URL_ROOT}/2b/api/app/`,
+  // Never put the slash at the end
+  API_ROOT: `http://${URL_ROOT}/2b/api/app`,
   STATIC_ROOT: `http://${URL_ROOT}/2b`,
+  SITE: `http://${URL_ROOT}`,
+  APP_NAME: 'Stage1 论坛',
+  COMPANY: '上海初欣网络科技有限公司',
+  VERSION: '1.0.0',
 });
 
 export function setConfiguration(name, value) {

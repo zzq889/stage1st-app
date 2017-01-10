@@ -21,11 +21,15 @@ class LoginViewContainer extends PureComponent {
   }
 
   componentWillMount() {
-    authEmitter.on('dismiss', this.dismissLogin);
+    this._subscription = authEmitter.once('dismiss', this.dismiss);
   }
 
-  dismissLogin = () => {
-    this.props.navigation.getNavigator('master').pop();
+  componentWillUnmount() {
+    this._subscription.remove();
+  }
+
+  dismiss = () => {
+    this.props.navigator.pop();
   }
 
   render() {
@@ -40,8 +44,8 @@ class LoginViewContainer extends PureComponent {
 
 LoginViewContainer.propTypes = {
   userAuth: PropTypes.func.isRequired,
-  navigation: PropTypes.shape({
-    getNavigator: PropTypes.func.isRequired,
+  navigator: PropTypes.shape({
+    pop: PropTypes.func.isRequired,
   }),
 };
 

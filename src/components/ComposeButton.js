@@ -12,7 +12,7 @@ class ComposeButton extends Component {
   gotoComposeView = () => {
     this.props.navigation
     .getNavigator('master')
-    .push(Router.getRoute('newThread'));
+    .push(Router.getRoute('newThread', { fid: this.props.fid }));
   }
 
   render() {
@@ -28,6 +28,10 @@ class ComposeButton extends Component {
 }
 
 ComposeButton.propTypes = {
+  fid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
   }),
@@ -40,7 +44,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   icon: {
-    flex: 1,
     margin: 8,
     justifyContent: 'center',
   },

@@ -12,7 +12,11 @@ export default function withMessage(WrappedComponent) {
   @withNavigation
   class InnerComponent extends PureComponent {
     componentWillMount() {
-      errorEmitter.on('error', this.listener);
+      this._subscription = errorEmitter.addListener('error', this.listener);
+    }
+
+    componentWillUnmount() {
+      this._subscription.remove();
     }
 
     listener = error => this.props.navigator.showLocalAlert(error, defaultAlertStyle);

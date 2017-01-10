@@ -1,6 +1,6 @@
 import { take, call/* , fork, select*/ } from 'redux-saga/effects';
 import { Map } from 'immutable';
-import EventEmitter from 'event-emitter';
+import { EventEmitter } from 'fbemitter';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,

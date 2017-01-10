@@ -1,4 +1,7 @@
 import { fromJS } from 'immutable';
+import {
+  Platform,
+} from 'react-native';
 
 const baseColors = {
   black: '#000',
@@ -15,7 +18,7 @@ const baseColors = {
 export const palette = {
   ...baseColors,
   primary: baseColors.black,
-  secondary: baseColors.red,
+  secondary: baseColors.blue,
   default: baseColors.grey,
   info: baseColors.blue,
   success: baseColors.green,
@@ -31,6 +34,8 @@ export const palette = {
 export const rounded = {
   borderRadius: 4,
 };
+
+export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 
 export const defaultRouteConfig = fromJS({
   navigationBar: {

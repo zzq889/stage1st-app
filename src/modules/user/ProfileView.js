@@ -17,7 +17,7 @@ const listData = fromJS([
   { title: '我的收藏', route: 'color' },
   { title: '我的马甲', route: 'color' },
   { title: '搜索', route: 'color' },
-  { title: '关于', route: 'color' },
+  { title: '关于', route: 'about' },
   { title: '退出登录', name: 'logout' },
 ]);
 

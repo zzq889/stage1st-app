@@ -16,7 +16,7 @@ class ThreadListView extends Component {
   static route = {
     navigationBar: {
       title: ({ title }) => title || 'Threads',
-      renderRight: () => <ComposeButton />,
+      renderRight: ({ params: { fid } }) => <ComposeButton fid={fid} />,
     },
   }
 
@@ -63,7 +63,10 @@ class ThreadListView extends Component {
 }
 
 ThreadListView.propTypes = {
-  // fid: PropTypes.number,
+  // fid: PropTypes.oneOfType([
+  //   PropTypes.number,
+  //   PropTypes.string,
+  // ]).isRequired,
   threads: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadThreadPage: PropTypes.func.isRequired,

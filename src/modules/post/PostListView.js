@@ -9,6 +9,7 @@ import { List, Map } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
+import PostToolbar from './PostToolbar';
 
 const renderRow = rowData => (
   <Row
@@ -49,13 +50,16 @@ class PostListView extends Component {
       );
     }
     return (
-      <ImmutableListView
-        immutableData={posts}
-        renderRow={renderRow}
-        renderHeader={this.renderHeader}
-        renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        rowsDuringInteraction={10}
-      />
+      <View style={styles.container}>
+        <ImmutableListView
+          immutableData={posts}
+          renderRow={renderRow}
+          renderHeader={this.renderHeader}
+          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
+          rowsDuringInteraction={10}
+        />
+        <PostToolbar />
+      </View>
     );
   }
 }

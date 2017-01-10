@@ -19,6 +19,8 @@ const ThreadListViewContainer = connect(
         const forumName = state.getIn(['entities', 'forums', String(threadFid), 'name']);
         return thread.set('forumName', forumName);
       })
+      .sortBy(post => post.get('lastpost'))
+      .reverse()
       .toList(),
     loading: state.getIn(['pagination', 'threadsById', fid, 'isFetching']),
   }),

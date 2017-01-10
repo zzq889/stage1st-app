@@ -1,16 +1,16 @@
-/* eslint-disable react/forbid-prop-types */
-
 import React, { PropTypes } from 'react';
 import {
-  View,
+  ScrollView,
   KeyboardAvoidingView,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import { Field, reduxForm } from 'redux-form/immutable';
-import { palette } from '../../styles/config';
+import { palette, rounded, keyboardVerticalOffset } from '../../styles/config';
+import TextField from '../../components/TextField';
+import PreImage from '../../../images/pre.png';
+import CircleView from '../../components/CircleView';
 
 const validate = (values) => {
   // IMPORTANT: values is an Immutable.Map here!
@@ -24,38 +24,32 @@ const validate = (values) => {
   return errors;
 };
 
-const renderField = ({ input, label, type, autoFocus }) => (
-  <View>
-    <TextInput
-      {...input}
-      style={styles.input}
-      autoCapitalize="none"
-      autoCorrect={false}
-      underlineColorAndroid="transparent"
-      secureTextEntry={type === 'password'}
-      placeholder={label}
-      autoFocus={autoFocus}
-      clearButtonMode="while-editing"
-    />
-  </View>
+const renderField = props => (
+  <TextField
+    style={styles.input}
+    autoCapitalize="none"
+    autoCorrect={false}
+    underlineColorAndroid="transparent"
+    clearButtonMode="while-editing"
+    {...props}
+  />
 );
-
-renderField.propTypes = {
-  input: PropTypes.any,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  autoFocus: PropTypes.bool,
-  // meta: PropTypes.shape({
-  //   touched: PropTypes.bool,
-  //   error: PropTypes.string,
-  // }),
-};
 
 const LoginView = ({ handleSubmit, invalid, submitting }) => {
   const disabled = invalid || submitting;
   return (
-    <View style={styles.outerContainer}>
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+    <KeyboardAvoidingView
+      keyboardVerticalOffset={keyboardVerticalOffset}
+      behavior="padding"
+      style={styles.container}
+    >
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps
+        keyboardDismissMode="on-drag"
+      >
+        <CircleView size={100} source={PreImage} style={styles.image} />
         <Field
           name="username"
           type="text"
@@ -69,17 +63,15 @@ const LoginView = ({ handleSubmit, invalid, submitting }) => {
           component={renderField}
           label="密码"
         />
-        <View>
-          <TouchableOpacity
-            style={disabled ? [styles.button, styles.disabled] : styles.button}
-            disabled={disabled}
-            onPress={handleSubmit}
-          >
-            <Text style={styles.buttonText}>登录</Text>
-          </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+        <TouchableOpacity
+          style={disabled ? [styles.button, styles.disabled] : styles.button}
+          disabled={disabled}
+          onPress={handleSubmit}
+        >
+          <Text style={styles.buttonText}>登录</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -96,25 +88,30 @@ export default reduxForm({
 })(LoginView);
 
 const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-  },
   container: {
     flex: 1,
+  },
+  content: {
     margin: 15,
   },
+  image: {
+    alignSelf: 'center',
+    marginBottom: 15,
+  },
   input: {
-    height: 40,
-    padding: 5,
+    ...rounded,
     borderColor: palette.grey,
     borderWidth: 1,
     marginBottom: 10,
   },
   button: {
+    flexDirection: 'row',
+    ...rounded,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: palette.primary,
+    marginBottom: 40,
   },
   disabled: {
     backgroundColor: palette.lightGrey,

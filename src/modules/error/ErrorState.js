@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import EventEmitter from 'event-emitter';
+import { EventEmitter } from 'fbemitter';
 import { createAction } from '../../utils/actionHelper';
 
 const RESET_ERROR_MESSAGE = 'ErrorState/RESET_ERROR_MESSAGE';

@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import { List } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
+import { palette } from '../../styles/config';
 
 // import ImmutableDataSource from '../../components/ImmutableDataSource';
 import Router from '../AppRouter';
@@ -69,7 +70,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: 1,
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#8E8E8E',
+    backgroundColor: palette.separator,
   },
 });
 
