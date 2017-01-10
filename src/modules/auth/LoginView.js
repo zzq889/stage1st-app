@@ -1,16 +1,14 @@
-/* eslint-disable react/forbid-prop-types */
-
 import React, { PropTypes } from 'react';
 import {
   View,
   KeyboardAvoidingView,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import { Field, reduxForm } from 'redux-form/immutable';
 import { palette } from '../../styles/config';
+import TextField from '../../components/TextField';
 
 const validate = (values) => {
   // IMPORTANT: values is an Immutable.Map here!
@@ -24,32 +22,15 @@ const validate = (values) => {
   return errors;
 };
 
-const renderField = ({ input, label, type, autoFocus }) => (
-  <View>
-    <TextInput
-      {...input}
-      style={styles.input}
-      autoCapitalize="none"
-      autoCorrect={false}
-      underlineColorAndroid="transparent"
-      secureTextEntry={type === 'password'}
-      placeholder={label}
-      autoFocus={autoFocus}
-      clearButtonMode="while-editing"
-    />
-  </View>
+const renderField = props => (
+  <TextField
+    style={styles.input}
+    autoCapitalize="none"
+    autoCorrect={false}
+    underlineColorAndroid="transparent"
+    {...props}
+  />
 );
-
-renderField.propTypes = {
-  input: PropTypes.any,
-  label: PropTypes.string,
-  type: PropTypes.string,
-  autoFocus: PropTypes.bool,
-  // meta: PropTypes.shape({
-  //   touched: PropTypes.bool,
-  //   error: PropTypes.string,
-  // }),
-};
 
 const LoginView = ({ handleSubmit, invalid, submitting }) => {
   const disabled = invalid || submitting;
@@ -104,8 +85,6 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   input: {
-    height: 40,
-    padding: 5,
     borderColor: palette.grey,
     borderWidth: 1,
     marginBottom: 10,
