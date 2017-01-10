@@ -5,39 +5,43 @@ import {
   View,
   KeyboardAvoidingView,
   StyleSheet,
-  TouchableOpacity,
   Text,
+  Platform,
 } from 'react-native';
 import { Map, List } from 'immutable';
 import { Field, reduxForm } from 'redux-form/immutable';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import Picker from '../../components/Picker';
+import { threadEmitter } from './ThreadState';
+import validate from './threadValidate';
 
-const validate = (values) => {
-  // IMPORTANT: values is an Immutable.Map here!
-  const errors = {};
-  if (!values.get('typeid')) {
-    errors.typeid = 'Required';
-  }
-  if (!values.get('title')) {
-    errors.title = 'Required';
-  }
-  if (!values.get('content')) {
-    errors.content = 'Required';
-  }
-  return errors;
+const CHAR_LIMIT = 80;
+
+const renderField = (props) => {
+  const charLeft = CHAR_LIMIT - unescape(encodeURIComponent(props.input.value)).length;
+  return (
+    <View style={styles.row}>
+      <TextField
+        style={styles.container}
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
+        clearButtonMode="while-editing"
+        {...props}
+      />
+      <Text style={charLeft < 0 ? [styles.counter, styles.counterError] : styles.counter}>
+        {charLeft}
+      </Text>
+    </View>
+  );
 };
 
-const renderField = props => (
-  <TextField
-    autoCapitalize="none"
-    autoCorrect={false}
-    underlineColorAndroid="transparent"
-    clearButtonMode="while-editing"
-    {...props}
-  />
-);
+renderField.propTypes = {
+  input: PropTypes.shape({
+    value: PropTypes.string,
+  }),
+};
 
 const renderArea = props => (
   <TextField
@@ -54,22 +58,22 @@ class ThreadComposeView extends Component {
     isExpand: false,
   }
 
+  componentWillMount() {
+    this._subscription = threadEmitter.addListener('submitThread', this.props.handleSubmit);
+  }
+
+  componentWillUnmount() {
+    this._subscription.remove();
+  }
+
   render() {
-    const { handleSubmit, types, invalid, submitting } = this.props;
-    const disabled = invalid || submitting;
+    const { types } = this.props;
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={keyboardVerticalOffset}
         behavior="padding"
         style={styles.container}
       >
-        <TouchableOpacity
-          style={disabled ? [styles.button, styles.disabled] : styles.button}
-          disabled={disabled}
-          onPress={handleSubmit}
-        >
-          <Text style={styles.buttonText}>提交</Text>
-        </TouchableOpacity>
         <Field
           name="title"
           type="text"
@@ -103,15 +107,25 @@ class ThreadComposeView extends Component {
 
 ThreadComposeView.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  invalid: PropTypes.bool.isRequired,
   // reset: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
   types: PropTypes.instanceOf(List),
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  counter: {
+    alignSelf: 'center',
+    textAlign: 'right',
+    margin: 10,
+    fontFamily: Platform.OS === 'ios' ? 'menlo' : 'monospace',
+  },
+  counterError: {
+    color: palette.red,
   },
   separator: {
     height: StyleSheet.hairlineWidth,

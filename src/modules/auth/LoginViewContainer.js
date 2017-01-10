@@ -21,7 +21,11 @@ class LoginViewContainer extends PureComponent {
   }
 
   componentWillMount() {
-    authEmitter.on('dismiss', this.dismiss);
+    this._subscription = authEmitter.once('dismiss', this.dismiss);
+  }
+
+  componentWillUnmount() {
+    this._subscription.remove();
   }
 
   dismiss = () => {

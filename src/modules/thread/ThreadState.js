@@ -1,5 +1,5 @@
 import { take, call } from 'redux-saga/effects';
-import EventEmitter from 'event-emitter';
+import { EventEmitter } from 'fbemitter';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,

@@ -9,6 +9,7 @@ import { palette } from '../../styles/config';
 import { newThread, threadEmitter } from './ThreadState';
 import { loadForumPage } from '../forum/ForumState';
 import withMessage from '../error/withMessage';
+import SubmitButton from './SubmitButton';
 
 @withMessage
 class ThreadComposeViewContainer extends PureComponent {
@@ -18,7 +19,7 @@ class ThreadComposeViewContainer extends PureComponent {
       backgroundColor: palette.black,
       tintColor: palette.inverted,
       renderLeft: () => <DismissButton />,
-      // renderRight: (route, props) => { console.warn(JSON.stringify(route), Object.keys(props)); },
+      renderRight: () => <SubmitButton />,
     },
     styles: {
       ...NavigationStyles.SlideVertical,
@@ -28,7 +29,11 @@ class ThreadComposeViewContainer extends PureComponent {
 
   componentWillMount() {
     this.props.loadForumPage();
-    threadEmitter.on('dismissComposeView', this.dismiss);
+    this._subscription = threadEmitter.once('dismissComposeView', this.dismiss);
+  }
+
+  componentWillUnmount() {
+    this._subscription.remove();
   }
 
   dismiss = () => {

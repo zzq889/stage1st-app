@@ -34,7 +34,7 @@
     "bluebird": "^3.3.5",
     "entities": "^1.1.1",
     "es6-symbol": "^3.0.2",
-    "event-emitter": "^0.3.4",
+    "fbemitter": "^2.1.1",
     "hoist-non-react-statics": "^1.2.0",
     "htmlparser2-without-node-native": "^3.9.0",
     "humps": "^2.0.0",
