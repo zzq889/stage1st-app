@@ -47,7 +47,7 @@ const LoginView = ({ handleSubmit, invalid, submitting }) => {
         style={styles.container}
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps
-        keyboardDismissMode="on-drag"
+        alwaysBounceVertical={false}
       >
         <CircleView size={100} source={PreImage} style={styles.image} />
         <Field
