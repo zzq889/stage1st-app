@@ -15,7 +15,7 @@ const baseColors = {
 export const palette = {
   ...baseColors,
   primary: baseColors.black,
-  secondary: baseColors.red,
+  secondary: baseColors.blue,
   default: baseColors.grey,
   info: baseColors.blue,
   success: baseColors.green,

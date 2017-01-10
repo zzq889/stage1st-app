@@ -8,6 +8,7 @@ import {
   watchLoadFavedThreadPage,
   watchLoadSubscribedThreadPage,
   watchNewThread,
+  watchNewThreadSuccess,
 } from '../modules/thread/ThreadState';
 import {
   watchLoadPostPage,
@@ -28,6 +29,7 @@ export default function* root() {
     fork(watchLoadFavedThreadPage),
     fork(watchLoadSubscribedThreadPage),
     fork(watchNewThread),
+    fork(watchNewThreadSuccess),
     fork(watchLoadPostPage),
     fork(watchUserAuth),
     fork(watchLoadUserPage),

@@ -31,6 +31,10 @@ export const forumSchema = new Schema('forums', {
   idAttribute: 'fid',
 });
 
+export const typeSchema = new Schema('types', {
+  idAttribute: 'typeid',
+});
+
 export const threadSchema = new Schema('threads', {
   idAttribute: 'tid',
 });
@@ -47,6 +51,10 @@ const forumOrChannel = {
   channel: channelSchema,
   forum: forumSchema,
 };
+
+forumSchema.define({
+  types: arrayOf(typeSchema),
+});
 
 export const forumSchemaArray = arrayOf(forumOrChannel, {
   schemaAttribute: (entity) => {

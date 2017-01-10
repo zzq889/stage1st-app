@@ -98,8 +98,8 @@ export function get(endpoint, params, ...otherArgs) {
   return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
 
-export function post(endpoint, body, ...otherArgs) {
-  return callApiAsync('POST', endpoint, body, ...otherArgs);
+export function post(...args) {
+  return callApiAsync('POST', ...args);
 }
 
 // resuable fetch Subroutine
@@ -151,7 +151,7 @@ export const fetchHistory = uid =>
 export const fetchChannels = () =>
   get('forum/all', null, SCHEMA.forumSchemaArray);
 
-export const fetchForums = fid =>
+export const fetchForum = fid =>
   get('forum', { fid }, SCHEMA.forumSchema);
 
 // thread
@@ -171,7 +171,7 @@ export const fetchFavedThreads = () =>
   get('favor/page', null, SCHEMA.threadSchemaArray);
 
 export const createThread = ({ fid, typeid, title, content }) =>
-  post('post/thread', { fid, typeid, title, content }, SCHEMA.postSchema);
+  post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);
 
 // post
 export const fetchPosts = (tid, uid) =>

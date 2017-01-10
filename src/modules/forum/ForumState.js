@@ -2,7 +2,7 @@ import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
-  fetchForums as apiFetchForums,
+  fetchForum as apiFetchForum,
   fetchChannels as apiFetchChannels,
 } from '../../services/webApi';
 
@@ -46,8 +46,8 @@ export const loadForumPage = (fid, requiredFields = []) =>
 const fetchChannels = fetchEntity.bind(null, channelEntity, apiFetchChannels);
 const getChannels = state => state.getIn(['entities', 'channels']);
 
-const fetchForums = fetchEntity.bind(null, forumEntity, apiFetchForums);
-const getForums = (state, fid) => state.getIn(['pagination', 'forumsByFid', fid]);
+const fetchForum = fetchEntity.bind(null, forumEntity, apiFetchForum);
+const getForum = (state, fid) => state.getIn(['entities', 'forums', fid]);
 
 // load repo unless it is cached
 function* loadChannels(requiredFields) {
@@ -57,11 +57,11 @@ function* loadChannels(requiredFields) {
   }
 }
 
-// load repo unless it is cached
-function* loadForums(fid, requiredFields) {
-  const forums = yield select(getForums, fid);
-  if (!forums || !forums.get('ids').size || requiredFields.some(key => !forums.has(key))) {
-    yield call(fetchForums, fid);
+// load forums unless it is cached
+function* loadForum(fid, requiredFields) {
+  const forum = yield select(getForum, fid);
+  if (!forum || requiredFields.some(key => !forum.has(key))) {
+    yield call(fetchForum, fid);
   }
 }
 
@@ -79,6 +79,7 @@ export function* watchLoadChannelPage() {
 export function* watchLoadForumPage() {
   while (true) {
     const { fid, requiredFields = [] } = yield take(LOAD_FORUM_PAGE);
-    yield fork(loadForums, fid, requiredFields);
+    // yield fork(loadForum, fid, requiredFields);
+    yield call(fetchForum, fid);
   }
 }
