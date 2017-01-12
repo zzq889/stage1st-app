@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@exponent/ex-navigation@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@exponent/ex-navigation/-/ex-navigation-2.5.0.tgz#acb8486387ceb11d85a586f4c303544c20633f5d"
+"@exponent/ex-navigation@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@exponent/ex-navigation/-/ex-navigation-2.7.1.tgz#5166110011468a040df9f82740f8d0eda64e797b"
   dependencies:
     "@exponent/react-native-touchable-native-feedback-safe" "^1.1.0"
     clamp "^1.0.1"
@@ -19,7 +19,7 @@
     react-clone-referenced-element "^1.0.1"
     react-mixin "^3.0.5"
     react-native-drawer-layout "^1.0.0"
-    react-native-tab-view "^0.0.38"
+    react-native-tab-view "0.0.42"
     react-redux "^4.4.5"
     react-static-container "^1.0.0"
     react-timer-mixin "^0.13.3"
@@ -2638,6 +2638,10 @@ fleximap@0.9.x:
   version "0.9.9"
   resolved "https://registry.yarnpkg.com/fleximap/-/fleximap-0.9.9.tgz#826debb3fd5fb4c9865742425bfb7bdc66339db7"
 
+flow-runtime@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/flow-runtime/-/flow-runtime-0.0.6.tgz#570aeab33dca9d2357d137c0b0a2e141b7342410"
+
 for-in@^0.1.5:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-0.1.6.tgz#c9f96e89bfad18a545af5ec3ed352a1d9e5b4dc8"
@@ -3259,13 +3263,13 @@ interpret@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.1.tgz#d579fb7f693b858004947af39fa0db49f795602c"
 
-invariant@=2.2.1, invariant@^2.0.0, invariant@^2.2.1:
+invariant@=2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.1.tgz#b097010547668c7e337028ebe816ebe36c8a8d54"
   dependencies:
     loose-envify "^1.0.0"
 
-invariant@^2.2.0, invariant@^2.2.2:
+invariant@^2.0.0, invariant@^2.2.0, invariant@^2.2.1, invariant@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.2.tgz#9e1f56ac0acdb6bf303306f338be3b204ae60360"
   dependencies:
@@ -4183,7 +4187,7 @@ lodash.map@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.map/-/lodash.map-4.6.0.tgz#771ec7839e3473d9c4cde28b19394c3562f4f6d3"
 
-lodash.merge@^4.4.0, lodash.merge@^4.6.0:
+lodash.merge@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
 
@@ -5121,9 +5125,9 @@ react-native-safari-view@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safari-view/-/react-native-safari-view-1.2.0.tgz#6cdd281a886937deffbb4592ae480aa55ae0e2e8"
 
-react-native-tab-view@^0.0.38:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.38.tgz#4194bba0abda9f781101c1a995c92733b194461a"
+react-native-tab-view@0.0.42:
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.42.tgz#abaeda8e7ab856db98c09709d3d82d2a08b94564"
 
 react-native-vector-icons@^3.0.0:
   version "3.0.0"
@@ -5395,10 +5399,11 @@ redux-form@^6.4.3:
     lodash-es "^4.17.3"
     shallowequal "^0.2.2"
 
-redux-immutable@^3.0.9:
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-3.0.9.tgz#b14f8ddc5cc390c46439e287e053336398881c58"
+redux-immutable@^3.0.10:
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-3.0.10.tgz#160c9ebfe59cf3f2fd4ee9baf0017cd56fe54649"
   dependencies:
+    flow-runtime "0.0.6"
     immutable "^3.8.1"
 
 redux-logger@^2.6.1:
