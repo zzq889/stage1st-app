@@ -6,26 +6,73 @@ import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
 import Image from '../components/Image';
 
-
+const DEBUG = __DEV__ && false;
 const LINE_BREAK = '\n';
-const PARAGRAPH_BREAK = '\n\n';
+const PARAGRAPH_BREAK = DEBUG ? '\nPARAGRAPH_BREAK\n' : '\n\n';
 const BULLET = '\u2022 ';
+
+function getBlockType(node) {
+  if (node.name === 'img' && node.attribs.smilieid) {
+    return false;
+  }
+  return [
+    'br',
+    'blockquote',
+    'img',
+    'div',
+    'p',
+    'h1', 'h2', 'h3', 'h4', 'h5',
+  ].indexOf(node.name) !== -1;
+}
+
+function flatten(dom) {
+  return dom.reduce((flat, node) => {
+    if (node.name === 'font' && node.children) {
+      return flat.concat(flatten(node.children));
+    }
+    if (node.type === 'text' && node.data.trim() === '') {
+      return flat;
+    }
+    if (node.name === 'br') {
+      if (flat.length > 0 && getBlockType(flat[flat.length - 1])) {
+        return flat;
+      }
+
+      if (dom.indexOf(node) === 0) {
+        return flat;
+      }
+    }
+
+    return flat.concat(node);
+  }, []);
+}
 
 function htmlToElement(rawHtml, opts, done) {
   function domToElement(dom, parent) {
     if (!dom) return null;
 
-    return dom.map((node, index, list) => {
+    return flatten(dom).map((node, index, list) => {
+      const isBlock = getBlockType(node);
+      const shouldBreakLast = isBlock && index < list.length - 1;
+
       if (opts.customRenderer) {
         const rendered = opts.customRenderer(node, index, parent, opts, () => domToElement(node.children, node));
-        if (rendered || rendered === null) return rendered;
+        if (rendered || rendered === null) {
+          return (
+            <Text key={index}>
+              {rendered}
+              {shouldBreakLast ? PARAGRAPH_BREAK : null}
+            </Text>
+          );
+        }
       }
-
 
       if (node.type === 'text') {
         return (
-          <Text key={index} style={parent ? opts.styles[parent.name] : null}>
-            {entities.decodeHTML(node.data)}
+          <Text key={index} style={parent ? [opts.styles.text, opts.styles[parent.name]] : opts.styles.text}>
+            {DEBUG ? `<text${index}>` : null}
+            {entities.decodeHTML(node.data).trim()}
+            {DEBUG ? `</text${index}>` : null}
           </Text>
         );
       }
@@ -54,19 +101,49 @@ function htmlToElement(rawHtml, opts, done) {
           linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href));
         }
 
+        if (node.name === 'a') {
+          return (
+            <Text key={index} style={opts.styles[node.name]} onPress={linkPressHandler}>
+              {domToElement(node.children, node)}
+            </Text>
+          );
+        }
+
+        if (node.name === 'br') {
+          if (index === list.length - 1) return null;
+          return (
+            <Text
+              key={index}
+              style={opts.styles[node.name]}
+            >
+              {PARAGRAPH_BREAK}
+            </Text>
+          );
+        }
+
         return (
-          <Text key={index} onPress={linkPressHandler}>
+          <Text key={index} style={opts.styles[node.name]} onPress={linkPressHandler}>
+            {
+              DEBUG
+              ? (
+                <Text>
+                  {`<${node.name}${index}`}
+                  <Text style={opts.styles.attr}>${JSON.stringify(node.attribs)}</Text>
+                  {'>'}
+                </Text>
+              )
+              : null
+            }
             {node.name === 'pre' ? LINE_BREAK : null}
             {node.name === 'li' ? BULLET : null}
             {domToElement(node.children, node)}
-            {node.name === 'br' || node.name === 'li' ? LINE_BREAK : null}
-            {node.name === 'p' && index < list.length - 1 ? PARAGRAPH_BREAK : null}
-            {node.name === 'h1' || node.name === 'h2' || node.name === 'h3' || node.name === 'h4' || node.name === 'h5' ? LINE_BREAK : null}
+            {shouldBreakLast ? PARAGRAPH_BREAK : null}
+            {DEBUG ? `</${node.name}${index}>` : null}
           </Text>
         );
       }
 
-      return <Text />;
+      return null;
     });
   }
 

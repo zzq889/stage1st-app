@@ -1,6 +1,7 @@
 import { PropTypes } from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import PostListView from './PostListView';
 import { loadPostPage } from './PostState';
 
@@ -14,9 +15,9 @@ const PostListViewContainer = connect(
     thread: state.getIn(['entities', 'threads', String(tid)]),
     loading: state.getIn(['pagination', 'postsByTid', tid, 'isFetching']),
   }),
-  {
-    loadPostPage,
-  },
+  (dispatch, { tid }) => ({
+    loadPostPage: bindActionCreators(loadPostPage.bind(null, tid), dispatch),
+  }),
 )(PostListView);
 
 PostListViewContainer.propTypes = {

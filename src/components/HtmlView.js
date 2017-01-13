@@ -7,6 +7,7 @@ import {
   Text,
 } from 'react-native';
 import htmlToElement from '../utils/htmlToElement';
+import { palette } from '../styles/config';
 
 const boldStyle = { fontWeight: '500' };
 const italicStyle = { fontStyle: 'italic' };
@@ -15,13 +16,25 @@ const codeStyle = { fontFamily: 'Menlo' };
 const baseStyles = StyleSheet.create({
   b: boldStyle,
   strong: boldStyle,
-  i: italicStyle,
+  i: {
+    ...italicStyle,
+    color: palette.red,
+  },
   em: italicStyle,
   pre: codeStyle,
   code: codeStyle,
   a: {
-    fontWeight: '500',
-    color: '#007AFF',
+    color: palette.blue,
+  },
+  text: {
+    fontSize: 16,
+    color: palette.foreground,
+  },
+  br: {
+    color: palette.orange,
+  },
+  blockquote: {
+    color: palette.grey,
   },
 });
 

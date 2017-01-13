@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  InteractionManager,
 } from 'react-native';
 import { List, Map } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
@@ -31,7 +32,9 @@ class PostListView extends Component {
   }
 
   componentWillMount() {
-    this.props.loadPostPage(this.props.tid);
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadPostPage();
+    });
   }
 
   renderHeader = () => (
@@ -65,7 +68,6 @@ class PostListView extends Component {
 }
 
 PostListView.propTypes = {
-  tid: PropTypes.number.isRequired,
   thread: PropTypes.instanceOf(Map).isRequired,
   posts: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,

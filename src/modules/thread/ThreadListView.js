@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   StyleSheet,
-  ActivityIndicator,
+  InteractionManager,
 } from 'react-native';
 import { List } from 'immutable';
 import { withNavigation } from '@exponent/ex-navigation';
@@ -10,19 +10,31 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
+import TitleView from '../../components/TitleView';
 
 @withNavigation
 class ThreadListView extends Component {
   static route = {
     navigationBar: {
-      title: ({ title }) => title || 'Threads',
       renderRight: ({ params: { fid } }) => <ComposeButton fid={fid} />,
+      renderTitle: ({ params }) => <TitleView {...params} />,
     },
   }
 
   componentWillMount() {
-    this.props.loadThreadPage();
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadThreadPage();
+    });
   }
+
+  componentWillReceiveProps({ loading }) {
+    if (loading !== this.props.loading) {
+      this.props.navigator.updateCurrentRouteParams({
+        loading,
+      });
+    }
+  }
+
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
@@ -43,14 +55,7 @@ class ThreadListView extends Component {
   )
 
   render() {
-    const { threads, loading } = this.props;
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator style={styles.centered} />
-        </View>
-      );
-    }
+    const { threads } = this.props;
     return (
       <ImmutableListView
         immutableData={threads}
@@ -63,15 +68,14 @@ class ThreadListView extends Component {
 }
 
 ThreadListView.propTypes = {
-  // fid: PropTypes.oneOfType([
-  //   PropTypes.number,
-  //   PropTypes.string,
-  // ]).isRequired,
   threads: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadThreadPage: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
+  }),
+  navigator: PropTypes.shape({
+    updateCurrentRouteParams: PropTypes.func.isRequired,
   }),
 };
 
