@@ -11,6 +11,7 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbar from './PostToolbar';
+import TitleView from '../../components/TitleView';
 
 const renderRow = rowData => (
   <Row
@@ -25,7 +26,7 @@ const renderRow = rowData => (
 class PostListView extends Component {
   static route = {
     navigationBar: {
-      title: 'Posts',
+      renderTitle: ({ params: { loading } }) => <TitleView title="Posts" loading={loading} />,
       backgroundColor: palette.black,
       tintColor: palette.inverted,
     },
@@ -37,6 +38,14 @@ class PostListView extends Component {
     });
   }
 
+  componentWillReceiveProps({ loading }) {
+    if (loading !== this.props.loading) {
+      this.props.navigator.updateCurrentRouteParams({
+        loading,
+      });
+    }
+  }
+
   renderHeader = () => (
     <View style={styles.header}>
       <Text style={styles.headerText}>{this.props.thread.get('subject')}</Text>
@@ -44,14 +53,7 @@ class PostListView extends Component {
   );
 
   render() {
-    const { posts, loading } = this.props;
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator style={styles.centered} />
-        </View>
-      );
-    }
+    const { posts } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
@@ -72,6 +74,9 @@ PostListView.propTypes = {
   posts: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
+  navigator: PropTypes.shape({
+    updateCurrentRouteParams: PropTypes.func.isRequired,
+  }),
 };
 
 PostListView.defaultProps = {

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { palette } from '../styles/config';
 
-const TitleView = ({ title, loading = true }) => (
+const TitleView = ({ title, loading = false }) => (
   <View style={styles.container}>
     <Text style={styles.text}>{title}</Text>
     {
