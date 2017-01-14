@@ -18,6 +18,7 @@ export default function paginate({ types, mapActionToKey }) {
   function updatePagination(state = Map({
     isFetching: false,
     nextPageUrl: undefined,
+    totalCount: 0,
     pageCount: 0,
     ids: Set(),
   }), action) {
@@ -27,6 +28,7 @@ export default function paginate({ types, mapActionToKey }) {
       case successType:
         return state
           .set('isFetching', false)
+          .set('totalCount', action.response.totalCount)
           .update('ids', value => value.union(action.response.result));
           // TODO: nextPageUrl
           // .set('nextPageUrl', action.response.nextPageUrl)

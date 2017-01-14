@@ -3,14 +3,13 @@ import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator,
   InteractionManager,
 } from 'react-native';
 import { List, Map } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
-import PostToolbar from './PostToolbar';
+import PostToolbarContainer from './PostToolbarContainer';
 import TitleView from '../../components/TitleView';
 
 const renderRow = rowData => (
@@ -53,7 +52,7 @@ class PostListView extends Component {
   );
 
   render() {
-    const { posts } = this.props;
+    const { tid, posts } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
@@ -63,13 +62,17 @@ class PostListView extends Component {
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           rowsDuringInteraction={10}
         />
-        <PostToolbar />
+        <PostToolbarContainer tid={tid} />
       </View>
     );
   }
 }
 
 PostListView.propTypes = {
+  tid: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
   thread: PropTypes.instanceOf(Map).isRequired,
   posts: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,

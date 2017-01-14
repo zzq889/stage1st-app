@@ -73,6 +73,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
 
   const camelizedJson = camelizeKeys(json);
   const nextPageUrl = getNextPageUrl(response);
+  const totalCount = json.data && json.data.totalCount;
   const responseJson = schema
     ? normalize(normalizeKey(camelizedJson), schema)
     : camelizedJson;
@@ -80,6 +81,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
   return {
     ...responseJson,
     nextPageUrl,
+    totalCount,
   };
 }
 
@@ -92,8 +94,12 @@ export function* callApiAsync(...args) {
 
 export function get(endpoint, params, ...otherArgs) {
   const paramsString = params
-    ? Object.keys(params).reduce((str, key) =>
-      `${str}&${key}=${encodeURIComponent(params[key])}`, '?')
+    ? Object.keys(params).reduce((str, key) => {
+      const value = params[key];
+      return value
+        ? `${str}&${key}=${encodeURIComponent(value)}`
+        : str;
+    }, '?')
     : '';
   return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
@@ -155,8 +161,8 @@ export const fetchForum = fid =>
   get('forum', { fid }, SCHEMA.forumSchema);
 
 // thread
-export const fetchThreads = fid =>
-  get('forum/page', { fid }, SCHEMA.threadSchemaArray);
+export const fetchThreads = (fid, pageNo) =>
+  get('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
 
 export const fetchSubscribedThreads = () =>
   get('forum/subscribed', null, SCHEMA.threadSchemaArray);
@@ -174,8 +180,8 @@ export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);
 
 // post
-export const fetchPosts = (tid, uid) =>
-  get('thread/page', { tid, uid }, SCHEMA.postSchemaArray);
+export const fetchPosts = (tid, uid, pageNo) =>
+  get('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
 export const createPost = ({ tid, pid, typeid, title, content }) =>
   post('post/post', { tid, pid, typeid, title, content }, SCHEMA.postSchema);
