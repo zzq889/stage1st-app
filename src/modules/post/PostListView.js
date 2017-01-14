@@ -10,7 +10,6 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbarContainer from './PostToolbarContainer';
-import TitleView from '../../components/TitleView';
 
 const renderRow = rowData => (
   <Row
@@ -25,7 +24,7 @@ const renderRow = rowData => (
 class PostListView extends Component {
   static route = {
     navigationBar: {
-      renderTitle: ({ params: { loading } }) => <TitleView title="Posts" loading={loading} />,
+      title: 'Posts',
       backgroundColor: palette.black,
       tintColor: palette.inverted,
     },
@@ -37,14 +36,6 @@ class PostListView extends Component {
     });
   }
 
-  componentWillReceiveProps({ loading }) {
-    if (loading !== this.props.loading) {
-      this.props.navigator.updateCurrentRouteParams({
-        loading,
-      });
-    }
-  }
-
   renderHeader = () => (
     <View style={styles.header}>
       <Text style={styles.headerText}>{this.props.thread.get('subject')}</Text>
@@ -52,7 +43,7 @@ class PostListView extends Component {
   );
 
   render() {
-    const { tid, posts } = this.props;
+    const { tid, posts, loading } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
@@ -60,7 +51,7 @@ class PostListView extends Component {
           renderRow={renderRow}
           renderHeader={this.renderHeader}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-          rowsDuringInteraction={10}
+          rowsDuringInteraction={5}
         />
         <PostToolbarContainer tid={tid} />
       </View>
@@ -77,9 +68,6 @@ PostListView.propTypes = {
   posts: PropTypes.instanceOf(List).isRequired,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
-  navigator: PropTypes.shape({
-    updateCurrentRouteParams: PropTypes.func.isRequired,
-  }),
 };
 
 PostListView.defaultProps = {

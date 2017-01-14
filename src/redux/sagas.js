@@ -5,6 +5,7 @@ import {
 } from '../modules/forum/ForumState';
 import {
   watchLoadThreadPage,
+  watchLoadMoreThreads,
   watchLoadFavedThreadPage,
   watchLoadSubscribedThreadPage,
   watchNewThread,
@@ -26,6 +27,7 @@ export default function* root() {
     fork(watchLoadChannelPage),
     fork(watchLoadForumPage),
     fork(watchLoadThreadPage),
+    fork(watchLoadMoreThreads),
     fork(watchLoadFavedThreadPage),
     fork(watchLoadSubscribedThreadPage),
     fork(watchNewThread),

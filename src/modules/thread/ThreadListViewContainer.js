@@ -7,6 +7,7 @@ import {
   loadThreadPage,
   loadFavedThreadPage,
   loadSubscribedThreadPage,
+  loadMoreThreads,
 } from './ThreadState';
 
 const ThreadListViewContainer = connect(
@@ -22,7 +23,8 @@ const ThreadListViewContainer = connect(
       .sortBy(post => post.get('lastpost'))
       .reverse()
       .toList(),
-    loading: state.getIn(['pagination', 'threadsById', fid, 'isFetching']),
+    loading: state.getIn(['pagination', 'threadsById', fid, 'isFetching'], false),
+    nextPage: state.getIn(['pagination', 'threadsById', fid, 'nextPage']),
   }),
   (dispatch, { fid }) => {
     let loadThreadPageFunc;
@@ -39,6 +41,7 @@ const ThreadListViewContainer = connect(
 
     return {
       loadThreadPage: bindActionCreators(loadThreadPageFunc, dispatch),
+      loadMoreThreads: bindActionCreators(loadMoreThreads.bind(null, fid), dispatch),
     };
   },
 )(ThreadListView);

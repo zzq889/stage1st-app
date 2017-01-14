@@ -10,13 +10,13 @@ import BarButtonItem from '../../components/BarButtonItem';
 import { palette } from '../../styles/config';
 
 
-const PostToolbar = ({ pageCount }) => (
+const PostToolbar = ({ pageNo = 1, totalPage }) => (
   <Toolbar style={styles.container}>
     <BarButtonItem disabled>
       <Icon style={styles.icon} name="chevron-thin-left" size={20} color={palette.lightGrey} />
     </BarButtonItem>
     <BarButtonItem style={styles.tabItem} stretch>
-      <Text>1 / {pageCount}</Text>
+      <Text>{ pageNo } / {totalPage}</Text>
     </BarButtonItem>
     <BarButtonItem>
       <Icon style={styles.icon} name="chevron-thin-right" size={20} color={palette.black} />
@@ -29,7 +29,8 @@ const PostToolbar = ({ pageCount }) => (
 );
 
 PostToolbar.propTypes = {
-  pageCount: PropTypes.number.isRequired,
+  pageNo: PropTypes.number,
+  totalPage: PropTypes.number,
 };
 
 const styles = StyleSheet.create({

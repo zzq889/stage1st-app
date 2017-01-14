@@ -17,8 +17,8 @@ export default function paginate({ types, mapActionToKey }) {
 
   function updatePagination(state = Map({
     isFetching: false,
-    nextPageUrl: undefined,
-    totalCount: 0,
+    nextPage: undefined,
+    totalPage: 0,
     pageCount: 0,
     ids: Set(),
   }), action) {
@@ -28,11 +28,10 @@ export default function paginate({ types, mapActionToKey }) {
       case successType:
         return state
           .set('isFetching', false)
-          .set('totalCount', action.response.totalCount)
-          .update('ids', value => value.union(action.response.result));
-          // TODO: nextPageUrl
-          // .set('nextPageUrl', action.response.nextPageUrl)
-          // .update('pageCount', value => value + 1);
+          .update('ids', value => value.union(action.response.result))
+          .set('totalPage', action.response.totalPage)
+          .set('nextPage', action.response.nextPage)
+          .update('pageCount', value => value + 1);
       case failureType:
         return state.set('isFetching', false);
       default:

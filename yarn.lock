@@ -5098,6 +5098,13 @@ react-native-immutable-list-view@0.2.2:
   dependencies:
     immutable "~3.8.1"
 
+react-native-infinite-scroll-view@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-infinite-scroll-view/-/react-native-infinite-scroll-view-0.4.2.tgz#9091a213aeedf6ac2cee0374648406ab32790f74"
+  dependencies:
+    react-clone-referenced-element "^1.0.1"
+    react-native-scrollable-mixin "^1.0.0"
+
 react-native-mock@~0.2.5:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/react-native-mock/-/react-native-mock-0.2.7.tgz#683880c400099a1c41bbd309ec5b92b3019d6034"
@@ -5118,6 +5125,10 @@ react-native-mock@~0.2.5:
 react-native-safari-view@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safari-view/-/react-native-safari-view-1.2.0.tgz#6cdd281a886937deffbb4592ae480aa55ae0e2e8"
+
+react-native-scrollable-mixin@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
 
 react-native-tab-view@0.0.42:
   version "0.0.42"

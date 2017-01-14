@@ -5,7 +5,7 @@ import PostToolbar from './PostToolbar';
 
 const PostToolbarContainer = connect(
   (state, { tid }) => ({
-    pageCount: Math.ceil((state.getIn(['pagination', 'postsByTid', tid, 'totalCount']) || 0) / 30),
+    totalPage: state.getIn(['pagination', 'postsByTid', tid, 'totalPage']),
   }),
   // (dispatch, { tid }) => ({
   //   loadPostPage: bindActionCreators(loadPostPage.bind(null, tid), dispatch),

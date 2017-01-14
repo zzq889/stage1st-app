@@ -13,18 +13,16 @@ export function url(path) {
 }
 
 // Extracts the next page URL from API response.
-function getNextPageUrl(response) {
-  const link = response.headers.get('link');
-  if (!link) {
-    return null;
+function getNextPage(data, totalPage) {
+  const currentPage = data.pageNo || 1;
+  if (currentPage < totalPage) {
+    return currentPage + 1;
   }
+  return null;
+}
 
-  const nextLink = link.split(',').find(s => s.indexOf('rel="next"') > -1);
-  if (!nextLink) {
-    return null;
-  }
-
-  return nextLink.split(';')[0].slice(1, -1);
+function getTotalPage(data) {
+  return (data && data.totalCount && Math.ceil(data.totalCount / 30)) || 1;
 }
 
 function getRequestHeaders(body, token) {
@@ -72,16 +70,16 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
   }
 
   const camelizedJson = camelizeKeys(json);
-  const nextPageUrl = getNextPageUrl(response);
-  const totalCount = json.data && json.data.totalCount;
+  const totalPage = getTotalPage(json.data);
+  const nextPage = getNextPage(json.data, totalPage);
   const responseJson = schema
     ? normalize(normalizeKey(camelizedJson), schema)
     : camelizedJson;
 
   return {
     ...responseJson,
-    nextPageUrl,
-    totalCount,
+    nextPage,
+    totalPage,
   };
 }
 
@@ -113,15 +111,15 @@ export function post(...args) {
 // apiFn  : api.fetchUser | api.fetchRepo | ...
 // id     : login | fullName
 // url    : next page url. If not provided will use pass it to apiFn
-export function* fetchEntity(entity, apiFn, id, nextUrl) {
+export function* fetchEntity(entity, apiFn, args) {
   try {
-    yield put(entity.request(id));
-    const response = yield call(apiFn, nextUrl || id);
-    yield put(entity.success(id, response));
+    yield put(entity.request(args));
+    const response = yield call(apiFn, args);
+    yield put(entity.success(args, response));
   } catch (error) {
     const message = error.message || 'Something bad happened';
     // console.warn(message);
-    yield put(entity.failure(id, message));
+    yield put(entity.failure(args, message));
   }
 }
 
@@ -161,7 +159,7 @@ export const fetchForum = fid =>
   get('forum', { fid }, SCHEMA.forumSchema);
 
 // thread
-export const fetchThreads = (fid, pageNo) =>
+export const fetchThreads = ({ fid, pageNo }) =>
   get('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
 
 export const fetchSubscribedThreads = () =>

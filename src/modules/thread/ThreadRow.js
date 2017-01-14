@@ -31,7 +31,7 @@ const ThreadRow = ({ subject, forumName, author, timestamp, onPress }) => (
 
 ThreadRow.propTypes = {
   subject: PropTypes.string.isRequired,
-  forumName: PropTypes.string.isRequired,
+  forumName: PropTypes.string,
   author: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
