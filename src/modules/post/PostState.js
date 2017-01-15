@@ -1,4 +1,4 @@
-import { take, call, fork, select } from 'redux-saga/effects';
+import { takeEvery, call, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
@@ -13,29 +13,30 @@ export const POST = createRequestTypes('POST');
 export const LOAD_POST_PAGE = 'PostState/LOAD_POST_PAGE';
 
 export const postEntity = {
-  request: tid => createAction(
-    POST.REQUEST, { tid }),
-  success: (tid, response) => createAction(
-    POST.SUCCESS, { tid, response }),
-  failure: (tid, error) => createAction(
-    POST.FAILURE, { tid, error }),
+  request: args => createAction(
+    POST.REQUEST, { ...args }),
+  success: (args, response) => createAction(
+    POST.SUCCESS, { ...args, response }),
+  failure: (args, error) => createAction(
+    POST.FAILURE, { ...args, error }),
 };
 
-export const loadPostPage = (tid, requiredFields = []) =>
-  createAction(LOAD_POST_PAGE, { tid, requiredFields });
+export const loadPostPage = (tid, uid, pageNo = 1) =>
+  createAction(LOAD_POST_PAGE, { tid, uid, pageNo });
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
 const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
-const getPosts = (state, tid) => state.getIn(['pagination', 'postsByTid', tid]);
+const getPosts = (state, { tid, uid, pageNo }) =>
+  state.getIn(['pagination', 'postsByTid', `${tid}.${uid}.${pageNo}`]);
 
 // load repo unless it is cached
-function* loadPosts(tid, requiredFields) {
-  const posts = yield select(getPosts, tid);
-  if (!posts || !posts.get('ids').size || requiredFields.some(key => !posts.has(key))) {
-    yield call(fetchPosts, tid);
+function* loadPosts({ tid, uid, pageNo }) {
+  const posts = yield select(getPosts, { tid, uid, pageNo });
+  if (!posts || !posts.get('ids').size) {
+    yield call(fetchPosts, { tid, uid, pageNo });
   }
 }
 
@@ -44,8 +45,5 @@ function* loadPosts(tid, requiredFields) {
 /** ****************************************************************************/
 
 export function* watchLoadPostPage() {
-  while (true) {
-    const { tid, requiredFields = [] } = yield take(LOAD_POST_PAGE);
-    yield fork(loadPosts, tid, requiredFields);
-  }
+  yield takeEvery(LOAD_POST_PAGE, loadPosts);
 }

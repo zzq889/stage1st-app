@@ -39,6 +39,11 @@ class ThreadListView extends Component {
     // TODO: on refresh
   }
 
+  handleScroll = (event) => {
+    // TODO: event.nativeEvent.contentOffset.y
+    console.log(event.nativeEvent.contentOffset.y);
+  }
+
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       subject={rowData.get('subject')}
@@ -61,10 +66,13 @@ class ThreadListView extends Component {
     const { threads, loading, nextPage } = this.props;
     return (
       <ImmutableListView
+        ref={(c) => { this.listView = c; }}
         immutableData={threads}
         renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={15}
+        // onScroll={this.handleScroll}
+        // contentOffset={{ y: 3000 }}
         // InfiniteScrollView props
         renderScrollComponent={props => <InfiniteScrollView {...props} />}
         canLoadMore={!loading && !!nextPage}

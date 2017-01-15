@@ -12,14 +12,31 @@ import { palette } from '../../styles/config';
 
 const PostToolbar = ({ pageNo = 1, totalPage }) => (
   <Toolbar style={styles.container}>
-    <BarButtonItem disabled>
-      <Icon style={styles.icon} name="chevron-thin-left" size={20} color={palette.lightGrey} />
+    <BarButtonItem
+      disabled={pageNo <= 1}
+    >
+      <Icon
+        style={styles.icon}
+        name="chevron-thin-left"
+        size={20}
+        color={pageNo <= 1 ? palette.lightGrey : palette.black}
+      />
     </BarButtonItem>
-    <BarButtonItem style={styles.tabItem} stretch>
+    <BarButtonItem
+      style={styles.tabItem}
+      stretch
+    >
       <Text>{ pageNo } / {totalPage}</Text>
     </BarButtonItem>
-    <BarButtonItem>
-      <Icon style={styles.icon} name="chevron-thin-right" size={20} color={palette.black} />
+    <BarButtonItem
+      disabled={pageNo === totalPage}
+    >
+      <Icon
+        style={styles.icon}
+        name="chevron-thin-right"
+        size={20}
+        color={pageNo === totalPage ? palette.lightGrey : palette.black}
+      />
     </BarButtonItem>
     <View style={styles.separator} />
     <BarButtonItem>

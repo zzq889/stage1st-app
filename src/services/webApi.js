@@ -178,7 +178,7 @@ export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);
 
 // post
-export const fetchPosts = (tid, uid, pageNo) =>
+export const fetchPosts = ({ tid, uid, pageNo }) =>
   get('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
 export const createPost = ({ tid, pid, typeid, title, content }) =>

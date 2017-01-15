@@ -5440,9 +5440,9 @@ redux-persist@^4.0.0:
     lodash "^4.11.1"
     lodash-es "^4.16.0"
 
-redux-saga@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.13.0.tgz#9294386550deb0d56bc9a1b3c90a613e7ddb6593"
+redux-saga@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.2.tgz#b8b0b5354750fe1a222b74fc1c9489f70dd9fdbb"
 
 redux@^3.4.0, redux@^3.5.2:
   version "3.6.0"
