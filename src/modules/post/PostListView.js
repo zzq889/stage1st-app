@@ -9,7 +9,7 @@ import { List, Map } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
-import PostToolbarContainer from './PostToolbarContainer';
+import PostToolbar from './PostToolbar';
 
 const renderRow = rowData => (
   <Row
@@ -36,6 +36,15 @@ class PostListView extends Component {
     });
   }
 
+  componentWillReceiveProps({ tid: nextTid, uid: nextUid, pageNo: nextPageNo }) {
+    const { tid, uid, pageNo } = this.props;
+    if (nextTid !== tid || nextUid !== uid || nextPageNo !== pageNo) {
+      InteractionManager.runAfterInteractions(() => {
+        this.props.loadPostPage();
+      });
+    }
+  }
+
   renderHeader = () => (
     <View style={styles.header}>
       <Text style={styles.headerText}>{this.props.thread.get('subject')}</Text>
@@ -43,7 +52,7 @@ class PostListView extends Component {
   );
 
   render() {
-    const { tid, posts, loading } = this.props;
+    const { posts, loading, pageNo, totalPage, jumpToPage } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
@@ -53,21 +62,30 @@ class PostListView extends Component {
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           rowsDuringInteraction={5}
         />
-        <PostToolbarContainer tid={tid} />
+        <PostToolbar
+          pageNo={pageNo}
+          totalPage={totalPage}
+          jumpToPage={jumpToPage}
+          loading={loading}
+        />
       </View>
     );
   }
 }
 
 PostListView.propTypes = {
-  tid: PropTypes.oneOfType([
+  thread: PropTypes.instanceOf(Map).isRequired,
+  posts: PropTypes.instanceOf(List).isRequired,
+  tid: PropTypes.number.isRequired,
+  uid: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
   ]).isRequired,
-  thread: PropTypes.instanceOf(Map).isRequired,
-  posts: PropTypes.instanceOf(List).isRequired,
+  pageNo: PropTypes.number,
+  totalPage: PropTypes.number,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
+  jumpToPage: PropTypes.func.isRequired,
 };
 
 PostListView.defaultProps = {

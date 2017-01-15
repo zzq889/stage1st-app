@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import { takeEvery, call, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -11,6 +12,7 @@ import {
 
 export const POST = createRequestTypes('POST');
 export const LOAD_POST_PAGE = 'PostState/LOAD_POST_PAGE';
+export const JUMP_TO_PAGE = 'PostState/JUMP_TO_PAGE';
 
 export const postEntity = {
   request: args => createAction(
@@ -24,18 +26,21 @@ export const postEntity = {
 export const loadPostPage = (tid, uid, pageNo = 1) =>
   createAction(LOAD_POST_PAGE, { tid, uid, pageNo });
 
+export const jumpToPage = (tid, uid, pageNo = 1) =>
+  createAction(JUMP_TO_PAGE, { tid, uid, pageNo });
+
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
 const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
-const getPosts = (state, { tid, uid, pageNo }) =>
-  state.getIn(['pagination', 'postsByTid', `${tid}.${uid}.${pageNo}`]);
+const getPosts = (state, { tid, uid = 'all', pageNo }) =>
+  state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`, 'pages', pageNo]);
 
 // load repo unless it is cached
 function* loadPosts({ tid, uid, pageNo }) {
   const posts = yield select(getPosts, { tid, uid, pageNo });
-  if (!posts || !posts.get('ids').size) {
+  if (!posts) {
     yield call(fetchPosts, { tid, uid, pageNo });
   }
 }
@@ -46,4 +51,21 @@ function* loadPosts({ tid, uid, pageNo }) {
 
 export function* watchLoadPostPage() {
   yield takeEvery(LOAD_POST_PAGE, loadPosts);
+}
+
+/** ****************************************************************************/
+/** ***************************** REDUCERS *************************************/
+/** ****************************************************************************/
+
+export default function PostStateReducer(state = Map(), action) {
+  switch (action.type) {
+    case JUMP_TO_PAGE: {
+      const { tid, uid = 'all', pageNo = 1 } = action;
+      return state
+        .setIn([tid, 'uid'], uid)
+        .setIn([tid, 'pageInfo', uid, 'pageNo'], pageNo);
+    }
+    default:
+      return state;
+  }
 }

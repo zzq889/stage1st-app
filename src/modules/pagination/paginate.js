@@ -21,6 +21,7 @@ export default function paginate({ types, mapActionToKey }) {
     totalPage: 0,
     pageCount: 0,
     ids: Set(),
+    pages: Map(),
   }), action) {
     switch (action.type) {
       case requestType:
@@ -29,6 +30,7 @@ export default function paginate({ types, mapActionToKey }) {
         return state
           .set('isFetching', false)
           .update('ids', value => value.union(action.response.result))
+          .setIn(['pages', action.response.currentPage], Set(action.response.result))
           .set('totalPage', action.response.totalPage)
           .set('nextPage', action.response.nextPage)
           .update('pageCount', value => value + 1);

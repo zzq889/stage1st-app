@@ -3,6 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import Toolbar from '../../components/Toolbar';
@@ -10,10 +11,16 @@ import BarButtonItem from '../../components/BarButtonItem';
 import { palette } from '../../styles/config';
 
 
-const PostToolbar = ({ pageNo = 1, totalPage }) => (
+const PostToolbar = ({
+  pageNo = 0,
+  totalPage = 0,
+  loading,
+  jumpToPage,
+}) => (
   <Toolbar style={styles.container}>
     <BarButtonItem
       disabled={pageNo <= 1}
+      onPress={() => jumpToPage(pageNo - 1)}
     >
       <Icon
         style={styles.icon}
@@ -26,10 +33,12 @@ const PostToolbar = ({ pageNo = 1, totalPage }) => (
       style={styles.tabItem}
       stretch
     >
+      {loading ? <ActivityIndicator style={styles.indicator} /> : null}
       <Text>{ pageNo } / {totalPage}</Text>
     </BarButtonItem>
     <BarButtonItem
       disabled={pageNo === totalPage}
+      onPress={() => jumpToPage(pageNo + 1)}
     >
       <Icon
         style={styles.icon}
@@ -47,7 +56,9 @@ const PostToolbar = ({ pageNo = 1, totalPage }) => (
 
 PostToolbar.propTypes = {
   pageNo: PropTypes.number,
+  loading: PropTypes.bool,
   totalPage: PropTypes.number,
+  jumpToPage: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -56,6 +67,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 4,
+  },
+  indicator: {
+    position: 'absolute',
+    left: 5,
   },
   separator: {
     marginTop: 10,

@@ -13,8 +13,7 @@ export function url(path) {
 }
 
 // Extracts the next page URL from API response.
-function getNextPage(data, totalPage) {
-  const currentPage = data.pageNo || 1;
+function getNextPage(currentPage = 1, totalPage) {
   if (currentPage < totalPage) {
     return currentPage + 1;
   }
@@ -71,13 +70,15 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
 
   const camelizedJson = camelizeKeys(json);
   const totalPage = getTotalPage(json.data);
-  const nextPage = getNextPage(json.data, totalPage);
+  const currentPage = json.data.pageNo;
+  const nextPage = getNextPage(currentPage, totalPage);
   const responseJson = schema
     ? normalize(normalizeKey(camelizedJson), schema)
     : camelizedJson;
 
   return {
     ...responseJson,
+    currentPage,
     nextPage,
     totalPage,
   };
