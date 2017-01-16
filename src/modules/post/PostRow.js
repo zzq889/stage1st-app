@@ -5,10 +5,12 @@ import {
   StyleSheet,
   Linking,
   Image,
+  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import SafariView from 'react-native-safari-view';
 import Moment from 'moment';
+import Icon from 'react-native-vector-icons/Entypo';
 import HtmlView from '../../components/HtmlView';
 // import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
@@ -80,10 +82,21 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
       </View>
     </View>
     <HtmlView
+      style={styles.content}
       value={message}
       renderNode={renderNode}
       onLinkPress={onLinkPress}
     />
+    <View style={styles.actions}>
+      <TouchableOpacity
+        hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
+      >
+        <View style={styles.iconView}>
+          <Icon name="reply" size={16} color={palette.secondary} />
+          <Text style={styles.iconText}>回复</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   </View>
 );
 
@@ -125,6 +138,19 @@ const styles = StyleSheet.create({
   detail: {
     color: palette.grey,
     marginTop: 5,
+  },
+  actions: {
+    marginTop: 15,
+    alignItems: 'flex-end',
+  },
+  iconView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconText: {
+    marginLeft: 5,
+    color: palette.secondary,
   },
 });
 
