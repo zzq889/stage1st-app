@@ -6,6 +6,7 @@ import {
   fetchThreads as apiFetchThreads,
   fetchFavedThreads as apiFetchFavedThreads,
   fetchSubscribedThreads as apiFetchSubscribedThreads,
+  fetchThreadHistory as apiFetchThreadHistory,
   createThread as apiCreateThread,
 } from '../../services/webApi';
 
@@ -61,13 +62,16 @@ export const newThread = args =>
 /** ****************************************************************************/
 
 const fetchThreads = (fid) => {
-  if (fid === 'faved') {
-    return fetchEntity.bind(null, threadEntity, apiFetchFavedThreads);
+  switch (fid) {
+    case 'faved':
+      return fetchEntity.bind(null, threadEntity, apiFetchFavedThreads);
+    case 'subscribed':
+      return fetchEntity.bind(null, threadEntity, apiFetchSubscribedThreads);
+    case 'history':
+      return fetchEntity.bind(null, threadEntity, apiFetchThreadHistory);
+    default:
+      return fetchEntity.bind(null, threadEntity, apiFetchThreads);
   }
-  if (fid === 'subscribed') {
-    return fetchEntity.bind(null, threadEntity, apiFetchSubscribedThreads);
-  }
-  return fetchEntity.bind(null, threadEntity, apiFetchThreads);
 };
 
 const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);

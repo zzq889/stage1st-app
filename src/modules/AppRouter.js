@@ -8,6 +8,7 @@ import SubscribedTabViewContainer from './thread/SubscribedTabViewContainer';
 import ThreadComposeViewContainer from './thread/ThreadComposeViewContainer';
 import PostListViewContainer from './post/PostListViewContainer';
 import ProfileViewContainer from './user/ProfileViewContainer';
+import HistoryTabView from './user/HistoryTabView';
 import AboutView from './about/AboutView';
 
 /**
@@ -23,6 +24,7 @@ const AppRouter = createRouter(() => ({
   forums: () => ForumTabViewContainer,
   posts: () => PostListViewContainer,
   profile: () => ProfileViewContainer,
+  history: () => HistoryTabView,
   about: () => AboutView,
 }));
 

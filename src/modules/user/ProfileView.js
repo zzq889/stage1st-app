@@ -8,11 +8,11 @@ import { connectActionSheet } from '@exponent/react-native-action-sheet';
 import { Map, List } from 'immutable';
 import TableCell from '../../components/TableCell';
 import Router from '../AppRouter';
-import ProfileHeaderContainer from './ProfileHeaderContainer';
 import { palette } from '../../styles/config';
+import ProfileHeaderContainer from './ProfileHeaderContainer';
 
 const listData = List([
-  Map({ title: '我的发言', route: 'color' }),
+  Map({ title: '我的发言', route: 'history' }),
   Map({ title: '我的消息', route: 'color' }),
   Map({ title: '我的收藏', route: 'threads', params: { fid: 'faved' } }),
   // Map({ title: '我的马甲', route: 'color' }),

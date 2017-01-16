@@ -103,8 +103,8 @@ export function get(endpoint, params, ...otherArgs) {
   return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
 
-export function post(endpoint, body = {}, ...args) {
-  return callApiAsync('POST', endpoint, body, ...args);
+export function post(endpoint, body, ...args) {
+  return callApiAsync('POST', endpoint, body || {}, ...args);
 }
 
 // resuable fetch Subroutine
@@ -146,8 +146,8 @@ export const fetchUserInfo = uid =>
   get('user', { uid }, SCHEMA.userSchema);
 
 // notification
-export const fetchNotication = uid =>
-  get(`notice/${uid}`);
+export const fetchNotication = () =>
+  post('notice/reply');
 
 // history
 export const fetchThreadHistory = () =>
