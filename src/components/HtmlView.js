@@ -5,6 +5,7 @@ import {
   Linking,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 import htmlToElement from '../utils/htmlToElement';
 import { palette } from '../styles/config';
@@ -35,6 +36,9 @@ const baseStyles = StyleSheet.create({
   },
   blockquote: {
     color: palette.grey,
+    backgroundColor: palette.lightYellow,
+    padding: 10,
+    marginBottom: 10,
   },
 });
 
@@ -46,7 +50,7 @@ class HtmlView extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.mounted = true;
     this.startHtmlRender(this.props.value);
   }
@@ -85,7 +89,7 @@ class HtmlView extends Component {
 
   render() {
     if (this.state.element) {
-      return <Text>{this.state.element}</Text>;
+      return <View>{this.state.element}</View>;
     }
     return <Text />;
   }

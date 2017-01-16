@@ -8,7 +8,7 @@ import Image from '../components/Image';
 
 const DEBUG = __DEV__ && false;
 const LINE_BREAK = '\n';
-const PARAGRAPH_BREAK = DEBUG ? '\nPARAGRAPH_BREAK\n' : '\n\n';
+const PARAGRAPH_BREAK = DEBUG ? 'PARAGRAPH_BREAK' : <Text>&nbsp;</Text>;
 const BULLET = '\u2022 ';
 
 function getBlockType(node) {
@@ -28,6 +28,9 @@ function getBlockType(node) {
 function flatten(dom) {
   return dom.reduce((flat, node) => {
     if (node.name === 'font' && node.children) {
+      return flat.concat(flatten(node.children));
+    }
+    if (node.name === 'div' && node.children) {
       return flat.concat(flatten(node.children));
     }
     if (node.type === 'text' && node.data.trim() === '') {
