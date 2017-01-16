@@ -71,7 +71,7 @@ ForumTabView.propTypes = {
 const styles = StyleSheet.create({
   tabLabel: {
     margin: 8,
-    fontSize: 13,
+    fontSize: 15,
     color: '#000',
   },
 

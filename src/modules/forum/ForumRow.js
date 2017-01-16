@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { palette } from '../../styles/config';
 
 const ForumRow = ({ name, subscribed, onPress }) => (
   <TouchableHighlight
@@ -51,8 +52,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 17,
+    color: palette.foreground,
   },
 });
 

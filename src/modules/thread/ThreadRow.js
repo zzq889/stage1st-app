@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     backgroundColor: palette.lightBlue,
   },
   title: {
-    fontSize: 16,
+    fontSize: 17,
     color: palette.foreground,
   },
   subtitle: {

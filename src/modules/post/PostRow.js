@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 16,
+    fontSize: 17,
     color: palette.black,
   },
   position: {

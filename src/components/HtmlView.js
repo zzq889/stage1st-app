@@ -28,7 +28,7 @@ const baseStyles = StyleSheet.create({
     color: palette.blue,
   },
   text: {
-    fontSize: 16,
+    fontSize: 17,
     color: palette.foreground,
   },
   br: {
