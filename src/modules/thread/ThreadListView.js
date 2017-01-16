@@ -51,6 +51,8 @@ class ThreadListView extends Component {
       author={rowData.get('author')}
       timestamp={rowData.get('lastpost')}
       status={rowData.get('statusicon')}
+      replies={rowData.get('replies')}
+      views={rowData.get('views')}
       onPress={() => {
         this.props.navigation
         .getNavigator('master')
