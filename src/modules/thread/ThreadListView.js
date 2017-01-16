@@ -50,6 +50,7 @@ class ThreadListView extends Component {
       forumName={rowData.get('forumName')}
       author={rowData.get('author')}
       timestamp={rowData.get('lastpost')}
+      status={rowData.get('statusicon')}
       onPress={() => {
         this.props.navigation
         .getNavigator('master')
@@ -72,7 +73,6 @@ class ThreadListView extends Component {
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={15}
         // onScroll={this.handleScroll}
-        // contentOffset={{ y: 3000 }}
         // InfiniteScrollView props
         renderScrollComponent={props => <InfiniteScrollView {...props} />}
         canLoadMore={!loading && !!nextPage}

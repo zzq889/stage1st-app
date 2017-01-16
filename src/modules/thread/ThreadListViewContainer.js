@@ -5,8 +5,6 @@ import { bindActionCreators } from 'redux';
 import ThreadListView from './ThreadListView';
 import {
   loadThreadPage,
-  loadFavedThreadPage,
-  loadSubscribedThreadPage,
   loadMoreThreads,
 } from './ThreadState';
 
@@ -20,30 +18,20 @@ const ThreadListViewContainer = connect(
         const forumName = state.getIn(['entities', 'forums', String(threadFid), 'name']);
         return thread.set('forumName', forumName);
       })
-      .sortBy(post => post.get('lastpost'))
+      .sortBy((post) => {
+        const pinned = post.get('statusicon') === 'pined';
+        const lastpost = post.get('lastpost');
+        return pinned ? `1.${lastpost}` : `0.${lastpost}`;
+      })
       .reverse()
       .toList(),
     loading: state.getIn(['pagination', 'threadsById', fid, 'isFetching'], false),
     nextPage: state.getIn(['pagination', 'threadsById', fid, 'nextPage']),
   }),
-  (dispatch, { fid }) => {
-    let loadThreadPageFunc;
-    switch (fid) {
-      case 'subscribed':
-        loadThreadPageFunc = loadSubscribedThreadPage;
-        break;
-      case 'fav':
-        loadThreadPageFunc = loadFavedThreadPage;
-        break;
-      default:
-        loadThreadPageFunc = loadThreadPage.bind(null, fid);
-    }
-
-    return {
-      loadThreadPage: bindActionCreators(loadThreadPageFunc, dispatch),
-      loadMoreThreads: bindActionCreators(loadMoreThreads.bind(null, fid), dispatch),
-    };
-  },
+  (dispatch, { fid }) => ({
+    loadThreadPage: bindActionCreators(loadThreadPage.bind(null, fid), dispatch),
+    loadMoreThreads: bindActionCreators(loadMoreThreads.bind(null, fid), dispatch),
+  }),
 )(ThreadListView);
 
 ThreadListViewContainer.propTypes = {

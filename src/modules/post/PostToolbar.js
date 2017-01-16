@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import Toolbar from '../../components/Toolbar';
@@ -14,7 +13,6 @@ import { palette } from '../../styles/config';
 const PostToolbar = ({
   pageNo = 0,
   totalPage = 0,
-  loading,
   jumpToPage,
 }) => (
   <Toolbar style={styles.container}>
@@ -33,7 +31,6 @@ const PostToolbar = ({
       style={styles.tabItem}
       stretch
     >
-      {loading ? <ActivityIndicator style={styles.indicator} /> : null}
       <Text>{ pageNo } / {totalPage}</Text>
     </BarButtonItem>
     <BarButtonItem
@@ -56,7 +53,6 @@ const PostToolbar = ({
 
 PostToolbar.propTypes = {
   pageNo: PropTypes.number,
-  loading: PropTypes.bool,
   totalPage: PropTypes.number,
   jumpToPage: PropTypes.func.isRequired,
 };

@@ -47,11 +47,11 @@ export const loadThreadPage = fid =>
 export const loadMoreThreads = fid =>
   createAction(LOAD_MORE_THREADS, { fid });
 
-export const loadFavedThreadPage = () =>
-  createAction(LOAD_FAVED_THREAD_PAGE, { fid: 'fav' });
+export const loadFavedThreadPage = fid =>
+  createAction(LOAD_FAVED_THREAD_PAGE, { fid });
 
-export const loadSubscribedThreadPage = () =>
-  createAction(LOAD_SUBSCRIBED_THREAD_PAGE, { fid: 'subscribed' });
+export const loadSubscribedThreadPage = fid =>
+  createAction(LOAD_SUBSCRIBED_THREAD_PAGE, fid);
 
 export const newThread = args =>
   createAction(NEW_THREAD, { args });
@@ -60,9 +60,16 @@ export const newThread = args =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchThreads = fetchEntity.bind(null, threadEntity, apiFetchThreads);
-const fetchFavedThreads = fetchEntity.bind(null, threadEntity, apiFetchFavedThreads);
-const fetchSubscribedThreads = fetchEntity.bind(null, threadEntity, apiFetchSubscribedThreads);
+const fetchThreads = (fid) => {
+  if (fid === 'faved') {
+    return fetchEntity.bind(null, threadEntity, apiFetchFavedThreads);
+  }
+  if (fid === 'subscribed') {
+    return fetchEntity.bind(null, threadEntity, apiFetchSubscribedThreads);
+  }
+  return fetchEntity.bind(null, threadEntity, apiFetchThreads);
+};
+
 const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);
 
 // load repo unless it is cached
@@ -71,23 +78,9 @@ const getThreads = (state, fid) => state.getIn(['pagination', 'threadsById', fid
 function* loadThreads(fid, loadMore) {
   const threads = yield select(getThreads, fid);
   if (!threads || !threads.get('pageCount') || loadMore) {
-    yield call(fetchThreads, { fid, pageNo: threads && threads.get('nextPage') });
+    yield call(fetchThreads(fid), { fid, pageNo: threads && threads.get('nextPage') });
   }
 }
-
-// function* loadFavedThreads(id, requiredFields) {
-//   const threads = yield select(getThreads, id);
-//   if (!threads || !threads.get('ids').size || requiredFields.some(key => !threads.has(key))) {
-//     yield call(fetchFavedThreads, id);
-//   }
-// }
-
-// function* loadSubscribedThreads(id, requiredFields) {
-//   const threads = yield select(getThreads, id);
-//   if (!threads || !threads.get('ids').size || requiredFields.some(key => !threads.has(key))) {
-//     yield call(fetchSubscribedThreads, id);
-//   }
-// }
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/
@@ -104,22 +97,6 @@ export function* watchLoadMoreThreads() {
   while (true) {
     const { fid } = yield take(LOAD_MORE_THREADS);
     yield fork(loadThreads, fid, true);
-  }
-}
-
-export function* watchLoadFavedThreadPage() {
-  while (true) {
-    const { fid } = yield take(LOAD_FAVED_THREAD_PAGE);
-    // yield fork(loadFavedThreads, id, requiredFields);
-    yield call(fetchFavedThreads, fid);
-  }
-}
-
-export function* watchLoadSubscribedThreadPage() {
-  while (true) {
-    const { fid } = yield take(LOAD_SUBSCRIBED_THREAD_PAGE);
-    // yield fork(loadSubscribedThreads, id, requiredFields);
-    yield call(fetchSubscribedThreads, fid);
   }
 }
 

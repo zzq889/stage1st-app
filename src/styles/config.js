@@ -2,6 +2,7 @@ import { fromJS } from 'immutable';
 import {
   Platform,
 } from 'react-native';
+import Color from 'color';
 
 const baseColors = {
   black: '#000',
@@ -17,6 +18,8 @@ const baseColors = {
 
 export const palette = {
   ...baseColors,
+  lightBlue: Color(baseColors.blue).lighten(0.5).string(),
+  lightYellow: Color(baseColors.yellow).lighten(0.5).string(),
   primary: baseColors.black,
   secondary: baseColors.blue,
   default: baseColors.grey,

@@ -4,6 +4,8 @@ import {
   Text,
   StyleSheet,
   InteractionManager,
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { List, Map } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
@@ -38,6 +40,7 @@ class PostListView extends Component {
 
   componentWillReceiveProps({ tid: nextTid, uid: nextUid, pageNo: nextPageNo }) {
     const { tid, uid, pageNo } = this.props;
+    this.scrollView.scrollTo({ y: 0, animated: false });
     if (nextTid !== tid || nextUid !== uid || nextPageNo !== pageNo) {
       InteractionManager.runAfterInteractions(() => {
         this.props.loadPostPage();
@@ -51,6 +54,12 @@ class PostListView extends Component {
     </View>
   );
 
+  renderFooter = () => (
+    <View style={styles.footer}>
+      <ActivityIndicator />
+    </View>
+  );
+
   render() {
     const { posts, loading, pageNo, totalPage, jumpToPage } = this.props;
     return (
@@ -58,7 +67,11 @@ class PostListView extends Component {
         <ImmutableListView
           immutableData={posts}
           renderRow={renderRow}
+          renderScrollComponent={() =>
+            <ScrollView ref={(c) => { this.scrollView = c; }} />
+          }
           renderHeader={this.renderHeader}
+          renderFooter={loading ? this.renderFooter : null}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           rowsDuringInteraction={5}
         />
@@ -66,7 +79,6 @@ class PostListView extends Component {
           pageNo={pageNo}
           totalPage={totalPage}
           jumpToPage={jumpToPage}
-          loading={loading}
         />
       </View>
     );
@@ -122,6 +134,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#8E8E8E',
+  },
+  footer: {
+    height: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

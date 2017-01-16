@@ -13,6 +13,7 @@ import {
 export const POST = createRequestTypes('POST');
 export const LOAD_POST_PAGE = 'PostState/LOAD_POST_PAGE';
 export const JUMP_TO_PAGE = 'PostState/JUMP_TO_PAGE';
+export const UPDATE_POST_OFFSET = 'PostState/UPDATE_POST_OFFSET';
 
 export const postEntity = {
   request: args => createAction(
@@ -28,6 +29,9 @@ export const loadPostPage = (tid, uid, pageNo = 1) =>
 
 export const jumpToPage = (tid, uid, pageNo = 1) =>
   createAction(JUMP_TO_PAGE, { tid, uid, pageNo });
+
+export const updatePostOffset = (tid, uid, pageNo = 1) =>
+  createAction(UPDATE_POST_OFFSET, { tid, uid, pageNo });
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
@@ -62,7 +66,6 @@ export default function PostStateReducer(state = Map(), action) {
     case JUMP_TO_PAGE: {
       const { tid, uid = 'all', pageNo = 1 } = action;
       return state
-        .setIn([tid, 'uid'], uid)
         .setIn([tid, 'pageInfo', uid, 'pageNo'], pageNo);
     }
     default:

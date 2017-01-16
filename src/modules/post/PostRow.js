@@ -12,20 +12,23 @@ import HtmlView from '../../components/HtmlView';
 import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
 import { getConfiguration } from '../../utils/configuration';
+import { palette } from '../../styles/config';
 
 // node, index, parent, opts, renderChild
 const renderNode = (node, index) => {
   const attribs = node.attribs;
 
   if (node.name === 'img') {
+    const isEmoji = attribs.smilieid;
     const { width: screenWidth } = Dimensions.get('window');
-    const defaultSize = attribs.smilieid ? 32 : (screenWidth - 30);
+    const defaultSize = isEmoji ? 32 : (screenWidth - 30);
     const imgWidth = Number((attribs.width && Math.min(attribs.width, defaultSize)) || defaultSize);
     const imgHeight = Number((attribs.height && (attribs.height / attribs.width) * imgWidth) || defaultSize);
 
     const imgStyle = {
       width: imgWidth,
       height: imgHeight,
+      backgroundColor: isEmoji ? null : palette.lightGrey,
     };
 
     const uri = attribs.src;
@@ -113,13 +116,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    color: '#000',
+    color: palette.black,
   },
   position: {
-    color: '#888',
+    color: palette.grey,
   },
   detail: {
-    color: '#888',
+    color: palette.grey,
     marginTop: 5,
   },
 });

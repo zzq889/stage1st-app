@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
+const MARGIN = 30;
 
 const baseStyle = {
   backgroundColor: 'transparent',
@@ -31,9 +32,10 @@ class ResizableImage extends Component {
 
   render() {
     const finalSize = {};
-    if (this.state.width > width) {
-      finalSize.width = width;
-      const ratio = width / this.state.width;
+    const resizeWidth = width - MARGIN;
+    if (this.state.width > resizeWidth) {
+      finalSize.width = resizeWidth;
+      const ratio = resizeWidth / this.state.width;
       finalSize.height = this.state.height * ratio;
     }
     const style = Object.assign(baseStyle, this.props.style, this.state, finalSize);

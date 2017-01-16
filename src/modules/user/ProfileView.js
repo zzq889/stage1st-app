@@ -14,7 +14,7 @@ import { palette } from '../../styles/config';
 const listData = fromJS([
   { title: '我的发言', route: 'color' },
   { title: '我的消息', route: 'color' },
-  { title: '我的收藏', route: 'color' },
+  { title: '我的收藏', route: 'threads', params: { fid: 'faved' } },
   { title: '我的马甲', route: 'color' },
   { title: '搜索', route: 'color' },
   { title: '关于', route: 'about' },
@@ -60,8 +60,8 @@ class ProfileView extends Component {
           onPress={() => {
             this.props.navigator
               .push(Router.getRoute(route, {
-                tid: rowData.get('tid'),
                 title: rowData.get('title'),
+                ...rowData.get('params').toJS(),
               }));
             highlightRow(sectionID, rowID);
           }}

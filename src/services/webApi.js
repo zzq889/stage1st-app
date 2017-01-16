@@ -173,7 +173,7 @@ export const favThread = tid =>
   post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);
 
 export const fetchFavedThreads = () =>
-  get('favor/page', null, SCHEMA.threadSchemaArray);
+  post('favor/page', {}, SCHEMA.threadSchemaArray);
 
 export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);
