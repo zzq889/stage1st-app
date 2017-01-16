@@ -4,12 +4,13 @@ import {
   Text,
   StyleSheet,
   Linking,
+  Image,
   Dimensions,
 } from 'react-native';
 import SafariView from 'react-native-safari-view';
 import Moment from 'moment';
 import HtmlView from '../../components/HtmlView';
-import Image from '../../components/Image';
+// import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
 import { getConfiguration } from '../../utils/configuration';
 import { palette } from '../../styles/config';

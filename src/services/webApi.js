@@ -12,18 +12,6 @@ export function url(path) {
     : `${apiRoot}/${path}`;
 }
 
-// Extracts the next page URL from API response.
-function getNextPage(currentPage = 1, totalPage) {
-  if (currentPage < totalPage) {
-    return currentPage + 1;
-  }
-  return null;
-}
-
-function getTotalPage(data) {
-  return (data && data.totalCount && Math.ceil(data.totalCount / 30)) || 1;
-}
-
 function getRequestHeaders(body, token) {
   // const headers = body
   //   ? { Accept: 'application/json', 'Content-Type': 'application/json' }
@@ -68,19 +56,18 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
     throw err;
   }
 
+  // pageCount and nextUrl
+  const { totalCount, pageNo } = json.data;
+
   const camelizedJson = camelizeKeys(json);
-  const totalPage = getTotalPage(json.data);
-  const currentPage = json.data.pageNo;
-  const nextPage = getNextPage(currentPage, totalPage);
   const responseJson = schema
     ? normalize(normalizeKey(camelizedJson), schema)
     : camelizedJson;
 
   return {
     ...responseJson,
-    currentPage,
-    nextPage,
-    totalPage,
+    totalCount,
+    pageNo,
   };
 }
 

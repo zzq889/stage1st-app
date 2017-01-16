@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#8E8E8E',
   },
   footer: {
-    height: 45,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },

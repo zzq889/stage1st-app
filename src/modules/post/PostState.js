@@ -38,13 +38,26 @@ export const updatePostOffset = (tid, uid, pageNo = 1) =>
 /** ****************************************************************************/
 
 const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
-const getPosts = (state, { tid, uid = 'all', pageNo }) =>
-  state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`, 'pages', pageNo]);
+const getPosts = (state, { tid, uid = 'all' }) =>
+  state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`]);
 
 // load repo unless it is cached
 function* loadPosts({ tid, uid, pageNo }) {
-  const posts = yield select(getPosts, { tid, uid, pageNo });
-  if (!posts) {
+  const posts = yield select(getPosts, { tid, uid });
+  let page;
+  let totalPage;
+  let lastPageSize;
+  let isLast;
+  if (posts) {
+    page = posts.getIn(['pages', pageNo]);
+    totalPage = posts.get('totalPage');
+    lastPageSize = posts.get('lastPageSize');
+    isLast = pageNo === totalPage;
+  }
+  if (!posts || !page
+    || (!isLast && page.size < 30)
+    || (isLast && page.size < lastPageSize)
+  ) {
     yield call(fetchPosts, { tid, uid, pageNo });
   }
 }
@@ -66,7 +79,7 @@ export default function PostStateReducer(state = Map(), action) {
     case JUMP_TO_PAGE: {
       const { tid, uid = 'all', pageNo = 1 } = action;
       return state
-        .setIn([tid, 'pageInfo', uid, 'pageNo'], pageNo);
+        .setIn([tid, uid, 'pageNo'], pageNo);
     }
     default:
       return state;

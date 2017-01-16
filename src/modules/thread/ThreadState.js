@@ -81,7 +81,7 @@ const getThreads = (state, fid) => state.getIn(['pagination', 'threadsById', fid
 
 function* loadThreads(fid, loadMore) {
   const threads = yield select(getThreads, fid);
-  if (!threads || !threads.get('pageCount') || loadMore) {
+  if (!threads || !threads.get('ids').size || loadMore) {
     yield call(fetchThreads(fid), { fid, pageNo: threads && threads.get('nextPage') });
   }
 }

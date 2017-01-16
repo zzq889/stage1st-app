@@ -9,7 +9,7 @@ import withMessage from '../error/withMessage';
 const PostListViewContainer = connect(
   (state, { tid }) => {
     const uid = state.getIn(['post', tid, 'uid'], 'all');
-    const pageNo = state.getIn(['post', tid, 'pageInfo', uid, 'pageNo'], 1);
+    const pageNo = state.getIn(['post', tid, uid, 'pageNo'], 1);
     return {
       uid,
       pageNo,

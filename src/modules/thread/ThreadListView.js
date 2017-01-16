@@ -3,6 +3,7 @@ import {
   View,
   StyleSheet,
   InteractionManager,
+  ActivityIndicator,
 } from 'react-native';
 import { List } from 'immutable';
 import { withNavigation } from '@exponent/ex-navigation';
@@ -44,6 +45,12 @@ class ThreadListView extends Component {
     console.log(event.nativeEvent.contentOffset.y);
   }
 
+  renderFooter = () => (
+    <View style={styles.footer}>
+      <ActivityIndicator />
+    </View>
+  );
+
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       subject={rowData.get('subject')}
@@ -72,6 +79,7 @@ class ThreadListView extends Component {
         ref={(c) => { this.listView = c; }}
         immutableData={threads}
         renderRow={this.renderRow}
+        renderFooter={loading ? this.renderFooter : null}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={15}
         // onScroll={this.handleScroll}
@@ -112,6 +120,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#8E8E8E',
+  },
+  footer: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
