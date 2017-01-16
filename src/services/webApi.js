@@ -103,8 +103,8 @@ export function get(endpoint, params, ...otherArgs) {
   return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
 
-export function post(...args) {
-  return callApiAsync('POST', ...args);
+export function post(endpoint, body = {}, ...args) {
+  return callApiAsync('POST', endpoint, body, ...args);
 }
 
 // resuable fetch Subroutine
@@ -149,8 +149,12 @@ export const fetchUserInfo = uid =>
 export const fetchNotication = uid =>
   get(`notice/${uid}`);
 
-export const fetchHistory = uid =>
-  get(`history/${uid}`);
+// history
+export const fetchThreadHistory = () =>
+  post('history/thread', null, SCHEMA.threadSchemaArray);
+
+export const fetchPostHistory = () =>
+  post('history/post', null, SCHEMA.postSchemaArray);
 
 // forum
 export const fetchChannels = () =>
@@ -173,7 +177,7 @@ export const favThread = tid =>
   post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);
 
 export const fetchFavedThreads = () =>
-  post('favor/page', {}, SCHEMA.threadSchemaArray);
+  post('favor/page', null, SCHEMA.threadSchemaArray);
 
 export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);

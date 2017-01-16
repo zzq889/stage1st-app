@@ -17,7 +17,7 @@ class ThreadListView extends Component {
   static route = {
     navigationBar: {
       title: ({ title }) => title,
-      renderRight: ({ params: { fid } }) => <ComposeButton fid={fid} />,
+      renderRight: ({ params: { fid } }) => (Number.isInteger(fid) ? <ComposeButton fid={fid} /> : null),
     },
   }
 
