@@ -7,6 +7,7 @@ import {
   fetchFavedThreads as apiFetchFavedThreads,
   fetchSubscribedThreads as apiFetchSubscribedThreads,
   fetchThreadHistory as apiFetchThreadHistory,
+  fetchThreadInfo as apiFetchThreadInfo,
   createThread as apiCreateThread,
 } from '../../services/webApi';
 
@@ -77,7 +78,7 @@ const fetchThreads = (fid) => {
 const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);
 
 // load repo unless it is cached
-const getThreads = (state, fid) => state.getIn(['pagination', 'threadsById', fid]);
+const getThreads = (state, fid) => state.getIn(['pagination', 'threadsByFid', fid]);
 
 function* loadThreads(fid, loadMore) {
   const threads = yield select(getThreads, fid);
