@@ -8,6 +8,7 @@ import {
   fetchSubscribedThreads as apiFetchSubscribedThreads,
   fetchThreadHistory as apiFetchThreadHistory,
   fetchThreadInfo as apiFetchThreadInfo,
+  favThread as apiFavThread,
   createThread as apiCreateThread,
 } from '../../services/webApi';
 
@@ -18,13 +19,15 @@ import {
 export const threadEmitter = new EventEmitter();
 
 export const THREAD = createRequestTypes('THREAD');
+export const THREAD_FAV = createRequestTypes('THREAD_FAV');
 export const THREAD_CREATION = createRequestTypes('THREAD_CREATION');
 export const LOAD_THREAD_PAGE = 'ThreadState/LOAD_THREAD_PAGE';
+export const LOAD_THREAD_INFO = 'ThreadState/LOAD_THREAD_INFO';
 export const LOAD_MORE_THREADS = 'ThreadState/LOAD_MORE_THREADS';
 export const LOAD_FAVED_THREAD_PAGE = 'ThreadState/LOAD_FAVED_THREAD_PAGE';
 export const LOAD_SUBSCRIBED_THREAD_PAGE = 'ThreadState/LOAD_SUBSCRIBED_THREAD_PAGE';
 export const NEW_THREAD = 'ThreadState/NEW_THREAD';
-export const LOAD_THREAD_INFO = 'ThreadState/LOAD_THREAD_INFO';
+export const FAV_THREAD = 'ThreadState/FAV_THREAD';
 
 export const threadEntity = {
   request: args => createAction(
@@ -33,6 +36,24 @@ export const threadEntity = {
     THREAD.SUCCESS, { ...args, response }),
   failure: (args, error) => createAction(
     THREAD.FAILURE, { ...args, error }),
+};
+
+export const threadInfoEntity = {
+  request: tid => createAction(
+    THREAD.REQUEST, { tid }),
+  success: (tid, response) => createAction(
+    THREAD.SUCCESS, { tid, response }),
+  failure: (tid, error) => createAction(
+    THREAD.FAILURE, { tid, error }),
+};
+
+export const threadFavEntity = {
+  request: tid => createAction(
+    THREAD_FAV.REQUEST, { tid }),
+  success: (tid, response) => createAction(
+    THREAD_FAV.SUCCESS, { tid, response }),
+  failure: (tid, error) => createAction(
+    THREAD_FAV.FAILURE, { tid, error }),
 };
 
 export const threadCreationEntity = {
@@ -59,13 +80,19 @@ export const loadSubscribedThreadPage = fid =>
 export const newThread = args =>
   createAction(NEW_THREAD, { args });
 
+export const loadThreadInfo = tid =>
+  createAction(LOAD_THREAD_INFO, { tid });
+
+export const favThread = tid =>
+  createAction(FAV_THREAD, { tid });
+
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
 const fetchThreads = (fid) => {
   switch (fid) {
-    case 'faved':
+    case 'favorite':
       return fetchEntity.bind(null, threadEntity, apiFetchFavedThreads);
     case 'subscribed':
       return fetchEntity.bind(null, threadEntity, apiFetchSubscribedThreads);
@@ -76,7 +103,8 @@ const fetchThreads = (fid) => {
   }
 };
 
-const fetchThread = fetchEntity.bind(null, threadEntity, apiFetchThreadInfo);
+const fetchThreadInfo = fetchEntity.bind(null, threadInfoEntity, apiFetchThreadInfo);
+const postFavThread = fetchEntity.bind(null, threadFavEntity, apiFavThread);
 const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);
 
 // load repo unless it is cached
@@ -103,7 +131,7 @@ export function* watchLoadThreadPage() {
 export function* watchLoadThreadInfo() {
   while (true) {
     const { tid } = yield take(LOAD_THREAD_INFO);
-    yield call(fetchThread, tid);
+    yield call(fetchThreadInfo, tid);
   }
 }
 
@@ -121,10 +149,17 @@ export function* watchNewThread() {
   }
 }
 
+export function* watchFavThread() {
+  while (true) {
+    const { tid } = yield take(FAV_THREAD);
+    yield call(postFavThread, tid);
+  }
+}
+
 export function* watchNewThreadSuccess() {
   while (true) {
     const { fid } = yield take(THREAD_CREATION.SUCCESS);
     threadEmitter.emit('dismissComposeView');
-    yield call(fetchThreads, fid);
+    yield call(fetchThreads(fid));
   }
 }

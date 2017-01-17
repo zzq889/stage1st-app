@@ -6,8 +6,10 @@ import {
   InteractionManager,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { List, Map } from 'immutable';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
@@ -35,24 +37,44 @@ class PostListView extends Component {
   componentWillMount() {
     InteractionManager.runAfterInteractions(() => {
       this.props.loadPostPage();
+      this.props.loadThreadInfo();
     });
   }
 
   componentWillReceiveProps({ tid: nextTid, uid: nextUid, pageNo: nextPageNo }) {
     const { tid, uid, pageNo } = this.props;
-    this.scrollView.scrollTo({ y: 0, animated: false });
     if (nextTid !== tid || nextUid !== uid || nextPageNo !== pageNo) {
+      this.scrollView.scrollTo({ y: 0, animated: false });
       InteractionManager.runAfterInteractions(() => {
         this.props.loadPostPage();
       });
     }
   }
 
-  renderHeader = () => (
-    <View style={styles.header}>
-      <Text style={styles.headerText}>{this.props.thread.get('subject')}</Text>
-    </View>
-  );
+  renderHeader = () => {
+    const isFav = this.props.thread.get('isFav');
+    const subject = this.props.thread.get('subject');
+    return (
+      <View style={styles.header}>
+        <View style={styles.headerTitleView}>
+          <Text style={styles.headerText}>
+            {__DEV__ ? `${this.props.tid}: ${subject}` : subject}
+          </Text>
+        </View>
+        <TouchableOpacity
+          style={styles.favButton}
+          hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}
+          onPress={() => this.props.favThread()}
+        >
+          <Icon
+            name={isFav ? 'star' : 'star-o'}
+            size={25}
+            color={palette.yellow}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   renderFooter = () => (
     <View style={styles.footer}>
@@ -92,12 +114,14 @@ PostListView.propTypes = {
   uid: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
-  ]).isRequired,
+  ]),
   pageNo: PropTypes.number,
   totalPage: PropTypes.number,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
   jumpToPage: PropTypes.func.isRequired,
+  loadThreadInfo: PropTypes.func.isRequired,
+  favThread: PropTypes.func.isRequired,
 };
 
 PostListView.defaultProps = {
@@ -108,17 +132,22 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centered: {
-    flex: 1,
-    alignSelf: 'center',
-  },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 15,
-    backgroundColor: '#eee',
+    backgroundColor: palette.secondary,
+  },
+  headerTitleView: {
+    flex: 1,
   },
   headerText: {
     fontSize: 16,
-    color: '#000',
+    color: palette.inverted,
+  },
+  favButton: {
+    marginLeft: 10,
   },
   iconContainer: {
     flex: 1,

@@ -50,5 +50,5 @@ export const defaultRouteConfig = fromJS({
 export const defaultAlertStyle = {
   text: { color: palette.foreground },
   container: { backgroundColor: palette.yellow },
-  duration: 1000,
+  duration: 2000,
 };

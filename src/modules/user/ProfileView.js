@@ -14,7 +14,7 @@ import ProfileHeaderContainer from './ProfileHeaderContainer';
 const listData = List([
   Map({ title: '我的发言', route: 'history' }),
   Map({ title: '我的消息', route: 'color' }),
-  Map({ title: '我的收藏', route: 'threads', params: { fid: 'faved' } }),
+  Map({ title: '我的收藏', route: 'threads', params: { fid: 'favorite' } }),
   // Map({ title: '我的马甲', route: 'color' }),
   // Map({ title: '搜索', route: 'color' }),
   Map({ title: '关于', route: 'about' }),

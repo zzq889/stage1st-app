@@ -81,12 +81,14 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
         <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
       </View>
     </View>
-    <HtmlView
-      style={styles.content}
-      value={message}
-      renderNode={renderNode}
-      onLinkPress={onLinkPress}
-    />
+    {message && (
+      <HtmlView
+        style={styles.content}
+        value={message}
+        renderNode={renderNode}
+        onLinkPress={onLinkPress}
+      />
+    )}
     <View style={styles.actions}>
       <TouchableOpacity
         hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
@@ -101,7 +103,7 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
 );
 
 PostRow.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.string,
   position: PropTypes.number.isRequired,
   author: PropTypes.string.isRequired,
   authorId: PropTypes.number.isRequired,
