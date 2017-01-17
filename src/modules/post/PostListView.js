@@ -52,21 +52,22 @@ class PostListView extends Component {
   }
 
   renderHeader = () => {
-    const isFaved = this.props.thread.get('favorite');
+    const isFav = this.props.thread.get('isFav');
     const subject = this.props.thread.get('subject');
     return (
       <View style={styles.header}>
         <View style={styles.headerTitleView}>
           <Text style={styles.headerText}>
-            {subject}
+            {__DEV__ ? `${this.props.tid}: ${subject}` : subject}
           </Text>
         </View>
         <TouchableOpacity
           style={styles.favButton}
           hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}
+          onPress={() => this.props.favThread()}
         >
           <Icon
-            name={isFaved ? 'star' : 'star-o'}
+            name={isFav ? 'star' : 'star-o'}
             size={25}
             color={palette.yellow}
           />
@@ -118,8 +119,9 @@ PostListView.propTypes = {
   totalPage: PropTypes.number,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
-  loadThreadInfo: PropTypes.func.isRequired,
   jumpToPage: PropTypes.func.isRequired,
+  loadThreadInfo: PropTypes.func.isRequired,
+  favThread: PropTypes.func.isRequired,
 };
 
 PostListView.defaultProps = {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PostListView from './PostListView';
 import { loadPostPage, jumpToPage } from './PostState';
-import { loadThreadInfo } from '../thread/ThreadState';
+import { loadThreadInfo, favThread } from '../thread/ThreadState';
 import withMessage from '../error/withMessage';
 
 const PostListViewContainer = connect(
@@ -30,6 +30,10 @@ const PostListViewContainer = connect(
   (dispatch, { tid, uid, pageNo }) => ({
     loadThreadInfo: bindActionCreators(
       loadThreadInfo.bind(null, tid),
+      dispatch,
+    ),
+    favThread: bindActionCreators(
+      favThread.bind(null, tid),
       dispatch,
     ),
     loadPostPage: bindActionCreators(

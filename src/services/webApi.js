@@ -28,6 +28,7 @@ function getRequestHeaders(body, token) {
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 async function callApi(token, method, endpoint, body, schema, mapResponseToKey) {
+  // console.warn(method, endpoint, body);
   const fullUrl = endpoint.match(/^http/) ? endpoint : url(endpoint);
   const headers = getRequestHeaders(body, token);
   const initialForm = new FormData();
@@ -57,7 +58,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
   }
 
   // pageCount and nextUrl
-  const { totalCount, pageNo, pageSize } = json.data;
+  const { totalCount, pageNo, pageSize } = (json.data || {});
 
   const camelizedJson = camelizeKeys(json);
   const responseJson = schema
@@ -80,7 +81,6 @@ export function* callApiAsync(...args) {
 }
 
 export function get(endpoint, params, ...otherArgs) {
-  // console.warn(endpoint, params);
   const paramsString = params
     ? Object.keys(params).reduce((str, key) => {
       const value = params[key];
@@ -166,7 +166,7 @@ export const fetchSubscribedThreads = () =>
   get('forum/subscribed', null, SCHEMA.threadSchemaArray);
 
 export const favThread = tid =>
-  post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);
+  post('thread/favor', { tid, action: 'add' });
 
 export const fetchFavedThreads = () =>
   post('favor/page', null, SCHEMA.threadSchemaArray);
