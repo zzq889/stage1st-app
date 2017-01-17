@@ -57,7 +57,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
   }
 
   // pageCount and nextUrl
-  const { totalCount, pageNo } = json.data;
+  const { totalCount, pageNo, pageSize } = json.data;
 
   const camelizedJson = camelizeKeys(json);
   const responseJson = schema
@@ -67,6 +67,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
   return {
     ...responseJson,
     totalCount,
+    pageSize,
     pageNo,
   };
 }

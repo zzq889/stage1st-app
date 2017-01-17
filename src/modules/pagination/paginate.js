@@ -7,12 +7,12 @@ function getNextPage(currentPage = 1, totalPage) {
   return null;
 }
 
-function getTotalPage(totalCount) {
-  return (totalCount && Math.ceil(totalCount / 30)) || 1;
+function getTotalPage(totalCount, pageSize = 30) {
+  return (totalCount && Math.ceil(totalCount / pageSize)) || 1;
 }
 
-function getLastPageSize(totalCount) {
-  return totalCount % 30;
+function getLastPageSize(totalCount, pageSize = 30) {
+  return totalCount % pageSize;
 }
 
 // Creates a reducer managing pagination, given the action types to handle,
@@ -42,9 +42,9 @@ export default function paginate({ types, mapActionToKey }) {
       case requestType:
         return state.set('isFetching', true);
       case successType: {
-        const { pageNo, totalCount, result } = action.response;
-        const totalPage = getTotalPage(totalCount);
-        const lastPageSize = getLastPageSize(totalCount);
+        const { pageNo, pageSize, totalCount, result } = action.response;
+        const totalPage = getTotalPage(totalCount, pageSize);
+        const lastPageSize = getLastPageSize(totalCount, pageSize);
         const nextPage = getNextPage(pageNo, totalPage);
 
         return state
