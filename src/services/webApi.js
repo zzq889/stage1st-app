@@ -79,13 +79,17 @@ export function* callApiAsync(...args) {
 }
 
 export function get(endpoint, params, ...otherArgs) {
+  // console.warn(endpoint, params);
   const paramsString = params
     ? Object.keys(params).reduce((str, key) => {
       const value = params[key];
-      return value
-        ? `${str}&${key}=${encodeURIComponent(value)}`
-        : str;
-    }, '?')
+      if (value) {
+        return str === ''
+          ? `?${key}=${encodeURIComponent(value)}`
+          : `${str}&${key}=${encodeURIComponent(value)}`;
+      }
+      return str;
+    }, '')
     : '';
   return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
@@ -154,11 +158,11 @@ export const fetchForum = fid =>
 export const fetchThreads = ({ fid, pageNo }) =>
   get('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
 
-export const fetchSubscribedThreads = () =>
-  get('forum/subscribed', null, SCHEMA.threadSchemaArray);
-
 export const fetchThreadInfo = tid =>
   get('thread', { tid }, SCHEMA.threadSchema);
+
+export const fetchSubscribedThreads = () =>
+  get('forum/subscribed', null, SCHEMA.threadSchemaArray);
 
 export const favThread = tid =>
   post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);

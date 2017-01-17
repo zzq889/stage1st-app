@@ -35,6 +35,15 @@ export const threadEntity = {
     THREAD.FAILURE, { ...args, error }),
 };
 
+export const threadInfoEntity = {
+  request: tid => createAction(
+    THREAD.REQUEST, { tid }),
+  success: (tid, response) => createAction(
+    THREAD.SUCCESS, { tid, response }),
+  failure: (tid, error) => createAction(
+    THREAD.FAILURE, { tid, error }),
+};
+
 export const threadCreationEntity = {
   request: args => createAction(
     THREAD_CREATION.REQUEST, { ...args }),
@@ -46,6 +55,9 @@ export const threadCreationEntity = {
 
 export const loadThreadPage = fid =>
   createAction(LOAD_THREAD_PAGE, { fid });
+
+export const loadThreadInfo = tid =>
+  createAction(LOAD_THREAD_INFO, { tid });
 
 export const loadMoreThreads = fid =>
   createAction(LOAD_MORE_THREADS, { fid });
@@ -76,7 +88,7 @@ const fetchThreads = (fid) => {
   }
 };
 
-const fetchThread = fetchEntity.bind(null, threadEntity, apiFetchThreadInfo);
+const fetchThreadInfo = fetchEntity.bind(null, threadInfoEntity, apiFetchThreadInfo);
 const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);
 
 // load repo unless it is cached
@@ -103,7 +115,7 @@ export function* watchLoadThreadPage() {
 export function* watchLoadThreadInfo() {
   while (true) {
     const { tid } = yield take(LOAD_THREAD_INFO);
-    yield call(fetchThread, tid);
+    yield call(fetchThreadInfo, tid);
   }
 }
 
@@ -125,6 +137,6 @@ export function* watchNewThreadSuccess() {
   while (true) {
     const { fid } = yield take(THREAD_CREATION.SUCCESS);
     threadEmitter.emit('dismissComposeView');
-    yield call(fetchThreads, fid);
+    yield call(fetchThreads(fid));
   }
 }

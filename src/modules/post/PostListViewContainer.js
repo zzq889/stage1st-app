@@ -4,28 +4,34 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PostListView from './PostListView';
 import { loadPostPage, jumpToPage } from './PostState';
+import { loadThreadInfo } from '../thread/ThreadState';
 import withMessage from '../error/withMessage';
 
 const PostListViewContainer = connect(
   (state, { tid }) => {
-    const uid = state.getIn(['post', tid, 'uid'], 'all');
-    const pageNo = state.getIn(['post', tid, uid, 'pageNo'], 1);
+    const uid = state.getIn(['post', tid, 'uid']);
+    const queryUid = uid || 'all';
+    const pageNo = state.getIn(['post', tid, queryUid, 'pageNo'], 1);
     return {
       uid,
       pageNo,
       posts: state
-        .getIn(['pagination', 'postsByTid', `${tid}.${uid}`, 'pages', pageNo], List())
+        .getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'pages', pageNo], List())
         .map(pid => state.getIn(['entities', 'posts', String(pid)]))
         .sortBy(post => post.get('position'))
         .toList(),
       thread: state.getIn(['entities', 'threads', String(tid)]),
-      loading: state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`, 'isFetching']),
-      totalPage: state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`, 'totalPage']),
+      loading: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'isFetching']),
+      totalPage: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'totalPage']),
     };
   },
 )(connect(
   () => ({}),
   (dispatch, { tid, uid, pageNo }) => ({
+    loadThreadInfo: bindActionCreators(
+      loadThreadInfo.bind(null, tid),
+      dispatch,
+    ),
     loadPostPage: bindActionCreators(
       loadPostPage.bind(null, tid, uid, pageNo),
       dispatch,
