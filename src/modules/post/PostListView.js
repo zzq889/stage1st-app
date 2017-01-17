@@ -43,8 +43,8 @@ class PostListView extends Component {
 
   componentWillReceiveProps({ tid: nextTid, uid: nextUid, pageNo: nextPageNo }) {
     const { tid, uid, pageNo } = this.props;
-    this.scrollView.scrollTo({ y: 0, animated: false });
     if (nextTid !== tid || nextUid !== uid || nextPageNo !== pageNo) {
+      this.scrollView.scrollTo({ y: 0, animated: false });
       InteractionManager.runAfterInteractions(() => {
         this.props.loadPostPage();
       });
