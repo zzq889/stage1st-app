@@ -5,11 +5,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const ToolbarItem = ({ style, stretch, disabled, children }) => (
+const ToolbarItem = ({ style, stretch, children, ...props }) => (
   <TouchableOpacity
     hitSlop={{ left: 10, right: 10, top: 0, bottom: 0 }}
     style={stretch ? [styles.container, styles.stretch] : styles.container}
-    disabled={disabled}
+    {...props}
   >
     <View style={[styles.tabItem, style]}>
       {children}
@@ -21,7 +21,6 @@ ToolbarItem.propTypes = {
   style: PropTypes.number,
   children: PropTypes.node,
   stretch: PropTypes.bool,
-  disabled: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

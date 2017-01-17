@@ -6,22 +6,43 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import Moment from 'moment';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import { palette } from '../../styles/config';
 
-const ThreadRow = ({ subject, forumName, author, timestamp, onPress }) => (
+const ThreadRow = ({
+  status,
+  subject,
+  forumName,
+  author,
+  timestamp,
+  replies,
+  onPress,
+}) => (
   <TouchableHighlight
-    underlayColor="#ccc"
+    underlayColor={palette.lightGrey}
     onPress={onPress}
+    style={styles[status]}
   >
     <View style={styles.row}>
-      <Text style={styles.title}>{subject}&nbsp;<Text style={styles.subtitle}>[{forumName}]</Text></Text>
+      <Text style={styles.title}>
+        {subject}
+        {
+          forumName
+          ? <Text style={styles.subtitle}>&nbsp;[{forumName}]</Text>
+          : null
+        }
+      </Text>
       <View style={styles.content}>
         <View style={styles.iconText}>
-          <Icon name="md-person" size={15} color="#888" />
+          <Icon name="user" size={16} color={palette.grey} />
           <Text style={styles.detail}>{author}</Text>
         </View>
         <View style={styles.iconText}>
-          <Icon name="md-time" size={15} color="#888" />
+          <Icon name="speech" size={16} color={palette.grey} />
+          <Text style={styles.detail}>{replies}</Text>
+        </View>
+        <View style={styles.iconText}>
+          <Icon name="clock" size={16} color={palette.grey} />
           <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
         </View>
       </View>
@@ -31,26 +52,35 @@ const ThreadRow = ({ subject, forumName, author, timestamp, onPress }) => (
 
 ThreadRow.propTypes = {
   subject: PropTypes.string.isRequired,
-  forumName: PropTypes.string.isRequired,
+  status: PropTypes.string,
+  forumName: PropTypes.string,
   author: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
+  replies: PropTypes.string.isRequired,
+  // views: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
   row: {
     margin: 15,
   },
+  hot: {
+    backgroundColor: palette.lightYellow,
+  },
+  pined: {
+    backgroundColor: palette.lightBlue,
+  },
   title: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 17,
+    color: palette.foreground,
   },
   subtitle: {
     fontSize: 16,
-    color: '#888',
+    color: palette.grey,
   },
   detail: {
-    color: '#888',
+    color: palette.grey,
     marginLeft: 5,
   },
   iconText: {

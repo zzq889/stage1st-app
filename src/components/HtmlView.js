@@ -5,8 +5,10 @@ import {
   Linking,
   StyleSheet,
   Text,
+  View,
 } from 'react-native';
 import htmlToElement from '../utils/htmlToElement';
+import { palette } from '../styles/config';
 
 const boldStyle = { fontWeight: '500' };
 const italicStyle = { fontStyle: 'italic' };
@@ -15,13 +17,28 @@ const codeStyle = { fontFamily: 'Menlo' };
 const baseStyles = StyleSheet.create({
   b: boldStyle,
   strong: boldStyle,
-  i: italicStyle,
+  i: {
+    ...italicStyle,
+    color: palette.red,
+  },
   em: italicStyle,
   pre: codeStyle,
   code: codeStyle,
   a: {
-    fontWeight: '500',
-    color: '#007AFF',
+    color: palette.blue,
+  },
+  text: {
+    fontSize: 17,
+    color: palette.foreground,
+  },
+  br: {
+    color: palette.orange,
+  },
+  blockquote: {
+    color: palette.grey,
+    backgroundColor: palette.lightYellow,
+    padding: 10,
+    marginBottom: 10,
   },
 });
 
@@ -33,7 +50,7 @@ class HtmlView extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.mounted = true;
     this.startHtmlRender(this.props.value);
   }
@@ -72,7 +89,7 @@ class HtmlView extends Component {
 
   render() {
     if (this.state.element) {
-      return <Text>{this.state.element}</Text>;
+      return <View>{this.state.element}</View>;
     }
     return <Text />;
   }

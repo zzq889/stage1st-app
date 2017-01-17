@@ -2,13 +2,13 @@ import { PropTypes } from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import ThreadListView from './ThreadListView';
+import PostListView from './PostListView';
 import {
-  loadThreadPage,
-  loadMoreThreads,
-} from './ThreadState';
+  loadHistoryPosts,
+  loadMoreHistoryPosts,
+} from './PostState';
 
-const ThreadListViewContainer = connect(
+const PostHistoryViewContainer = connect(
   (state, { fid }) => ({
     threads: state
       .getIn(['pagination', 'threadsById', fid, 'ids'], List())
@@ -34,11 +34,11 @@ const ThreadListViewContainer = connect(
   }),
 )(ThreadListView);
 
-ThreadListViewContainer.propTypes = {
+PostHistoryViewContainer.propTypes = {
   fid: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
   ]).isRequired,
 };
 
-export default ThreadListViewContainer;
+export default PostHistoryViewContainer;

@@ -3,7 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
+  InteractionManager,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { List, Map } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
@@ -31,7 +33,19 @@ class PostListView extends Component {
   }
 
   componentWillMount() {
-    this.props.loadPostPage(this.props.tid);
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadPostPage();
+    });
+  }
+
+  componentWillReceiveProps({ tid: nextTid, uid: nextUid, pageNo: nextPageNo }) {
+    const { tid, uid, pageNo } = this.props;
+    this.scrollView.scrollTo({ y: 0, animated: false });
+    if (nextTid !== tid || nextUid !== uid || nextPageNo !== pageNo) {
+      InteractionManager.runAfterInteractions(() => {
+        this.props.loadPostPage();
+      });
+    }
   }
 
   renderHeader = () => (
@@ -40,36 +54,50 @@ class PostListView extends Component {
     </View>
   );
 
+  renderFooter = () => (
+    <View style={styles.footer}>
+      <ActivityIndicator />
+    </View>
+  );
+
   render() {
-    const { posts, loading } = this.props;
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator style={styles.centered} />
-        </View>
-      );
-    }
+    const { posts, loading, pageNo, totalPage, jumpToPage } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
           immutableData={posts}
           renderRow={renderRow}
+          renderScrollComponent={() =>
+            <ScrollView ref={(c) => { this.scrollView = c; }} />
+          }
           renderHeader={this.renderHeader}
+          renderFooter={loading ? this.renderFooter : null}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-          rowsDuringInteraction={10}
+          rowsDuringInteraction={5}
         />
-        <PostToolbar />
+        <PostToolbar
+          pageNo={pageNo}
+          totalPage={totalPage}
+          jumpToPage={jumpToPage}
+        />
       </View>
     );
   }
 }
 
 PostListView.propTypes = {
-  tid: PropTypes.number.isRequired,
   thread: PropTypes.instanceOf(Map).isRequired,
   posts: PropTypes.instanceOf(List).isRequired,
+  tid: PropTypes.number.isRequired,
+  uid: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string,
+  ]).isRequired,
+  pageNo: PropTypes.number,
+  totalPage: PropTypes.number,
   loading: PropTypes.bool,
   loadPostPage: PropTypes.func.isRequired,
+  jumpToPage: PropTypes.func.isRequired,
 };
 
 PostListView.defaultProps = {
@@ -106,6 +134,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#8E8E8E',
+  },
+  footer: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -4,39 +4,34 @@ import {
   Text,
   StyleSheet,
   Linking,
+  Image,
+  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import SafariView from 'react-native-safari-view';
 import Moment from 'moment';
-import entities from 'entities';
+import Icon from 'react-native-vector-icons/Entypo';
 import HtmlView from '../../components/HtmlView';
-import Image from '../../components/Image';
+// import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
 import { getConfiguration } from '../../utils/configuration';
+import { palette } from '../../styles/config';
 
 // node, index, parent, opts, renderChild
-const renderNode = (node, index, parent, opts, renderChild) => {
+const renderNode = (node, index) => {
   const attribs = node.attribs;
 
-  if (node.type === 'text') {
-    return (
-      <Text key={index} style={parent ? opts.styles[parent.name] : styles.content}>
-        {entities.decodeHTML(node.data)}
-      </Text>
-    );
-  } else if (node.name === 'br') {
-    return null;
-  } else if (node.attribs && node.attribs.class === 'quote') {
-    return <Text key={index} style={[styles.content, styles.quote]}>{renderChild()}{'\n'}</Text>;
-  } else if (node.name === 'img') {
+  if (node.name === 'img') {
+    const isEmoji = attribs.smilieid;
     const { width: screenWidth } = Dimensions.get('window');
-    const defaultSize = attribs.smilieid ? 32 : (screenWidth - 30);
-    const imgWidth = Number(attribs.width || attribs['data-width'] || defaultSize);
-    const imgHeight = Number(attribs.height || attribs['data-height'] || defaultSize);
+    const defaultSize = isEmoji ? 32 : (screenWidth - 30);
+    const imgWidth = Number((attribs.width && Math.min(attribs.width, defaultSize)) || defaultSize);
+    const imgHeight = Number((attribs.height && (attribs.height / attribs.width) * imgWidth) || defaultSize);
 
     const imgStyle = {
       width: imgWidth,
       height: imgHeight,
+      backgroundColor: isEmoji ? null : palette.lightGrey,
     };
 
     const uri = attribs.src;
@@ -50,16 +45,7 @@ const renderNode = (node, index, parent, opts, renderChild) => {
       height: imgHeight,
     };
 
-    if (attribs.smilieid) {
-      return <Image key={index} source={source} style={imgStyle} />;
-    }
-
-    return (
-      <Text key={index} style={styles.imgWrapper}>
-        <Image key={index} source={source} style={imgStyle} />
-        {`${source.uri}\n`}
-      </Text>
-    );
+    return <Image key={index} source={source} style={imgStyle} />;
   }
 
   return undefined;
@@ -96,10 +82,21 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
       </View>
     </View>
     <HtmlView
+      style={styles.content}
       value={message}
       renderNode={renderNode}
       onLinkPress={onLinkPress}
     />
+    <View style={styles.actions}>
+      <TouchableOpacity
+        hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
+      >
+        <View style={styles.iconView}>
+          <Icon name="reply" size={16} color={palette.secondary} />
+          <Text style={styles.iconText}>回复</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   </View>
 );
 
@@ -132,25 +129,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   title: {
-    fontSize: 16,
-    color: '#000',
+    fontSize: 17,
+    color: palette.black,
   },
   position: {
-    color: '#888',
+    color: palette.grey,
   },
   detail: {
-    color: '#888',
+    color: palette.grey,
     marginTop: 5,
   },
-  content: {
-    fontSize: 16,
-    color: '#000',
+  actions: {
+    marginTop: 15,
+    alignItems: 'flex-end',
   },
-  quote: {
-    color: '#888',
+  iconView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  imgWrapper: {
-    backgroundColor: '#eee',
+  iconText: {
+    marginLeft: 5,
+    color: palette.secondary,
   },
 });
 

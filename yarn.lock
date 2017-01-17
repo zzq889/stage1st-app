@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@exponent/ex-navigation@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@exponent/ex-navigation/-/ex-navigation-2.5.0.tgz#acb8486387ceb11d85a586f4c303544c20633f5d"
+"@exponent/ex-navigation@^2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@exponent/ex-navigation/-/ex-navigation-2.7.1.tgz#5166110011468a040df9f82740f8d0eda64e797b"
   dependencies:
     "@exponent/react-native-touchable-native-feedback-safe" "^1.1.0"
     clamp "^1.0.1"
@@ -19,7 +19,7 @@
     react-clone-referenced-element "^1.0.1"
     react-mixin "^3.0.5"
     react-native-drawer-layout "^1.0.0"
-    react-native-tab-view "^0.0.38"
+    react-native-tab-view "0.0.42"
     react-redux "^4.4.5"
     react-static-container "^1.0.0"
     react-timer-mixin "^0.13.3"
@@ -1447,6 +1447,30 @@ code-push@1.8.0-beta:
     q "^1.4.1"
     superagent "^1.7.2"
 
+color-convert@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.8.2.tgz#be868184d7c8631766d54e7078e2672d7c7e3339"
+  dependencies:
+    color-name "^1.1.1"
+
+color-name@^1.0.0, color-name@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.1.tgz#4b1415304cf50028ea81643643bd82ea05803689"
+
+color-string@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.4.0.tgz#2b47f8565fb0eb52f9f77c801992b8ca55d6e898"
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
+
+color@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/color/-/color-1.0.3.tgz#e48e832d85f14ef694fb468811c2d5cfe729b55d"
+  dependencies:
+    color-convert "^1.8.2"
+    color-string "^1.4.0"
+
 colors@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.0.3.tgz#0433f44d809680fdeb60ed260f1b0c262e82a40b"
@@ -2632,6 +2656,10 @@ fleximap@0.9.x:
   version "0.9.9"
   resolved "https://registry.yarnpkg.com/fleximap/-/fleximap-0.9.9.tgz#826debb3fd5fb4c9865742425bfb7bdc66339db7"
 
+flow-runtime@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/flow-runtime/-/flow-runtime-0.0.6.tgz#570aeab33dca9d2357d137c0b0a2e141b7342410"
+
 for-in@^0.1.5:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-0.1.6.tgz#c9f96e89bfad18a545af5ec3ed352a1d9e5b4dc8"
@@ -3253,13 +3281,13 @@ interpret@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.1.tgz#d579fb7f693b858004947af39fa0db49f795602c"
 
-invariant@=2.2.1, invariant@^2.0.0, invariant@^2.2.1:
+invariant@=2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.1.tgz#b097010547668c7e337028ebe816ebe36c8a8d54"
   dependencies:
     loose-envify "^1.0.0"
 
-invariant@^2.2.0, invariant@^2.2.2:
+invariant@^2.0.0, invariant@^2.2.0, invariant@^2.2.1, invariant@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.2.tgz#9e1f56ac0acdb6bf303306f338be3b204ae60360"
   dependencies:
@@ -3282,6 +3310,10 @@ is-absolute@^0.1.5:
 is-arrayish@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
+
+is-arrayish@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.1.tgz#c2dfc386abaa0c3e33c48db3fe87059e69065efd"
 
 is-buffer@^1.0.2:
   version "1.1.4"
@@ -4177,7 +4209,7 @@ lodash.map@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.map/-/lodash.map-4.6.0.tgz#771ec7839e3473d9c4cde28b19394c3562f4f6d3"
 
-lodash.merge@^4.4.0, lodash.merge@^4.6.0:
+lodash.merge@^4.4.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.0.tgz#69884ba144ac33fe699737a6086deffadd0f89c5"
 
@@ -5094,6 +5126,13 @@ react-native-immutable-list-view@0.2.2:
   dependencies:
     immutable "~3.8.1"
 
+react-native-infinite-scroll-view@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-infinite-scroll-view/-/react-native-infinite-scroll-view-0.4.2.tgz#9091a213aeedf6ac2cee0374648406ab32790f74"
+  dependencies:
+    react-clone-referenced-element "^1.0.1"
+    react-native-scrollable-mixin "^1.0.0"
+
 react-native-mock@~0.2.5:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/react-native-mock/-/react-native-mock-0.2.7.tgz#683880c400099a1c41bbd309ec5b92b3019d6034"
@@ -5115,9 +5154,13 @@ react-native-safari-view@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safari-view/-/react-native-safari-view-1.2.0.tgz#6cdd281a886937deffbb4592ae480aa55ae0e2e8"
 
-react-native-tab-view@^0.0.38:
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.38.tgz#4194bba0abda9f781101c1a995c92733b194461a"
+react-native-scrollable-mixin@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
+
+react-native-tab-view@0.0.42:
+  version "0.0.42"
+  resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.42.tgz#abaeda8e7ab856db98c09709d3d82d2a08b94564"
 
 react-native-vector-icons@^3.0.0:
   version "3.0.0"
@@ -5389,10 +5432,11 @@ redux-form@^6.4.3:
     lodash-es "^4.17.3"
     shallowequal "^0.2.2"
 
-redux-immutable@^3.0.9:
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-3.0.9.tgz#b14f8ddc5cc390c46439e287e053336398881c58"
+redux-immutable@^3.0.10:
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/redux-immutable/-/redux-immutable-3.0.10.tgz#160c9ebfe59cf3f2fd4ee9baf0017cd56fe54649"
   dependencies:
+    flow-runtime "0.0.6"
     immutable "^3.8.1"
 
 redux-logger@^2.6.1:
@@ -5424,9 +5468,9 @@ redux-persist@^4.0.0:
     lodash "^4.11.1"
     lodash-es "^4.16.0"
 
-redux-saga@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.13.0.tgz#9294386550deb0d56bc9a1b3c90a613e7ddb6593"
+redux-saga@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.14.2.tgz#b8b0b5354750fe1a222b74fc1c9489f70dd9fdbb"
 
 redux@^3.4.0, redux@^3.5.2:
   version "3.6.0"
@@ -5859,6 +5903,12 @@ simple-plist@0.1.4:
     bplist-creator "0.0.4"
     bplist-parser "0.0.6"
     plist "1.2.0"
+
+simple-swizzle@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
+  dependencies:
+    is-arrayish "^0.3.1"
 
 sinon@^1.9.1:
   version "1.17.6"

@@ -18,5 +18,8 @@ clean.android:
 clean.ios:
 	rm -rf ios/build
 
+keystore:
+	keytool -genkey -v -keystore stage1st.keystore -alias stage1st -keyalg RSA -keysize 2048 -validity 10000
+
 bundle.android:
 	cd android && ./gradlew assembleRelease

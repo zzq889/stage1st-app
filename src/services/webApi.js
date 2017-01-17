@@ -12,21 +12,6 @@ export function url(path) {
     : `${apiRoot}/${path}`;
 }
 
-// Extracts the next page URL from API response.
-function getNextPageUrl(response) {
-  const link = response.headers.get('link');
-  if (!link) {
-    return null;
-  }
-
-  const nextLink = link.split(',').find(s => s.indexOf('rel="next"') > -1);
-  if (!nextLink) {
-    return null;
-  }
-
-  return nextLink.split(';')[0].slice(1, -1);
-}
-
 function getRequestHeaders(body, token) {
   // const headers = body
   //   ? { Accept: 'application/json', 'Content-Type': 'application/json' }
@@ -71,15 +56,18 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
     throw err;
   }
 
+  // pageCount and nextUrl
+  const { totalCount, pageNo } = json.data;
+
   const camelizedJson = camelizeKeys(json);
-  const nextPageUrl = getNextPageUrl(response);
   const responseJson = schema
     ? normalize(normalizeKey(camelizedJson), schema)
     : camelizedJson;
 
   return {
     ...responseJson,
-    nextPageUrl,
+    totalCount,
+    pageNo,
   };
 }
 
@@ -92,14 +80,18 @@ export function* callApiAsync(...args) {
 
 export function get(endpoint, params, ...otherArgs) {
   const paramsString = params
-    ? Object.keys(params).reduce((str, key) =>
-      `${str}&${key}=${encodeURIComponent(params[key])}`, '?')
+    ? Object.keys(params).reduce((str, key) => {
+      const value = params[key];
+      return value
+        ? `${str}&${key}=${encodeURIComponent(value)}`
+        : str;
+    }, '?')
     : '';
   return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
 }
 
-export function post(...args) {
-  return callApiAsync('POST', ...args);
+export function post(endpoint, body, ...args) {
+  return callApiAsync('POST', endpoint, body || {}, ...args);
 }
 
 // resuable fetch Subroutine
@@ -107,15 +99,15 @@ export function post(...args) {
 // apiFn  : api.fetchUser | api.fetchRepo | ...
 // id     : login | fullName
 // url    : next page url. If not provided will use pass it to apiFn
-export function* fetchEntity(entity, apiFn, id, nextUrl) {
+export function* fetchEntity(entity, apiFn, args) {
   try {
-    yield put(entity.request(id));
-    const response = yield call(apiFn, nextUrl || id);
-    yield put(entity.success(id, response));
+    yield put(entity.request(args));
+    const response = yield call(apiFn, args);
+    yield put(entity.success(args, response));
   } catch (error) {
     const message = error.message || 'Something bad happened';
     // console.warn(message);
-    yield put(entity.failure(id, message));
+    yield put(entity.failure(args, message));
   }
 }
 
@@ -141,11 +133,15 @@ export const fetchUserInfo = uid =>
   get('user', { uid }, SCHEMA.userSchema);
 
 // notification
-export const fetchNotication = uid =>
-  get(`notice/${uid}`);
+export const fetchNotication = () =>
+  post('notice/reply');
 
-export const fetchHistory = uid =>
-  get(`history/${uid}`);
+// history
+export const fetchThreadHistory = () =>
+  post('history/thread', null, SCHEMA.threadSchemaArray);
+
+export const fetchPostHistory = () =>
+  post('history/post', null, SCHEMA.postSchemaArray);
 
 // forum
 export const fetchChannels = () =>
@@ -155,8 +151,8 @@ export const fetchForum = fid =>
   get('forum', { fid }, SCHEMA.forumSchema);
 
 // thread
-export const fetchThreads = fid =>
-  get('forum/page', { fid }, SCHEMA.threadSchemaArray);
+export const fetchThreads = ({ fid, pageNo }) =>
+  get('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
 
 export const fetchSubscribedThreads = () =>
   get('forum/subscribed', null, SCHEMA.threadSchemaArray);
@@ -168,14 +164,14 @@ export const favThread = tid =>
   post('thread/favor', { tid, action: 'add' }, SCHEMA.threadSchema);
 
 export const fetchFavedThreads = () =>
-  get('favor/page', null, SCHEMA.threadSchemaArray);
+  post('favor/page', null, SCHEMA.threadSchemaArray);
 
 export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);
 
 // post
-export const fetchPosts = (tid, uid) =>
-  get('thread/page', { tid, uid }, SCHEMA.postSchemaArray);
+export const fetchPosts = ({ tid, uid, pageNo }) =>
+  get('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
 export const createPost = ({ tid, pid, typeid, title, content }) =>
   post('post/post', { tid, pid, typeid, title, content }, SCHEMA.postSchema);

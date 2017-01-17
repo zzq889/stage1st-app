@@ -2,10 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import {
   View,
   StyleSheet,
+  InteractionManager,
   ActivityIndicator,
 } from 'react-native';
 import { List } from 'immutable';
 import { withNavigation } from '@exponent/ex-navigation';
+import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
 import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
@@ -15,14 +17,39 @@ import Router from '../AppRouter';
 class ThreadListView extends Component {
   static route = {
     navigationBar: {
-      title: ({ title }) => title || 'Threads',
-      renderRight: ({ params: { fid } }) => <ComposeButton fid={fid} />,
+      title: ({ title }) => title,
+      renderRight: ({ params: { fid } }) => (Number.isInteger(fid) ? <ComposeButton fid={fid} /> : null),
     },
   }
 
   componentWillMount() {
-    this.props.loadThreadPage();
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadThreadPage();
+    });
   }
+
+  _loadMoreContentAsync = async () => {
+    // Fetch more data here.
+    // After fetching data, you should update your ListView data source
+    // manually.
+    // This function does not have a return value.
+    this.props.loadMoreThreads();
+  }
+
+  _onRefresh = () => {
+    // TODO: on refresh
+  }
+
+  handleScroll = (event) => {
+    // TODO: event.nativeEvent.contentOffset.y
+    console.log(event.nativeEvent.contentOffset.y);
+  }
+
+  renderFooter = () => (
+    <View style={styles.footer}>
+      <ActivityIndicator />
+    </View>
+  );
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
@@ -30,6 +57,9 @@ class ThreadListView extends Component {
       forumName={rowData.get('forumName')}
       author={rowData.get('author')}
       timestamp={rowData.get('lastpost')}
+      status={rowData.get('statusicon')}
+      replies={rowData.get('replies')}
+      views={rowData.get('views')}
       onPress={() => {
         this.props.navigation
         .getNavigator('master')
@@ -43,33 +73,32 @@ class ThreadListView extends Component {
   )
 
   render() {
-    const { threads, loading } = this.props;
-    if (loading) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator style={styles.centered} />
-        </View>
-      );
-    }
+    const { threads, loading, nextPage } = this.props;
     return (
       <ImmutableListView
+        ref={(c) => { this.listView = c; }}
         immutableData={threads}
         renderRow={this.renderRow}
+        renderFooter={loading ? this.renderFooter : null}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        rowsDuringInteraction={30}
+        rowsDuringInteraction={15}
+        // onScroll={this.handleScroll}
+        // InfiniteScrollView props
+        renderScrollComponent={props => <InfiniteScrollView {...props} />}
+        canLoadMore={!loading && !!nextPage}
+        distanceToLoadMore={0}
+        onLoadMoreAsync={this._loadMoreContentAsync}
       />
     );
   }
 }
 
 ThreadListView.propTypes = {
-  // fid: PropTypes.oneOfType([
-  //   PropTypes.number,
-  //   PropTypes.string,
-  // ]).isRequired,
   threads: PropTypes.instanceOf(List).isRequired,
-  loading: PropTypes.bool,
+  nextPage: PropTypes.number,
+  loading: PropTypes.bool.isRequired,
   loadThreadPage: PropTypes.func.isRequired,
+  loadMoreThreads: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
   }),
@@ -91,6 +120,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: StyleSheet.hairlineWidth,
     backgroundColor: '#8E8E8E',
+  },
+  footer: {
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

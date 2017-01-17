@@ -14,7 +14,7 @@ export default combineReducers({
     ],
   }),
   postsByTid: paginate({
-    mapActionToKey: action => action.tid,
+    mapActionToKey: ({ tid, uid = 'all' }) => `${tid}.${uid}`,
     types: [
       POST.REQUEST,
       POST.SUCCESS,

@@ -10,16 +10,39 @@ import BarButtonItem from '../../components/BarButtonItem';
 import { palette } from '../../styles/config';
 
 
-const PostToolbar = () => (
+const PostToolbar = ({
+  pageNo = 0,
+  totalPage = 0,
+  jumpToPage,
+}) => (
   <Toolbar style={styles.container}>
-    <BarButtonItem disabled>
-      <Icon style={styles.icon} name="chevron-thin-left" size={20} color={palette.lightGrey} />
+    <BarButtonItem
+      disabled={pageNo <= 1}
+      onPress={() => jumpToPage(pageNo - 1)}
+    >
+      <Icon
+        style={styles.icon}
+        name="chevron-thin-left"
+        size={20}
+        color={pageNo <= 1 ? palette.lightGrey : palette.black}
+      />
     </BarButtonItem>
-    <BarButtonItem style={styles.tabItem} stretch>
-      <Text>1 / 1</Text>
+    <BarButtonItem
+      style={styles.tabItem}
+      stretch
+    >
+      <Text>{ pageNo } / {totalPage}</Text>
     </BarButtonItem>
-    <BarButtonItem>
-      <Icon style={styles.icon} name="chevron-thin-right" size={20} color={palette.black} />
+    <BarButtonItem
+      disabled={pageNo === totalPage}
+      onPress={() => jumpToPage(pageNo + 1)}
+    >
+      <Icon
+        style={styles.icon}
+        name="chevron-thin-right"
+        size={20}
+        color={pageNo === totalPage ? palette.lightGrey : palette.black}
+      />
     </BarButtonItem>
     <View style={styles.separator} />
     <BarButtonItem>
@@ -29,7 +52,9 @@ const PostToolbar = () => (
 );
 
 PostToolbar.propTypes = {
-  // TODO
+  pageNo: PropTypes.number,
+  totalPage: PropTypes.number,
+  jumpToPage: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -38,6 +63,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 4,
+  },
+  indicator: {
+    position: 'absolute',
+    left: 5,
   },
   separator: {
     marginTop: 10,

@@ -5,20 +5,20 @@ import {
 } from 'react-native';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { connectActionSheet } from '@exponent/react-native-action-sheet';
-import { Map, fromJS } from 'immutable';
+import { Map, List } from 'immutable';
 import TableCell from '../../components/TableCell';
 import Router from '../AppRouter';
-import ProfileHeaderContainer from './ProfileHeaderContainer';
 import { palette } from '../../styles/config';
+import ProfileHeaderContainer from './ProfileHeaderContainer';
 
-const listData = fromJS([
-  { title: '我的发言', route: 'color' },
-  { title: '我的消息', route: 'color' },
-  { title: '我的收藏', route: 'color' },
-  { title: '我的马甲', route: 'color' },
-  { title: '搜索', route: 'color' },
-  { title: '关于', route: 'about' },
-  { title: '退出登录', name: 'logout' },
+const listData = List([
+  Map({ title: '我的发言', route: 'history' }),
+  Map({ title: '我的消息', route: 'color' }),
+  Map({ title: '我的收藏', route: 'threads', params: { fid: 'faved' } }),
+  // Map({ title: '我的马甲', route: 'color' }),
+  // Map({ title: '搜索', route: 'color' }),
+  Map({ title: '关于', route: 'about' }),
+  Map({ title: '退出登录', name: 'logout' }),
 ]);
 
 @connectActionSheet
@@ -60,8 +60,8 @@ class ProfileView extends Component {
           onPress={() => {
             this.props.navigator
               .push(Router.getRoute(route, {
-                tid: rowData.get('tid'),
                 title: rowData.get('title'),
+                ...rowData.get('params', {}),
               }));
             highlightRow(sectionID, rowID);
           }}
