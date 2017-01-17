@@ -67,8 +67,8 @@ class PostListView extends Component {
         <ImmutableListView
           immutableData={posts}
           renderRow={renderRow}
-          renderScrollComponent={() =>
-            <ScrollView ref={(c) => { this.scrollView = c; }} />
+          renderScrollComponent={props =>
+            <ScrollView ref={(c) => { this.scrollView = c; }} {...props} />
           }
           renderHeader={this.renderHeader}
           renderFooter={loading ? this.renderFooter : null}
