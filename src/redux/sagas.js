@@ -4,6 +4,7 @@ import {
   watchLoadForumPage,
 } from '../modules/forum/ForumState';
 import {
+  watchLoadThreadInfo,
   watchLoadThreadPage,
   watchLoadMoreThreads,
   watchNewThread,
@@ -24,6 +25,7 @@ export default function* root() {
   yield [
     fork(watchLoadChannelPage),
     fork(watchLoadForumPage),
+    fork(watchLoadThreadInfo),
     fork(watchLoadThreadPage),
     fork(watchLoadMoreThreads),
     fork(watchNewThread),

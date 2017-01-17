@@ -11,7 +11,7 @@ import {
 const ThreadListViewContainer = connect(
   (state, { fid }) => ({
     threads: state
-      .getIn(['pagination', 'threadsById', fid, 'ids'], List())
+      .getIn(['pagination', 'threadsByFid', fid, 'ids'], List())
       .map((tid) => {
         const thread = state.getIn(['entities', 'threads', String(tid)]);
         const threadFid = thread.get('fid');
@@ -25,8 +25,8 @@ const ThreadListViewContainer = connect(
       })
       .reverse()
       .toList(),
-    loading: state.getIn(['pagination', 'threadsById', fid, 'isFetching'], false),
-    nextPage: state.getIn(['pagination', 'threadsById', fid, 'nextPage']),
+    loading: state.getIn(['pagination', 'threadsByFid', fid, 'isFetching'], false),
+    nextPage: state.getIn(['pagination', 'threadsByFid', fid, 'nextPage']),
   }),
   (dispatch, { fid }) => ({
     loadThreadPage: bindActionCreators(loadThreadPage.bind(null, fid), dispatch),

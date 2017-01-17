@@ -7,6 +7,7 @@ import {
   fetchFavedThreads as apiFetchFavedThreads,
   fetchSubscribedThreads as apiFetchSubscribedThreads,
   fetchThreadHistory as apiFetchThreadHistory,
+  fetchThreadInfo as apiFetchThreadInfo,
   createThread as apiCreateThread,
 } from '../../services/webApi';
 
@@ -23,6 +24,7 @@ export const LOAD_MORE_THREADS = 'ThreadState/LOAD_MORE_THREADS';
 export const LOAD_FAVED_THREAD_PAGE = 'ThreadState/LOAD_FAVED_THREAD_PAGE';
 export const LOAD_SUBSCRIBED_THREAD_PAGE = 'ThreadState/LOAD_SUBSCRIBED_THREAD_PAGE';
 export const NEW_THREAD = 'ThreadState/NEW_THREAD';
+export const LOAD_THREAD_INFO = 'ThreadState/LOAD_THREAD_INFO';
 
 export const threadEntity = {
   request: args => createAction(
@@ -74,10 +76,11 @@ const fetchThreads = (fid) => {
   }
 };
 
+const fetchThread = fetchEntity.bind(null, threadEntity, apiFetchThreadInfo);
 const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);
 
 // load repo unless it is cached
-const getThreads = (state, fid) => state.getIn(['pagination', 'threadsById', fid]);
+const getThreads = (state, fid) => state.getIn(['pagination', 'threadsByFid', fid]);
 
 function* loadThreads(fid, loadMore) {
   const threads = yield select(getThreads, fid);
@@ -94,6 +97,13 @@ export function* watchLoadThreadPage() {
   while (true) {
     const { fid } = yield take(LOAD_THREAD_PAGE);
     yield fork(loadThreads, fid);
+  }
+}
+
+export function* watchLoadThreadInfo() {
+  while (true) {
+    const { tid } = yield take(LOAD_THREAD_INFO);
+    yield call(fetchThread, tid);
   }
 }
 
