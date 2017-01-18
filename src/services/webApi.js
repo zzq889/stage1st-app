@@ -178,8 +178,8 @@ export const createThread = ({ fid, typeid, title, content }) =>
 export const fetchPosts = ({ tid, uid, pageNo }) =>
   get('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
-export const createPost = ({ tid, pid, typeid, title, content }) =>
-  post('post/post', { tid, pid, typeid, title, content }, SCHEMA.postSchema);
+export const createPost = ({ tid, pid, content }) =>
+  post('post/post', { tid, pid, content }, SCHEMA.postSchema);
 
 export const reportPost = ({ pid, message }) =>
   post('post/report', { pid, message });
