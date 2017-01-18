@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import { List, Map } from 'immutable';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -91,6 +92,12 @@ class PostListView extends Component {
           renderRow={renderRow}
           renderScrollComponent={props =>
             <ScrollView ref={(c) => { this.scrollView = c; }} {...props} />
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={!!posts.size && loading}
+              onRefresh={() => this.props.loadPostPage(true)}
+            />
           }
           renderHeader={this.renderHeader}
           renderFooter={loading ? this.renderFooter : null}
