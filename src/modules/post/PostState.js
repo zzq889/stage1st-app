@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+import { EventEmitter } from 'fbemitter';
 import { takeEvery, call, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -36,6 +37,8 @@ export const updatePostOffset = (tid, uid, pageNo = 1) =>
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
+
+export const postEmitter = new EventEmitter();
 
 const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
 const getPosts = (state, { tid, uid = 'all' }) =>

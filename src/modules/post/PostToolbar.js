@@ -9,11 +9,11 @@ import Toolbar from '../../components/Toolbar';
 import BarButtonItem from '../../components/BarButtonItem';
 import { palette } from '../../styles/config';
 
-
 const PostToolbar = ({
   pageNo = 0,
   totalPage = 0,
   jumpToPage,
+  onReplyPress,
 }) => (
   <Toolbar style={styles.container}>
     <BarButtonItem
@@ -45,13 +45,14 @@ const PostToolbar = ({
       />
     </BarButtonItem>
     <View style={styles.separator} />
-    <BarButtonItem>
+    <BarButtonItem onPress={onReplyPress}>
       <Icon style={styles.icon} name="reply" size={20} color={palette.black} />
     </BarButtonItem>
   </Toolbar>
 );
 
 PostToolbar.propTypes = {
+  onReplyPress: PropTypes.func,
   pageNo: PropTypes.number,
   totalPage: PropTypes.number,
   jumpToPage: PropTypes.func.isRequired,

@@ -178,6 +178,9 @@ export const createThread = ({ fid, typeid, title, content }) =>
 export const fetchPosts = ({ tid, uid, pageNo }) =>
   get('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
+// pid: optional
+// tid: required
+// content: required
 export const createPost = ({ tid, pid, content }) =>
   post('post/post', { tid, pid, content }, SCHEMA.postSchema);
 
