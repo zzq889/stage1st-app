@@ -84,7 +84,7 @@ class PostListView extends Component {
   );
 
   render() {
-    const { posts, loading, pageNo, totalPage, jumpToPage } = this.props;
+    const { posts, loading, refresh, pageNo, totalPage, jumpToPage } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
@@ -95,7 +95,7 @@ class PostListView extends Component {
           }
           refreshControl={
             <RefreshControl
-              refreshing={!!posts.size && loading}
+              refreshing={refresh && loading}
               onRefresh={() => this.props.loadPostPage(true)}
             />
           }
@@ -124,7 +124,8 @@ PostListView.propTypes = {
   ]),
   pageNo: PropTypes.number,
   totalPage: PropTypes.number,
-  loading: PropTypes.bool,
+  refresh: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   loadPostPage: PropTypes.func.isRequired,
   jumpToPage: PropTypes.func.isRequired,
   loadThreadInfo: PropTypes.func.isRequired,

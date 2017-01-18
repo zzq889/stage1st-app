@@ -33,6 +33,7 @@ export default function paginate({ types, mapActionToKey }) {
   function updatePagination(state = Map({
     isFetching: false,
     nextPage: undefined,
+    refresh: false,
     totalPage: 0,
     lastPageSize: 0,
     ids: Set(),
@@ -40,20 +41,30 @@ export default function paginate({ types, mapActionToKey }) {
   }), action) {
     switch (action.type) {
       case requestType:
-        return state.set('isFetching', true);
+        return state
+          .set('isFetching', true)
+          .set('refresh', action.refresh || action.force || false);
       case successType: {
         const { pageNo, pageSize, totalCount, result } = action.response;
         const totalPage = getTotalPage(totalCount, pageSize);
         const lastPageSize = getLastPageSize(totalCount, pageSize);
         const nextPage = getNextPage(pageNo, totalPage);
-
-        return state
+        const newState = state
           .set('isFetching', false)
-          .update('ids', value => value.union(result))
-          .setIn(['pages', pageNo], Set(result))
+          .set('currentPage', pageNo)
           .set('totalPage', totalPage)
           .set('nextPage', nextPage)
           .set('lastPageSize', lastPageSize);
+        if (action.refresh) {
+          return newState
+            .set('ids', Set(result))
+            .set('pages', Map({
+              [pageNo]: Set(result),
+            }));
+        }
+        return newState
+          .update('ids', value => value.union(result))
+          .setIn(['pages', pageNo], Set(result));
       }
       case failureType:
         return state.set('isFetching', false);

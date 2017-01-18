@@ -5,10 +5,7 @@ import {
   View,
   Text,
 } from 'react-native';
-import {
-  SlidingTabNavigation,
-  SlidingTabNavigationItem,
-} from '@exponent/ex-navigation';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ForumListViewContainer from './ForumListViewContainer';
 import withMessage from '../error/withMessage';
 
@@ -17,7 +14,6 @@ export default class ForumTabView extends Component {
   static route = {
     navigationBar: {
       title: '论坛',
-      ...SlidingTabNavigation.navigationBarStyles,
     },
   }
 
@@ -39,26 +35,20 @@ export default class ForumTabView extends Component {
 
     const channelsElement = channels.toList().map((chan) => {
       const key = String(chan.get('fid'));
+      const name = chan.get('name');
       return (
-        <SlidingTabNavigationItem key={key} id={key}>
-          <ForumListViewContainer
-            forumIds={chan.get('child')}
-          />
-        </SlidingTabNavigationItem>
+        <ForumListViewContainer
+          key={key}
+          forumIds={chan.get('child')}
+          tabLabel={name}
+        />
       );
     });
 
     return (
-      <SlidingTabNavigation
-        id="forumTab"
-        navigatorUID="forumTab"
-        renderLabel={this._renderLabel}
-        barBackgroundColor="#ddd"
-        indicatorStyle={styles.tabIndicator}
-        lazy // Hack: the lazy property must be required for ListView
-      >
+      <ScrollableTabView>
         {channelsElement}
-      </SlidingTabNavigation>
+      </ScrollableTabView>
     );
   }
 }

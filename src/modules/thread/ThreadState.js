@@ -65,8 +65,8 @@ export const threadCreationEntity = {
     THREAD_CREATION.FAILURE, { ...args, error }),
 };
 
-export const loadThreadPage = fid =>
-  createAction(LOAD_THREAD_PAGE, { fid });
+export const loadThreadPage = (fid, refresh) =>
+  createAction(LOAD_THREAD_PAGE, { fid, refresh });
 
 export const loadMoreThreads = fid =>
   createAction(LOAD_MORE_THREADS, { fid });
@@ -123,8 +123,12 @@ function* loadThreads(fid, loadMore) {
 
 export function* watchLoadThreadPage() {
   while (true) {
-    const { fid } = yield take(LOAD_THREAD_PAGE);
-    yield fork(loadThreads, fid);
+    const { fid, refresh } = yield take(LOAD_THREAD_PAGE);
+    if (refresh) {
+      yield call(fetchThreads(fid), { fid, pageNo: 1, refresh });
+    } else {
+      yield fork(loadThreads, fid);
+    }
   }
 }
 
