@@ -26,6 +26,7 @@ const ThreadListViewContainer = connect(
       .reverse()
       .toList(),
     loading: state.getIn(['pagination', 'threadsByFid', fid, 'isFetching'], false),
+    refresh: state.getIn(['pagination', 'threadsByFid', fid, 'refresh'], false),
     nextPage: state.getIn(['pagination', 'threadsByFid', fid, 'nextPage']),
   }),
   (dispatch, { fid }) => ({

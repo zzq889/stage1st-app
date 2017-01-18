@@ -5158,6 +5158,12 @@ react-native-scrollable-mixin@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
 
+react-native-scrollable-tab-view@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/react-native-scrollable-tab-view/-/react-native-scrollable-tab-view-0.7.1.tgz#e28fd11242fffcf363f554a2ca6443d6e0e207b8"
+  dependencies:
+    react-timer-mixin "^0.13.3"
+
 react-native-tab-view@0.0.42:
   version "0.0.42"
   resolved "https://registry.yarnpkg.com/react-native-tab-view/-/react-native-tab-view-0.0.42.tgz#abaeda8e7ab856db98c09709d3d82d2a08b94564"

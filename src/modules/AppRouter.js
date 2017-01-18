@@ -7,6 +7,7 @@ import ThreadListViewContainer from './thread/ThreadListViewContainer';
 import SubscribedTabViewContainer from './thread/SubscribedTabViewContainer';
 import ThreadComposeViewContainer from './thread/ThreadComposeViewContainer';
 import PostListViewContainer from './post/PostListViewContainer';
+import PostComposeView from './post/PostComposeView';
 import ProfileViewContainer from './user/ProfileViewContainer';
 import HistoryTabView from './user/HistoryTabView';
 import AboutView from './about/AboutView';
@@ -21,6 +22,7 @@ const AppRouter = createRouter(() => ({
   threads: () => ThreadListViewContainer,
   subscribed: () => SubscribedTabViewContainer,
   newThread: () => ThreadComposeViewContainer,
+  reply: () => PostComposeView,
   forums: () => ForumTabViewContainer,
   posts: () => PostListViewContainer,
   profile: () => ProfileViewContainer,

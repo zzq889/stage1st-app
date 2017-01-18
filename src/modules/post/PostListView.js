@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from 'react-native';
 import { List, Map } from 'immutable';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,16 +15,7 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbar from './PostToolbar';
-
-const renderRow = rowData => (
-  <Row
-    message={rowData.get('message')}
-    position={rowData.get('position')}
-    author={rowData.get('author')}
-    authorId={rowData.get('authorid')}
-    timestamp={rowData.get('dateline')}
-  />
-);
+import Router from '../AppRouter';
 
 class PostListView extends Component {
   static route = {
@@ -50,6 +42,23 @@ class PostListView extends Component {
       });
     }
   }
+
+  showReply = (pid) => {
+    this.props.navigation
+    .getNavigator('master')
+    .push(Router.getRoute('reply', { tid: this.props.tid, pid }));
+  }
+
+  renderRow = rowData => (
+    <Row
+      message={rowData.get('message')}
+      position={rowData.get('position')}
+      author={rowData.get('author')}
+      authorId={rowData.get('authorid')}
+      timestamp={rowData.get('dateline')}
+      onReplyPress={() => this.showReply(rowData.get('pid'))}
+    />
+  );
 
   renderHeader = () => {
     const isFav = this.props.thread.get('isFav');
@@ -83,14 +92,20 @@ class PostListView extends Component {
   );
 
   render() {
-    const { posts, loading, pageNo, totalPage, jumpToPage } = this.props;
+    const { posts, loading, refresh, pageNo, totalPage, jumpToPage } = this.props;
     return (
       <View style={styles.container}>
         <ImmutableListView
           immutableData={posts}
-          renderRow={renderRow}
+          renderRow={this.renderRow}
           renderScrollComponent={props =>
             <ScrollView ref={(c) => { this.scrollView = c; }} {...props} />
+          }
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh && loading}
+              onRefresh={() => this.props.loadPostPage(true)}
+            />
           }
           renderHeader={this.renderHeader}
           renderFooter={loading ? this.renderFooter : null}
@@ -101,6 +116,7 @@ class PostListView extends Component {
           pageNo={pageNo}
           totalPage={totalPage}
           jumpToPage={jumpToPage}
+          onReplyPress={() => this.showReply()}
         />
       </View>
     );
@@ -117,11 +133,15 @@ PostListView.propTypes = {
   ]),
   pageNo: PropTypes.number,
   totalPage: PropTypes.number,
-  loading: PropTypes.bool,
+  refresh: PropTypes.bool.isRequired,
+  loading: PropTypes.bool.isRequired,
   loadPostPage: PropTypes.func.isRequired,
   jumpToPage: PropTypes.func.isRequired,
   loadThreadInfo: PropTypes.func.isRequired,
   favThread: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    getNavigator: PropTypes.func.isRequired,
+  }),
 };
 
 PostListView.defaultProps = {

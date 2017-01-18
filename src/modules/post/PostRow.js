@@ -69,7 +69,14 @@ async function onLinkPress(url) {
   }
 }
 
-const PostRow = ({ message, position, author, authorId, timestamp }) => (
+const PostRow = ({
+  message,
+  position,
+  author,
+  authorId,
+  timestamp,
+  onReplyPress,
+}) => (
   <View style={styles.row}>
     <View style={styles.header}>
       <Avatar style={styles.avatar} uid={authorId} />
@@ -92,6 +99,7 @@ const PostRow = ({ message, position, author, authorId, timestamp }) => (
     <View style={styles.actions}>
       <TouchableOpacity
         hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
+        onPress={onReplyPress}
       >
         <View style={styles.iconView}>
           <Icon name="reply" size={16} color={palette.secondary} />
@@ -108,6 +116,7 @@ PostRow.propTypes = {
   author: PropTypes.string.isRequired,
   authorId: PropTypes.number.isRequired,
   timestamp: PropTypes.number.isRequired,
+  onReplyPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({

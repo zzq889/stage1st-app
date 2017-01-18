@@ -4,6 +4,7 @@ import {
   StyleSheet,
   InteractionManager,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 import { List } from 'immutable';
 import { withNavigation } from '@exponent/ex-navigation';
@@ -73,11 +74,17 @@ class ThreadListView extends Component {
   )
 
   render() {
-    const { threads, loading, nextPage } = this.props;
+    const { threads, loading, refresh, nextPage } = this.props;
     return (
       <ImmutableListView
         ref={(c) => { this.listView = c; }}
         immutableData={threads}
+        refreshControl={
+          <RefreshControl
+            refreshing={refresh && loading}
+            onRefresh={() => this.props.loadThreadPage(true)}
+          />
+        }
         renderRow={this.renderRow}
         renderFooter={loading ? this.renderFooter : null}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
@@ -96,6 +103,7 @@ class ThreadListView extends Component {
 ThreadListView.propTypes = {
   threads: PropTypes.instanceOf(List).isRequired,
   nextPage: PropTypes.number,
+  refresh: PropTypes.bool.isRequired,
   loading: PropTypes.bool.isRequired,
   loadThreadPage: PropTypes.func.isRequired,
   loadMoreThreads: PropTypes.func.isRequired,

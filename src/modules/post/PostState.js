@@ -1,4 +1,5 @@
 import { Map } from 'immutable';
+import { EventEmitter } from 'fbemitter';
 import { takeEvery, call, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -24,8 +25,8 @@ export const postEntity = {
     POST.FAILURE, { ...args, error }),
 };
 
-export const loadPostPage = (tid, uid, pageNo = 1) =>
-  createAction(LOAD_POST_PAGE, { tid, uid, pageNo });
+export const loadPostPage = (tid, uid, pageNo = 1, force) =>
+  createAction(LOAD_POST_PAGE, { tid, uid, pageNo, force });
 
 export const jumpToPage = (tid, uid, pageNo = 1) =>
   createAction(JUMP_TO_PAGE, { tid, uid, pageNo });
@@ -37,12 +38,14 @@ export const updatePostOffset = (tid, uid, pageNo = 1) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
+export const postEmitter = new EventEmitter();
+
 const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
 const getPosts = (state, { tid, uid = 'all' }) =>
   state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`]);
 
 // load repo unless it is cached
-function* loadPosts({ tid, uid, pageNo }) {
+function* loadPosts({ tid, uid, pageNo, force }) {
   const posts = yield select(getPosts, { tid, uid });
   let page;
   let totalPage;
@@ -54,9 +57,12 @@ function* loadPosts({ tid, uid, pageNo }) {
     lastPageSize = posts.get('lastPageSize');
     isLast = pageNo === totalPage;
   }
-  if (!posts || !page
+  if (
+    !posts
+    || !page
     || (!isLast && page.size < 30)
     || (isLast && page.size < lastPageSize)
+    || force
   ) {
     yield call(fetchPosts, { tid, uid, pageNo });
   }
