@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PostComposeView from './PostComposeView';
-import { onChange } from '../form/FormState';
+import { onChange, reset } from '../form/FormState';
 import { newPost } from './PostState';
 
 const FORM_NAME = 'postComposeForm';
@@ -13,6 +13,10 @@ export default connect(
   dispatch => ({
     onContentChange: bindActionCreators(
       onChange.bind(null, FORM_NAME, 'content'),
+      dispatch,
+    ),
+    reset: bindActionCreators(
+      reset.bind(null, FORM_NAME),
       dispatch,
     ),
   }),

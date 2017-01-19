@@ -41,6 +41,7 @@ export default class PostComposeView extends Component {
   }
 
   dismiss = () => {
+    this.props.reset();
     this.props.navigator.pop();
   }
 
@@ -73,6 +74,7 @@ PostComposeView.propTypes = {
   navigator: PropTypes.shape({
     pop: PropTypes.func.isRequired,
   }),
+  reset: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
