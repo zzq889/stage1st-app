@@ -16,6 +16,7 @@ import { palette } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbar from './PostToolbar';
 import Router from '../AppRouter';
+import { postEmitter } from './PostState';
 
 class PostListView extends Component {
   static route = {
@@ -27,6 +28,8 @@ class PostListView extends Component {
   }
 
   componentWillMount() {
+    this._subscription = postEmitter.addListener(
+      'POST_CREATION_SUCESS', () => this.props.loadPostPage(true));
     InteractionManager.runAfterInteractions(() => {
       this.props.loadPostPage();
       this.props.loadThreadInfo();
@@ -41,6 +44,10 @@ class PostListView extends Component {
         this.props.loadPostPage();
       });
     }
+  }
+
+  componentWillUnmount() {
+    this._subscription.remove();
   }
 
   showReply = (pid) => {

@@ -7,6 +7,7 @@ import EntitiesStateReducer from '../modules/entities/EntitiesState';
 import PaginationStateReducer from '../modules/pagination/PaginationState';
 import AuthStateReducer from '../modules/auth/AuthState';
 import PostStateReducer from '../modules/post/PostState';
+import FormStateReducer from '../modules/form/FormState';
 
 // after reducer changes, don't forget to update the persist policy in store.js
 export default combineReducers({
@@ -16,6 +17,7 @@ export default combineReducers({
   form: FormReducer,
   session: SessionStateReducer,
   error: ErrorStateReducer,
+  form2: FormStateReducer,
 
   // persist
   entities: EntitiesStateReducer,
