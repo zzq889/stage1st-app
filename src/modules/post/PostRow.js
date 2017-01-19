@@ -35,12 +35,17 @@ const renderNode = (node, index) => {
     };
 
     const uri = attribs.src;
-    const assembledUri = uri.match(/^\//)
+    let assembledUri = uri.match(/^\//)
       ? getConfiguration('STATIC_ROOT') + uri
       : `${getConfiguration('STATIC_ROOT')}/${uri}`;
+    assembledUri = uri.match(/^http/) ? uri : assembledUri;
+    // Hack for API mistake
+    // related issue: https://github.com/mixslice/stage1st-app/issues/41
+    assembledUri = assembledUri.replace(
+      /\/attachments\/(?!forum)/, '/attachments/forum/');
 
     const source = {
-      uri: uri.match(/^http/) ? uri : assembledUri,
+      uri: assembledUri,
       width: imgWidth,
       height: imgHeight,
     };
