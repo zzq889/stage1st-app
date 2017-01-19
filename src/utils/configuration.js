@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 const DEV_ROOT = 'saraba1st.asuscomm.com:20080';
 const PROD_ROOT = 'app.saraba1st.com';
 
-const URL_ROOT = __DEV__ ? DEV_ROOT : PROD_ROOT;
+const URL_ROOT = (__DEV__ && false) ? DEV_ROOT : PROD_ROOT;
 
 let configuration = Map({
   // Never put the slash at the end

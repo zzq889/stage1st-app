@@ -73,9 +73,9 @@ function htmlToElement(rawHtml, opts, done) {
       if (node.type === 'text') {
         return (
           <Text key={index} style={parent ? [opts.styles.text, opts.styles[parent.name]] : opts.styles.text}>
-            {DEBUG && `<text${index}>`}
+            {DEBUG ? `<text${index}>` : null}
             {entities.decodeHTML(node.data).trim()}
-            {DEBUG && `</text${index}>`}
+            {DEBUG ? `</text${index}>` : null}
           </Text>
         );
       }
@@ -126,18 +126,18 @@ function htmlToElement(rawHtml, opts, done) {
 
         return (
           <Text key={index} style={opts.styles[node.name]} onPress={linkPressHandler}>
-            {DEBUG && (
+            {DEBUG ? (
               <Text>
                 {`<${node.name}${index}`}
                 <Text style={opts.styles.attr}>${JSON.stringify(node.attribs)}</Text>
                 {'>'}
               </Text>
-            )}
+            ) : null}
             {node.name === 'pre' && LINE_BREAK}
             {node.name === 'li' && BULLET}
             {domToElement(node.children, node)}
             {shouldBreakLast && PARAGRAPH_BREAK}
-            {DEBUG && `</${node.name}${index}>`}
+            {DEBUG ? `</${node.name}${index}>` : null}
           </Text>
         );
       }
