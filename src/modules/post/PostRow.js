@@ -93,14 +93,14 @@ const PostRow = ({
         <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
       </View>
     </View>
-    {message && (
+    {message ? (
       <HtmlView
         style={styles.content}
         value={message}
         renderNode={renderNode}
         onLinkPress={onLinkPress}
       />
-    )}
+    ) : null}
     <View style={styles.actions}>
       <TouchableOpacity
         hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
