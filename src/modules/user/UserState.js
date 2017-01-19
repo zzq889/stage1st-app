@@ -43,8 +43,8 @@ export const userSign = (uid, requiredFields = []) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchUserInfo = fetchEntity.bind(null, userEntity, apiFetchUserInfo);
-const postUserSign = fetchEntity.bind(null, userSignEntity, apiUserSign);
+const fetchUserInfo = args => fetchEntity(userEntity, apiFetchUserInfo, args);
+const postUserSign = args => fetchEntity(userSignEntity, apiUserSign, args);
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/

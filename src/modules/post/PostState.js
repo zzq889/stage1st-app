@@ -1,10 +1,11 @@
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
-import { takeEvery, call, select } from 'redux-saga/effects';
+import { take, takeEvery, call, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   fetchEntity,
   fetchPosts as apiFetchPosts,
+  createPost as apiCreatePost,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -12,9 +13,11 @@ import {
 /** ****************************************************************************/
 
 export const POST = createRequestTypes('POST');
+export const POST_CREATION = createRequestTypes('POST_CREATION');
 export const LOAD_POST_PAGE = 'PostState/LOAD_POST_PAGE';
 export const JUMP_TO_PAGE = 'PostState/JUMP_TO_PAGE';
 export const UPDATE_POST_OFFSET = 'PostState/UPDATE_POST_OFFSET';
+export const NEW_POST = 'ThreadState/NEW_POST';
 
 export const postEntity = {
   request: args => createAction(
@@ -24,6 +27,18 @@ export const postEntity = {
   failure: (args, error) => createAction(
     POST.FAILURE, { ...args, error }),
 };
+
+export const postCreationEntity = {
+  request: args => createAction(
+    POST_CREATION.REQUEST, { ...args }),
+  success: (args, response) => createAction(
+    POST_CREATION.SUCCESS, { ...args, response }),
+  failure: (args, error) => createAction(
+    POST_CREATION.FAILURE, { ...args, error }),
+};
+
+export const newPost = ({ tid, pid, content }) =>
+  createAction(NEW_POST, { tid, pid, content });
 
 export const loadPostPage = (tid, uid, pageNo = 1, force) =>
   createAction(LOAD_POST_PAGE, { tid, uid, pageNo, force });
@@ -40,7 +55,8 @@ export const updatePostOffset = (tid, uid, pageNo = 1) =>
 
 export const postEmitter = new EventEmitter();
 
-const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
+const fetchPosts = args => fetchEntity(postEntity, apiFetchPosts, args);
+const createPost = args => fetchEntity(postCreationEntity, apiCreatePost, args);
 const getPosts = (state, { tid, uid = 'all' }) =>
   state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`]);
 
@@ -74,6 +90,20 @@ function* loadPosts({ tid, uid, pageNo, force }) {
 
 export function* watchLoadPostPage() {
   yield takeEvery(LOAD_POST_PAGE, loadPosts);
+}
+
+export function* watchNewPost() {
+  while (true) {
+    const { tid, pid, content } = yield take(NEW_POST);
+    yield call(createPost, { tid, pid, content });
+  }
+}
+
+export function* watchNewPostSuccess() {
+  while (true) {
+    yield take(POST_CREATION.SUCCESS);
+    postEmitter.emit('POST_CREATION_SUCESS');
+  }
 }
 
 /** ****************************************************************************/

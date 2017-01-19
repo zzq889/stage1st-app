@@ -5,24 +5,13 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
 } from 'react-native';
-import { List } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
-// import { Field, reduxForm } from 'redux-form/immutable';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import DismissButton from '../../components/DismissButton';
 import SubmitButton from './SubmitButton';
 import { postEmitter } from './PostState';
 
-// const renderArea = props => (
-//   <TextField
-//     autoCapitalize="none"
-//     autoCorrect={false}
-//     underlineColorAndroid="transparent"
-//     multiline
-//     {...props}
-//   />
-// );
 
 export default class PostComposeView extends Component {
   static route = {
@@ -39,16 +28,24 @@ export default class PostComposeView extends Component {
     },
   }
 
+  state = { value: null };
+
   componentWillMount() {
-    // this._subscription = postEmitter.addListener('submitPost', this.props.handleSubmit);
+    this._subscription = postEmitter.addListener(
+      'submitPost', () => this.props.onSubmit());
+    postEmitter.once('POST_CREATION_SUCESS', this.dismiss);
   }
 
   componentWillUnmount() {
-    // this._subscription.remove();
+    this._subscription.remove();
+  }
+
+  dismiss = () => {
+    this.props.reset();
+    this.props.navigator.pop();
   }
 
   render() {
-    // const { types } = this.props;
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={keyboardVerticalOffset}
@@ -62,6 +59,8 @@ export default class PostComposeView extends Component {
           underlineColorAndroid="transparent"
           multiline
           autoFocus
+          value={this.props.content}
+          onChangeText={val => this.props.onContentChange(val)}
         />
       </KeyboardAvoidingView>
     );
@@ -69,8 +68,13 @@ export default class PostComposeView extends Component {
 }
 
 PostComposeView.propTypes = {
-  // handleSubmit: PropTypes.func.isRequired,
-  types: PropTypes.instanceOf(List),
+  onSubmit: PropTypes.func.isRequired,
+  content: PropTypes.string,
+  onContentChange: PropTypes.func.isRequired,
+  navigator: PropTypes.shape({
+    pop: PropTypes.func.isRequired,
+  }),
+  reset: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({

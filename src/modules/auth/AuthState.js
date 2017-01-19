@@ -37,7 +37,7 @@ export const userLogout = () => createAction(USER_LOGOUT);
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const loginRequest = fetchEntity.bind(null, loginEntity, apiUserLogin);
+const loginRequest = args => fetchEntity(loginEntity, apiUserLogin, args);
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/

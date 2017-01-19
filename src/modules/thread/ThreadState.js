@@ -93,19 +93,19 @@ export const favThread = tid =>
 const fetchThreads = (fid) => {
   switch (fid) {
     case 'favorite':
-      return fetchEntity.bind(null, threadEntity, apiFetchFavedThreads);
+      return args => fetchEntity(threadEntity, apiFetchFavedThreads, args);
     case 'subscribed':
-      return fetchEntity.bind(null, threadEntity, apiFetchSubscribedThreads);
+      return args => fetchEntity(threadEntity, apiFetchSubscribedThreads, args);
     case 'history':
-      return fetchEntity.bind(null, threadEntity, apiFetchThreadHistory);
+      return args => fetchEntity(threadEntity, apiFetchThreadHistory, args);
     default:
-      return fetchEntity.bind(null, threadEntity, apiFetchThreads);
+      return args => fetchEntity(threadEntity, apiFetchThreads, args);
   }
 };
 
-const fetchThreadInfo = fetchEntity.bind(null, threadInfoEntity, apiFetchThreadInfo);
-const postFavThread = fetchEntity.bind(null, threadFavEntity, apiFavThread);
-const createThread = fetchEntity.bind(null, threadCreationEntity, apiCreateThread);
+const fetchThreadInfo = args => fetchEntity(threadInfoEntity, apiFetchThreadInfo, args);
+const postFavThread = args => fetchEntity(threadFavEntity, apiFavThread, args);
+const createThread = args => fetchEntity(threadCreationEntity, apiCreateThread, args);
 
 // load repo unless it is cached
 const getThreads = (state, fid) => state.getIn(['pagination', 'threadsByFid', fid]);
