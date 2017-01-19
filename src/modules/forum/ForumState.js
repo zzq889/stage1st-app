@@ -43,10 +43,10 @@ export const loadForumPage = (fid, requiredFields = []) =>
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchChannels = fetchEntity.bind(null, channelEntity, apiFetchChannels);
+const fetchChannels = args => fetchEntity(channelEntity, apiFetchChannels, args);
 const getChannels = state => state.getIn(['entities', 'channels']);
 
-const fetchForum = fetchEntity.bind(null, forumEntity, apiFetchForum);
+const fetchForum = args => fetchEntity(forumEntity, apiFetchForum, args);
 const getForum = (state, fid) => state.getIn(['entities', 'forums', fid]);
 
 // load repo unless it is cached

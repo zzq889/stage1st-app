@@ -40,7 +40,7 @@ export const updatePostOffset = (tid, uid, pageNo = 1) =>
 
 export const postEmitter = new EventEmitter();
 
-const fetchPosts = fetchEntity.bind(null, postEntity, apiFetchPosts);
+const fetchPosts = args => fetchEntity(postEntity, apiFetchPosts, args);
 const getPosts = (state, { tid, uid = 'all' }) =>
   state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`]);
 
