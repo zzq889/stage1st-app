@@ -7,7 +7,7 @@ import {
   Picker,
 } from 'react-native';
 
-const MyPicker = ({ label, input, items, ...otherProps }) => {
+const MyPicker = ({ value, onChange, label, items, ...otherProps }) => {
   const pickerItem = [];
   pickerItem.push(<Picker.Item key={-1} label={label} value={null} />);
   items.map((item) => {
@@ -26,8 +26,8 @@ const MyPicker = ({ label, input, items, ...otherProps }) => {
   return (
     <Picker
       mode="dropdown"
-      selectedValue={input.value}
-      onValueChange={val => input.onChange(val)}
+      selectedValue={value}
+      onValueChange={val => onChange(val)}
       {...otherProps}
     >
       {pickerItem}
@@ -36,7 +36,11 @@ const MyPicker = ({ label, input, items, ...otherProps }) => {
 };
 
 MyPicker.propTypes = {
-  input: PropTypes.any,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   items: PropTypes.instanceOf(List),
   isExpand: PropTypes.bool,
