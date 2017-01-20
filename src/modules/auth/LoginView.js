@@ -15,18 +15,6 @@ import CircleView from '../../components/CircleView';
 import DismissButton from '../../components/DismissButton';
 import { authEmitter } from './AuthState';
 
-const validate = (values) => {
-  // IMPORTANT: values is an Immutable.Map here!
-  const errors = {};
-  if (!values.get('username')) {
-    errors.username = 'Required';
-  }
-  if (!values.get('password')) {
-    errors.password = 'Required';
-  }
-  return Map(errors);
-};
-
 class LoginView extends Component {
   static route = {
     navigationBar: {
@@ -57,12 +45,11 @@ class LoginView extends Component {
   render() {
     const {
       onSubmit,
-      // invalid,
+      invalid,
       submitting,
       values,
       onChange,
     } = this.props;
-    const invalid = validate(values).size > 0;
     const disabled = invalid || submitting;
     return (
       <KeyboardAvoidingView
@@ -117,7 +104,7 @@ class LoginView extends Component {
 
 LoginView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  // invalid: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool.isRequired,
   submitting: PropTypes.bool.isRequired,
   values: PropTypes.instanceOf(Map).isRequired,
   onChange: PropTypes.func.isRequired,

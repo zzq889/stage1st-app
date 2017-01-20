@@ -9,49 +9,12 @@ import {
   Platform,
 } from 'react-native';
 import { Map, List } from 'immutable';
-import { Field, reduxForm } from 'redux-form/immutable';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import Picker from '../../components/Picker';
 import { threadEmitter } from './ThreadState';
-import validate from './threadValidate';
 
 const CHAR_LIMIT = 80;
-
-const renderField = (props) => {
-  const charLeft = CHAR_LIMIT - unescape(encodeURIComponent(props.input.value)).length;
-  return (
-    <View style={styles.row}>
-      <TextField
-        style={styles.container}
-        autoCapitalize="none"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-        clearButtonMode="while-editing"
-        {...props}
-      />
-      <Text style={charLeft < 0 ? [styles.counter, styles.counterError] : styles.counter}>
-        {charLeft}
-      </Text>
-    </View>
-  );
-};
-
-renderField.propTypes = {
-  input: PropTypes.shape({
-    value: PropTypes.string,
-  }),
-};
-
-const renderArea = props => (
-  <TextField
-    autoCapitalize="none"
-    autoCorrect={false}
-    underlineColorAndroid="transparent"
-    multiline
-    {...props}
-  />
-);
 
 class ThreadComposeView extends Component {
   state = {
@@ -59,44 +22,78 @@ class ThreadComposeView extends Component {
   }
 
   componentWillMount() {
-    this._subscription = threadEmitter.addListener('submitThread', this.props.handleSubmit);
+    this.initialize(this.props, true);
+    this._subscription = threadEmitter.addListener('submitThread', () => this.props.onSubmit());
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initialize(nextProps);
   }
 
   componentWillUnmount() {
     this._subscription.remove();
   }
 
+  initialize = (props, always) => {
+    // initial value
+    const typeid = props.values.get('typeid');
+    if (always || (!typeid && this.props.initialValues.typeid !== props.initialValues.typeid)) {
+      this.props.onChange('typeid', props.initialValues.typeid);
+    }
+  }
+
+
   render() {
     const { types } = this.props;
+    const title = this.props.values.get('title');
+    const typeid = this.props.values.get('typeid');
+    const content = this.props.values.get('content');
+    const charLeft = CHAR_LIMIT - unescape(encodeURIComponent(title)).length;
     return (
       <KeyboardAvoidingView
         keyboardVerticalOffset={keyboardVerticalOffset}
         behavior="padding"
         style={styles.container}
       >
-        <Field
-          name="title"
-          type="text"
-          component={renderField}
-          label="请输入标题"
-          autoFocus
-        />
+        <View style={styles.row}>
+          <TextField
+            style={styles.container}
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            clearButtonMode="while-editing"
+            name="title"
+            value={title}
+            onChangeText={val => this.props.onChange('title', val)}
+            type="text"
+            label="请输入标题"
+            autoFocus
+          />
+          <Text style={charLeft < 0 ? [styles.counter, styles.counterError] : styles.counter}>
+            {charLeft}
+          </Text>
+        </View>
         <View style={styles.separator} />
-        <Field
+        <Picker
           name="typeid"
-          type="picker"
-          component={Picker}
+          value={typeid}
+          onChange={val => this.props.onChange('typeid', val)}
           isExpand={this.state.isExpand}
           toggleExpand={() => { this.setState({ isExpand: !this.state.isExpand }); }}
           items={types.map(type => Map({ label: type.get('type'), value: type.get('typeid') }))}
           label="主题分类"
         />
         <View style={styles.separator} />
-        <Field
+        <TextField
           style={styles.textarea}
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          multiline
           name="content"
+          value={content}
+          onChangeText={val => this.props.onChange('content', val)}
           type="text"
-          component={renderArea}
           label="请输入正文"
         />
       </KeyboardAvoidingView>
@@ -105,9 +102,13 @@ class ThreadComposeView extends Component {
 }
 
 ThreadComposeView.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  // reset: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   types: PropTypes.instanceOf(List),
+  values: PropTypes.instanceOf(Map),
+  onChange: PropTypes.func.isRequired,
+  initialValues: PropTypes.shape({
+    typeid: PropTypes.number,
+  }).isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -147,8 +148,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default reduxForm({
-  form: 'composeForm',
-  enableReinitialize: true,
-  validate,
-})(ThreadComposeView);
+export default ThreadComposeView;

@@ -3,8 +3,9 @@ import { bindActionCreators } from 'redux';
 import LoginView from './LoginView';
 import { userAuth } from './AuthState';
 import formConnect from '../form/helper';
+import validate from './authValidate';
 
-export default formConnect('loginForm')(connect(
+export default formConnect('loginForm', validate)(connect(
   state => ({
     submitting: state.getIn(['auth', 'isSigning']),
   }),
