@@ -2,6 +2,7 @@ import { PropTypes } from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import ForumListView from './ForumListView';
+import { subscribeForum, unsubscribeForum } from './ForumState';
 
 const ForumListViewContainer = connect(
   (state, { forumIds }) => {
@@ -11,6 +12,7 @@ const ForumListViewContainer = connect(
 
     return { forums };
   },
+  { subscribeForum, unsubscribeForum },
 )(ForumListView);
 
 ForumListViewContainer.propTypes = {

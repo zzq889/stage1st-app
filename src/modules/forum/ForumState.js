@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { Map, Set } from 'immutable';
 import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -56,7 +56,7 @@ const fetchChannels = args => fetchEntity(channelEntity, apiFetchChannels, args)
 const getChannels = state => state.getIn(['entities', 'channels']);
 
 const fetchForum = args => fetchEntity(forumEntity, apiFetchForum, args);
-const getForum = (state, fid) => state.getIn(['entities', 'forums', fid]);
+// const getForum = (state, fid) => state.getIn(['entities', 'forums', fid]);
 
 // load repo unless it is cached
 function* loadChannels(requiredFields) {
@@ -67,12 +67,12 @@ function* loadChannels(requiredFields) {
 }
 
 // load forums unless it is cached
-function* loadForum(fid, requiredFields) {
-  const forum = yield select(getForum, fid);
-  if (!forum || requiredFields.some(key => !forum.has(key))) {
-    yield call(fetchForum, fid);
-  }
-}
+// function* loadForum(fid, requiredFields) {
+//   const forum = yield select(getForum, fid);
+//   if (!forum || requiredFields.some(key => !forum.has(key))) {
+//     yield call(fetchForum, fid);
+//   }
+// }
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/
@@ -96,17 +96,19 @@ export function* watchLoadForumPage() {
 /** ***************************** REDUCERS *************************************/
 /** ****************************************************************************/
 
-export default function ForumStateReducer(state = Map(), action) {
+export default function ForumStateReducer(state = Map({
+  subscriptions: Set(),
+}), action) {
   switch (action.type) {
     case SUBSCRIBE_FORUM: {
       const { fid } = action;
       return state
-        .update('subscription', value => value.add(fid));
+        .update('subscriptions', value => value.add(fid));
     }
     case UNSUBSCRIBE_FORUM: {
       const { fid } = action;
       return state
-        .update('subscription', value => value.delete(fid));
+        .update('subscriptions', value => value.delete(fid));
     }
     default:
       return state;

@@ -9,15 +9,18 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../../styles/config';
 
-const ForumRow = ({ name, subscribed, onPress }) => (
+const ForumRow = ({ name, isSubscribed, onPress, onSubscribePress }) => (
   <TouchableHighlight
     underlayColor="#ccc"
     onPress={onPress}
   >
     <View style={styles.row} ref={(component) => { this._root = component; }} {...this.props}>
       <Text style={styles.title}>{name}</Text>
-      <TouchableOpacity style={styles.iconContainer}>
-        {subscribed
+      <TouchableOpacity
+        style={styles.iconContainer}
+        onPress={onSubscribePress}
+      >
+        {isSubscribed
           ? <Icon style={styles.icon} name="ios-heart" size={20} color="#f00" />
           : <Icon style={styles.icon} name="ios-add" size={28} color="#000" />
         }
@@ -28,12 +31,13 @@ const ForumRow = ({ name, subscribed, onPress }) => (
 
 ForumRow.propTypes = {
   name: PropTypes.string.isRequired,
-  subscribed: PropTypes.bool,
+  isSubscribed: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
+  onSubscribePress: PropTypes.func,
 };
 
 ForumRow.defaultProps = {
-  subscribed: false,
+  isSubscribed: false,
 };
 
 const styles = StyleSheet.create({

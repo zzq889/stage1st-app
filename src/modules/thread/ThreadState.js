@@ -1,4 +1,4 @@
-import { put, take, call, fork, select } from 'redux-saga/effects';
+import { take, call, fork, select } from 'redux-saga/effects';
 import { EventEmitter } from 'fbemitter';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -24,8 +24,6 @@ export const THREAD_CREATION = createRequestTypes('THREAD_CREATION');
 export const LOAD_THREAD_PAGE = 'ThreadState/LOAD_THREAD_PAGE';
 export const LOAD_THREAD_INFO = 'ThreadState/LOAD_THREAD_INFO';
 export const LOAD_MORE_THREADS = 'ThreadState/LOAD_MORE_THREADS';
-export const LOAD_FAVED_THREAD_PAGE = 'ThreadState/LOAD_FAVED_THREAD_PAGE';
-export const LOAD_SUBSCRIBED_THREAD_PAGE = 'ThreadState/LOAD_SUBSCRIBED_THREAD_PAGE';
 export const NEW_THREAD = 'ThreadState/NEW_THREAD';
 export const FAV_THREAD = 'ThreadState/FAV_THREAD';
 
@@ -65,17 +63,11 @@ export const threadCreationEntity = {
     THREAD_CREATION.FAILURE, { ...args, error }),
 };
 
-export const loadThreadPage = (fid, refresh) =>
-  createAction(LOAD_THREAD_PAGE, { fid, refresh });
+export const loadThreadPage = (fid, refresh, params) =>
+  createAction(LOAD_THREAD_PAGE, { fid, refresh, params });
 
-export const loadMoreThreads = fid =>
-  createAction(LOAD_MORE_THREADS, { fid });
-
-export const loadFavedThreadPage = fid =>
-  createAction(LOAD_FAVED_THREAD_PAGE, { fid });
-
-export const loadSubscribedThreadPage = fid =>
-  createAction(LOAD_SUBSCRIBED_THREAD_PAGE, fid);
+export const loadMoreThreads = (fid, params) =>
+  createAction(LOAD_MORE_THREADS, { fid, params });
 
 export const newThread = args =>
   createAction(NEW_THREAD, { ...args });
@@ -109,11 +101,22 @@ const createThread = args => fetchEntity(threadCreationEntity, apiCreateThread, 
 
 // load repo unless it is cached
 const getThreads = (state, fid) => state.getIn(['pagination', 'threadsByFid', fid]);
+const getSubscriptions = state => state.getIn(['forum', 'subscriptions']);
 
-function* loadThreads(fid, loadMore) {
-  const threads = yield select(getThreads, fid);
-  if (!threads || !threads.get('ids').size || loadMore) {
-    yield call(fetchThreads(fid), { fid, pageNo: threads && threads.get('nextPage') });
+// type: ['refresh', 'loadmore', null]
+function* loadThreads(fid, type) {
+  const params = {};
+  if (fid === 'subscribed') {
+    const subscriptions = yield select(getSubscriptions);
+    params.list = subscriptions && subscriptions.reduce((li, sub) => `${li},${sub}`);
+  }
+  if (type === 'refresh') {
+    yield call(fetchThreads(fid), { fid, pageNo: 1, refresh: true, ...params });
+  } else {
+    const threads = yield select(getThreads, fid);
+    if (!threads || !threads.get('ids').size || type === 'loadmore') {
+      yield call(fetchThreads(fid), { fid, pageNo: threads && threads.get('nextPage'), ...params });
+    }
   }
 }
 
@@ -124,11 +127,11 @@ function* loadThreads(fid, loadMore) {
 export function* watchLoadThreadPage() {
   while (true) {
     const { fid, refresh } = yield take(LOAD_THREAD_PAGE);
-    if (refresh) {
-      yield call(fetchThreads(fid), { fid, pageNo: 1, refresh });
-    } else {
-      yield fork(loadThreads, fid);
-    }
+    yield fork(
+      loadThreads,
+      fid,
+      refresh ? 'refresh' : null,
+    );
   }
 }
 
@@ -142,7 +145,7 @@ export function* watchLoadThreadInfo() {
 export function* watchLoadMoreThreads() {
   while (true) {
     const { fid } = yield take(LOAD_MORE_THREADS);
-    yield fork(loadThreads, fid, true);
+    yield fork(loadThreads, fid, 'loadmore');
   }
 }
 
