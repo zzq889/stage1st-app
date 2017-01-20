@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { InteractionManager } from 'react-native';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -10,6 +11,8 @@ import { newThread, threadEmitter } from './ThreadState';
 import { loadForumPage } from '../forum/ForumState';
 import withMessage from '../error/withMessage';
 import SubmitButton from './SubmitButton';
+import formConnect from '../form/helper';
+import validate from './threadValidate';
 
 @withMessage
 class ThreadComposeViewContainer extends PureComponent {
@@ -28,8 +31,10 @@ class ThreadComposeViewContainer extends PureComponent {
   }
 
   componentWillMount() {
-    this.props.loadForumPage();
-    this._subscription = threadEmitter.once('dismissComposeView', this.dismiss);
+    this._subscription = threadEmitter.once('THREAD_CREATION_SUCCESS', this.dismiss);
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadForumPage();
+    });
   }
 
   componentWillUnmount() {
@@ -37,6 +42,7 @@ class ThreadComposeViewContainer extends PureComponent {
   }
 
   dismiss = () => {
+    this.props.reset();
     this.props.navigator.pop();
   }
 
@@ -51,25 +57,29 @@ class ThreadComposeViewContainer extends PureComponent {
 
 ThreadComposeViewContainer.propTypes = {
   loadForumPage: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
     pop: PropTypes.func.isRequired,
   }),
 };
 
-export default connect(
+export default formConnect('threadComposeForm', validate)(connect(
   (state, { fid }) => {
-    const types = state
-      .getIn(['entities', 'forums', String(fid), 'types'], List())
-      .map(typeid => state.getIn(['entities', 'types', String(typeid)]));
+    const typeIds = state.getIn(['entities', 'forums', String(fid), 'types'], List());
+    const types = typeIds.map(typeid => state.getIn(['entities', 'types', String(typeid)]));
     return {
+      typeIds,
       types,
       initialValues: {
         typeid: types.getIn([0, 'typeid']),
       },
     };
   },
-  (dispatch, { fid }) => ({
-    onSubmit: data => bindActionCreators(newThread, dispatch)(data.set('fid', fid).toJS()),
+  (dispatch, { fid, values }) => ({
+    onSubmit: bindActionCreators(
+      newThread.bind(null, values.set('fid', fid).toJS()),
+      dispatch,
+    ),
     loadForumPage: bindActionCreators(loadForumPage.bind(null, fid), dispatch),
   }),
-)(ThreadComposeViewContainer);
+)(ThreadComposeViewContainer));

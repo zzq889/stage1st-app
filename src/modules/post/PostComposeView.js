@@ -1,10 +1,9 @@
-/* eslint-disable react/forbid-prop-types, react/prefer-stateless-function */
-
 import React, { PropTypes, Component } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
 } from 'react-native';
+import { Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
@@ -59,8 +58,8 @@ export default class PostComposeView extends Component {
           underlineColorAndroid="transparent"
           multiline
           autoFocus
-          value={this.props.content}
-          onChangeText={val => this.props.onContentChange(val)}
+          value={this.props.values.get('content')}
+          onChangeText={val => this.props.onChange('content', val)}
         />
       </KeyboardAvoidingView>
     );
@@ -69,8 +68,8 @@ export default class PostComposeView extends Component {
 
 PostComposeView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  content: PropTypes.string,
-  onContentChange: PropTypes.func.isRequired,
+  values: PropTypes.instanceOf(Map),
+  onChange: PropTypes.func.isRequired,
   navigator: PropTypes.shape({
     pop: PropTypes.func.isRequired,
   }),

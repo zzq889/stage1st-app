@@ -1,3 +1,4 @@
+import { Map } from 'immutable';
 import { take, call, fork, select } from 'redux-saga/effects';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -14,6 +15,8 @@ export const CHANNEL = createRequestTypes('CHANNEL');
 export const FORUM = createRequestTypes('FORUM');
 export const LOAD_CHANNEL_PAGE = 'ForumState/LOAD_CHANNEL_PAGE';
 export const LOAD_FORUM_PAGE = 'ForumState/LOAD_FORUM_PAGE';
+export const SUBSCRIBE_FORUM = 'ForumState/SUBSCRIBE_FORUM';
+export const UNSUBSCRIBE_FORUM = 'ForumState/UNSUBSCRIBE_FORUM';
 
 export const channelEntity = {
   request: () => createAction(
@@ -38,6 +41,12 @@ export const loadChannelPage = (requiredFields = []) =>
 
 export const loadForumPage = (fid, requiredFields = []) =>
   createAction(LOAD_FORUM_PAGE, { fid, requiredFields });
+
+export const subscribeForum = fid =>
+  createAction(SUBSCRIBE_FORUM, { fid });
+
+export const unsubscribeForum = fid =>
+  createAction(UNSUBSCRIBE_FORUM, { fid });
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
@@ -78,8 +87,28 @@ export function* watchLoadChannelPage() {
 
 export function* watchLoadForumPage() {
   while (true) {
-    const { fid, requiredFields = [] } = yield take(LOAD_FORUM_PAGE);
-    // yield fork(loadForum, fid, requiredFields);
+    const { fid } = yield take(LOAD_FORUM_PAGE);
     yield call(fetchForum, fid);
+  }
+}
+
+/** ****************************************************************************/
+/** ***************************** REDUCERS *************************************/
+/** ****************************************************************************/
+
+export default function ForumStateReducer(state = Map(), action) {
+  switch (action.type) {
+    case SUBSCRIBE_FORUM: {
+      const { fid } = action;
+      return state
+        .update('subscription', value => value.add(fid));
+    }
+    case UNSUBSCRIBE_FORUM: {
+      const { fid } = action;
+      return state
+        .update('subscription', value => value.delete(fid));
+    }
+    default:
+      return state;
   }
 }

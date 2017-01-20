@@ -1,4 +1,4 @@
-import { take, call, fork, select } from 'redux-saga/effects';
+import { put, take, call, fork, select } from 'redux-saga/effects';
 import { EventEmitter } from 'fbemitter';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -78,7 +78,7 @@ export const loadSubscribedThreadPage = fid =>
   createAction(LOAD_SUBSCRIBED_THREAD_PAGE, fid);
 
 export const newThread = args =>
-  createAction(NEW_THREAD, { args });
+  createAction(NEW_THREAD, { ...args });
 
 export const loadThreadInfo = tid =>
   createAction(LOAD_THREAD_INFO, { tid });
@@ -148,8 +148,8 @@ export function* watchLoadMoreThreads() {
 
 export function* watchNewThread() {
   while (true) {
-    const { args } = yield take(NEW_THREAD);
-    yield call(createThread, args);
+    const { fid, typeid, title, content } = yield take(NEW_THREAD);
+    yield call(createThread, { fid, typeid, title, content });
   }
 }
 
@@ -162,8 +162,8 @@ export function* watchFavThread() {
 
 export function* watchNewThreadSuccess() {
   while (true) {
-    const { fid } = yield take(THREAD_CREATION.SUCCESS);
-    threadEmitter.emit('dismissComposeView');
-    yield call(fetchThreads(fid));
+    const { fid } = yield take(THREAD_CREATION.REQUEST);
+    threadEmitter.emit('THREAD_CREATION_SUCCESS');
+    yield call(fetchThreads(fid), { fid, pageNo: 1, refresh: true });
   }
 }

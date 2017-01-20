@@ -1,3 +1,5 @@
+import { Map } from 'immutable';
+
 const validate = (values) => {
   // IMPORTANT: values is an Immutable.Map here!
   const errors = {};
@@ -12,7 +14,7 @@ const validate = (values) => {
   if (!values.get('content')) {
     errors.content = 'Required';
   }
-  return errors;
+  return Map(errors);
 };
 
 export default validate;

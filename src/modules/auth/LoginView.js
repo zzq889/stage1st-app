@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import {
   ScrollView,
   KeyboardAvoidingView,
@@ -6,86 +6,113 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { Map } from 'immutable';
+import { NavigationStyles } from '@exponent/ex-navigation';
 import { palette, rounded, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import PreImage from '../../../images/pre.png';
 import CircleView from '../../components/CircleView';
+import DismissButton from '../../components/DismissButton';
+import { authEmitter } from './AuthState';
 
-const validate = (values) => {
-  // IMPORTANT: values is an Immutable.Map here!
-  const errors = {};
-  if (!values.get('username')) {
-    errors.username = 'Required';
+class LoginView extends Component {
+  static route = {
+    navigationBar: {
+      title: 'Login',
+      backgroundColor: palette.black,
+      tintColor: palette.inverted,
+      renderLeft: () => <DismissButton />,
+    },
+    styles: {
+      ...NavigationStyles.SlideVertical,
+      gestures: null,
+    },
   }
-  if (!values.get('password')) {
-    errors.password = 'Required';
+
+  componentWillMount() {
+    this._subscription = authEmitter.once('dismiss', this.dismiss);
   }
-  return errors;
-};
 
-const renderField = props => (
-  <TextField
-    style={styles.input}
-    autoCapitalize="none"
-    autoCorrect={false}
-    underlineColorAndroid="transparent"
-    clearButtonMode="while-editing"
-    {...props}
-  />
-);
+  componentWillUnmount() {
+    this.props.reset();
+    this._subscription.remove();
+  }
 
-const LoginView = ({ handleSubmit, invalid, submitting }) => {
-  const disabled = invalid || submitting;
-  return (
-    <KeyboardAvoidingView
-      keyboardVerticalOffset={keyboardVerticalOffset}
-      behavior="padding"
-      style={styles.container}
-    >
-      <ScrollView
+  dismiss = () => {
+    this.props.navigator.pop();
+  }
+
+  render() {
+    const {
+      onSubmit,
+      invalid,
+      submitting,
+      values,
+      onChange,
+    } = this.props;
+    const disabled = invalid || submitting;
+    return (
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={keyboardVerticalOffset}
+        behavior="padding"
         style={styles.container}
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps
-        alwaysBounceVertical={false}
       >
-        <CircleView size={100} source={PreImage} style={styles.image} />
-        <Field
-          name="username"
-          type="text"
-          component={renderField}
-          label="用户名"
-          autoFocus
-        />
-        <Field
-          name="password"
-          type="password"
-          component={renderField}
-          label="密码"
-        />
-        <TouchableOpacity
-          style={disabled ? [styles.button, styles.disabled] : styles.button}
-          disabled={disabled}
-          onPress={handleSubmit}
+        <ScrollView
+          style={styles.container}
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps
+          alwaysBounceVertical={false}
         >
-          <Text style={styles.buttonText}>登录</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
-};
+          <CircleView size={100} source={PreImage} style={styles.image} />
+          <TextField
+            style={styles.input}
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            clearButtonMode="while-editing"
+            label="username"
+            type="text"
+            value={values.get('username')}
+            onChangeText={val => onChange('username', val)}
+            autoFocus
+            onSubmitEditing={() => { this.passField.focus(); }}
+          />
+          <TextField
+            ref={(c) => { this.passField = c; }}
+            style={styles.input}
+            autoCapitalize="none"
+            autoCorrect={false}
+            underlineColorAndroid="transparent"
+            clearButtonMode="while-editing"
+            label="password"
+            type="password"
+            value={values.get('password')}
+            onChangeText={val => onChange('password', val)}
+          />
+          <TouchableOpacity
+            style={disabled ? [styles.button, styles.disabled] : styles.button}
+            disabled={disabled}
+            onPress={() => onSubmit()}
+          >
+            <Text style={styles.buttonText}>登录</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    );
+  }
+}
 
 LoginView.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool.isRequired,
-  // reset: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
+  values: PropTypes.instanceOf(Map).isRequired,
+  onChange: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  navigator: PropTypes.shape({
+    pop: PropTypes.func.isRequired,
+  }),
 };
-
-export default reduxForm({
-  form: 'loginForm',
-  validate,
-})(LoginView);
 
 const styles = StyleSheet.create({
   container: {
@@ -120,3 +147,5 @@ const styles = StyleSheet.create({
     color: palette.white,
   },
 });
+
+export default LoginView;

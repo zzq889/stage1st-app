@@ -4,9 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { reduxForm } from 'redux-form/immutable';
 import { threadEmitter } from './ThreadState';
-import validate from './threadValidate';
 import { palette } from '../../styles/config';
 
 const SubmitButton = ({ invalid, submitting }) => {
@@ -23,8 +21,8 @@ const SubmitButton = ({ invalid, submitting }) => {
 };
 
 SubmitButton.propTypes = {
-  invalid: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool.isRequired,
+  invalid: PropTypes.bool,
+  submitting: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -44,8 +42,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default reduxForm({
-  form: 'composeForm',
-  enableReinitialize: true,
-  validate,
-})(SubmitButton);
+export default SubmitButton;

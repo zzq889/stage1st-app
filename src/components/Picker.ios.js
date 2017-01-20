@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import { palette } from '../styles/config';
 
-const MyPicker = ({ input, label, items, isExpand, toggleExpand, ...otherProps }) => {
+const MyPicker = ({ value, onChange, label, items, isExpand, toggleExpand, ...otherProps }) => {
   const currentLabel = items
-    .filter(d => d.get('value') === input.value)
+    .filter(d => d.get('value') === value)
     .getIn([0, 'label']);
   return (
     <View>
@@ -30,8 +30,8 @@ const MyPicker = ({ input, label, items, isExpand, toggleExpand, ...otherProps }
           <View>
             <View style={styles.separator} />
             <Picker
-              selectedValue={input.value}
-              onValueChange={val => input.onChange(val)}
+              selectedValue={value}
+              onValueChange={val => onChange(val)}
               {...otherProps}
             >
               {items.map((item) => {
@@ -55,7 +55,11 @@ const MyPicker = ({ input, label, items, isExpand, toggleExpand, ...otherProps }
 };
 
 MyPicker.propTypes = {
-  input: PropTypes.any,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]),
+  onChange: PropTypes.func.isRequired,
   label: PropTypes.string,
   items: PropTypes.instanceOf(List),
   isExpand: PropTypes.bool,
