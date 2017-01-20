@@ -1,8 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { Set } from 'immutable';
-import {
-  StyleSheet,
-} from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ThreadListViewContainer from './ThreadListViewContainer';
 import withMessage from '../error/withMessage';

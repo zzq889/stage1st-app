@@ -56,7 +56,7 @@ const fetchChannels = args => fetchEntity(channelEntity, apiFetchChannels, args)
 const getChannels = state => state.getIn(['entities', 'channels']);
 
 const fetchForum = args => fetchEntity(forumEntity, apiFetchForum, args);
-const getForum = (state, fid) => state.getIn(['entities', 'forums', fid]);
+// const getForum = (state, fid) => state.getIn(['entities', 'forums', fid]);
 
 // load repo unless it is cached
 function* loadChannels(requiredFields) {
@@ -67,12 +67,12 @@ function* loadChannels(requiredFields) {
 }
 
 // load forums unless it is cached
-function* loadForum(fid, requiredFields) {
-  const forum = yield select(getForum, fid);
-  if (!forum || requiredFields.some(key => !forum.has(key))) {
-    yield call(fetchForum, fid);
-  }
-}
+// function* loadForum(fid, requiredFields) {
+//   const forum = yield select(getForum, fid);
+//   if (!forum || requiredFields.some(key => !forum.has(key))) {
+//     yield call(fetchForum, fid);
+//   }
+// }
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/

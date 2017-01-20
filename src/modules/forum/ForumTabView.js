@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import {
-  StyleSheet,
   View,
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
