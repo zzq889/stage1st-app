@@ -27,13 +27,21 @@ class ForumListView extends Component {
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
-      // subscribed={rowData.get('subscribed')}
       onPress={() => {
         this._push(Router.getRoute('threads', {
           fid: rowData.get('fid'),
           title: rowData.get('name'),
         }));
         highlightRow(sectionID, rowID);
+      }}
+      isSubscribed={rowData.get('isSubscribed')}
+      onSubscribePress={() => {
+        const fid = rowData.get('fid');
+        if (rowData.get('isSubscribed')) {
+          this.props.unsubscribeForum(fid);
+        } else {
+          this.props.subscribeForum(fid);
+        }
       }}
     />
   )
@@ -54,6 +62,8 @@ ForumListView.propTypes = {
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
   }),
+  subscribeForum: PropTypes.func.isRequired,
+  unsubscribeForum: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
