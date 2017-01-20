@@ -49,12 +49,8 @@ class ThreadComposeView extends Component {
     const typeid = this.props.values.get('typeid');
     const content = this.props.values.get('content');
     const charLeft = CHAR_LIMIT - unescape(encodeURIComponent(title)).length;
-    return (
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={keyboardVerticalOffset}
-        behavior="padding"
-        style={styles.container}
-      >
+    const children = (
+      <View style={styles.container}>
         <View style={styles.row}>
           <TextField
             style={styles.container}
@@ -96,8 +92,21 @@ class ThreadComposeView extends Component {
           type="text"
           label="请输入正文"
         />
-      </KeyboardAvoidingView>
+      </View>
     );
+
+    if (Platform.OS === 'ios') {
+      return (
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={keyboardVerticalOffset}
+          behavior="padding"
+          style={styles.container}
+        >
+          {children}
+        </KeyboardAvoidingView>
+      );
+    }
+    return children;
   }
 }
 

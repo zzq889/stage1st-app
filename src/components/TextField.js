@@ -8,7 +8,6 @@ import {
 
 const TextField = ({
   style,
-  input,
   label,
   multiline,
   type,
@@ -16,8 +15,6 @@ const TextField = ({
 }) => (
   <TextInput
     style={[multiline ? styles.textarea : styles.input, style]}
-    value={input && input.value}
-    onChangeText={input && input.onChange}
     secureTextEntry={type === 'password'}
     placeholder={label}
     multiline={multiline}
@@ -26,10 +23,6 @@ const TextField = ({
 );
 
 TextField.propTypes = {
-  input: PropTypes.shape({
-    onChange: PropTypes.func.isRequired,
-    value: PropTypes.any,
-  }),
   label: PropTypes.string,
   type: PropTypes.string,
   style: PropTypes.number,

@@ -1,10 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import {
-  ScrollView,
+  View,
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import { Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
@@ -51,54 +52,56 @@ class LoginView extends Component {
       onChange,
     } = this.props;
     const disabled = invalid || submitting;
-    return (
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={keyboardVerticalOffset}
-        behavior="padding"
-        style={styles.container}
-      >
-        <ScrollView
-          style={styles.container}
-          contentContainerStyle={styles.content}
-          keyboardShouldPersistTaps
-          alwaysBounceVertical={false}
+    const children = (
+      <View style={styles.content}>
+        <CircleView size={100} source={PreImage} style={styles.image} />
+        <TextField
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          clearButtonMode="while-editing"
+          label="username"
+          type="text"
+          value={values.get('username')}
+          onChangeText={val => onChange('username', val)}
+          autoFocus
+          onSubmitEditing={() => { this.passField.focus(); }}
+        />
+        <TextField
+          ref={(c) => { this.passField = c; }}
+          style={styles.input}
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          clearButtonMode="while-editing"
+          label="password"
+          type="password"
+          value={values.get('password')}
+          onChangeText={val => onChange('password', val)}
+        />
+        <TouchableOpacity
+          style={disabled ? [styles.button, styles.disabled] : styles.button}
+          disabled={disabled}
+          onPress={() => onSubmit()}
         >
-          <CircleView size={100} source={PreImage} style={styles.image} />
-          <TextField
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            clearButtonMode="while-editing"
-            label="username"
-            type="text"
-            value={values.get('username')}
-            onChangeText={val => onChange('username', val)}
-            autoFocus
-            onSubmitEditing={() => { this.passField.focus(); }}
-          />
-          <TextField
-            ref={(c) => { this.passField = c; }}
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            underlineColorAndroid="transparent"
-            clearButtonMode="while-editing"
-            label="password"
-            type="password"
-            value={values.get('password')}
-            onChangeText={val => onChange('password', val)}
-          />
-          <TouchableOpacity
-            style={disabled ? [styles.button, styles.disabled] : styles.button}
-            disabled={disabled}
-            onPress={() => onSubmit()}
-          >
-            <Text style={styles.buttonText}>登录</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          <Text style={styles.buttonText}>登录</Text>
+        </TouchableOpacity>
+      </View>
     );
+
+    if (Platform.OS === 'ios') {
+      return (
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={keyboardVerticalOffset}
+          behavior="padding"
+          style={styles.container}
+        >
+          {children}
+        </KeyboardAvoidingView>
+      );
+    }
+    return children;
   }
 }
 

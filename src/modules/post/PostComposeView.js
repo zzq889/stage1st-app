@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import { Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
@@ -45,24 +46,31 @@ export default class PostComposeView extends Component {
   }
 
   render() {
-    return (
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={keyboardVerticalOffset}
-        behavior="padding"
-        style={styles.container}
-      >
-        <TextField
-          style={styles.textarea}
-          autoCapitalize="none"
-          autoCorrect={false}
-          underlineColorAndroid="transparent"
-          multiline
-          autoFocus
-          value={this.props.values.get('content')}
-          onChangeText={val => this.props.onChange('content', val)}
-        />
-      </KeyboardAvoidingView>
+    const children = (
+      <TextField
+        style={styles.textarea}
+        autoCapitalize="none"
+        autoCorrect={false}
+        underlineColorAndroid="transparent"
+        multiline
+        autoFocus
+        value={this.props.values.get('content')}
+        onChangeText={val => this.props.onChange('content', val)}
+      />
     );
+
+    if (Platform.OS === 'ios') {
+      return (
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={keyboardVerticalOffset}
+          behavior="padding"
+          style={styles.container}
+        >
+          {children}
+        </KeyboardAvoidingView>
+      );
+    }
+    return children;
   }
 }
 
