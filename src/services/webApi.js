@@ -40,7 +40,12 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
       method,
       headers,
       body: Object.keys(body).reduce(
-        (form, key) => { form.append(key, body[key]); return form; },
+        (form, key) => {
+          if (body[key]) {
+            form.append(key, body[key]);
+          }
+          return form;
+        },
         initialForm,
       ),
     }
@@ -157,13 +162,13 @@ export const fetchForum = fid =>
 
 // thread
 export const fetchThreads = ({ fid, pageNo }) =>
-  get('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
+  post('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
 
 export const fetchThreadInfo = tid =>
-  get('thread', { tid }, SCHEMA.threadSchema);
+  post('thread', { tid }, SCHEMA.threadSchema);
 
 export const fetchSubscribedThreads = ({ fid, list, pageNo }) =>
-  get('forum/subscribed', { fid, list, pageNo }, SCHEMA.threadSchemaArray);
+  post('forum/subscribed', { fid, list, pageNo }, SCHEMA.threadSchemaArray);
 
 
 export const favThread = tid =>
@@ -177,7 +182,7 @@ export const createThread = ({ fid, typeid, title, content }) =>
 
 // post
 export const fetchPosts = ({ tid, uid, pageNo }) =>
-  get('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
+  post('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
 // pid: optional
 // tid: required

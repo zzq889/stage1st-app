@@ -66,10 +66,8 @@ class LoginView extends Component {
           value={values.get('username')}
           onChangeText={val => onChange('username', val)}
           autoFocus
-          onSubmitEditing={() => { this.passField.focus(); }}
         />
         <TextField
-          ref={(c) => { this.passField = c; }}
           style={styles.input}
           autoCapitalize="none"
           autoCorrect={false}
