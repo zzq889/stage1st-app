@@ -14,7 +14,7 @@ const TextField = ({
   ...otherProps
 }) => (
   <TextInput
-    style={[multiline ? styles.textarea : styles.input, style]}
+    style={[multiline ? styles.multiline : styles.input, style]}
     secureTextEntry={type === 'password'}
     placeholder={label}
     multiline={multiline}
@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  textarea: {
+  multiline: {
     fontSize: 17,
+    textAlignVertical: 'top',
     paddingTop: 10,
     paddingBottom: 12,
     paddingLeft: 10,
