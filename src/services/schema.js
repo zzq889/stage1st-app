@@ -1,70 +1,61 @@
 /* eslint-disable no-param-reassign */
 
-import { Schema, arrayOf } from 'normalizr';
+import { schema } from 'normalizr';
 
-// We use this Normalizr schemas to transform API responses from a nested form
-// to a flat form where repos and users are placed in `entities`, and nested
-// JSON objects are replaced with their IDs. This is very convenient for
-// consumption by reducers, because we can easily build a normalized tree
-// and keep it updated as we fetch more data.
-
-// Read more about Normalizr: https://github.com/gaearon/normalizr
-
-// function assignEntity(output, key, value) {
-//   if (timeKeys.has(key)) {
-//     output[key] = value;
-//   } else {
-//     output[key] = value;
-//   }
-// }
+function replaceHtmlEntites(text) {
+  const translateRe = /&(nbsp|amp|quot|lt|gt);/g;
+  const translate = {
+    nbsp: ' ',
+    amp: '&',
+    quot: '"',
+    lt: '<',
+    gt: '>',
+  };
+  return text.replace(translateRe, (match, entity) => translate[entity]);
+}
 
 // Schemas
-export const userSchema = new Schema('users', {
+export const userSchema = new schema.Entity('users', {}, {
   idAttribute: 'uid',
 });
 
-export const channelSchema = new Schema('channels', {
+export const channelSchema = new schema.Entity('channels', {}, {
   idAttribute: 'fid',
 });
 
-export const forumSchema = new Schema('forums', {
+export const forumSchema = new schema.Entity('forums', {}, {
   idAttribute: 'fid',
 });
 
-export const typeSchema = new Schema('types', {
+export const typeSchema = new schema.Entity('types', {}, {
   idAttribute: 'typeid',
 });
 
-export const threadSchema = new Schema('threads', {
+export const threadSchema = new schema.Entity('threads', {}, {
   idAttribute: 'tid',
+  processStrategy: (entity) => {
+    entity.subject = replaceHtmlEntites(entity.subject);
+    return entity;
+  },
 });
 
-export const postSchema = new Schema('posts', {
+export const postSchema = new schema.Entity('posts', {}, {
   idAttribute: 'pid',
 });
 
 channelSchema.define({
-  child: arrayOf(forumSchema),
+  child: [forumSchema],
 });
-
-const forumOrChannel = {
-  channel: channelSchema,
-  forum: forumSchema,
-};
 
 forumSchema.define({
-  types: arrayOf(typeSchema),
+  types: [typeSchema],
 });
 
-export const forumSchemaArray = arrayOf(forumOrChannel, {
-  schemaAttribute: (entity) => {
-    if (entity.child) {
-      return 'channel';
-    }
-    return 'forum';
-  },
-});
+export const forumSchemaArray = new schema.Array({
+  channel: channelSchema,
+  forum: forumSchema,
+}, input => (input.child ? 'channel' : 'forum'));
 
-export const threadSchemaArray = arrayOf(threadSchema);
+export const threadSchemaArray = [threadSchema];
 
-export const postSchemaArray = arrayOf(postSchema);
+export const postSchemaArray = [postSchema];
