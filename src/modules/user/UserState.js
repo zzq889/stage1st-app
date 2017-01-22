@@ -1,7 +1,6 @@
 import { take, call } from 'redux-saga/effects';
-import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
-  fetchEntity,
   fetchUserInfo as apiFetchUserInfo,
   userSign as apiUserSign,
 } from '../../services/webApi';

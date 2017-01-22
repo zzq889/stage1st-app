@@ -1,9 +1,8 @@
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
 import { take, takeEvery, call, select } from 'redux-saga/effects';
-import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
-  fetchEntity,
   fetchPosts as apiFetchPosts,
   createPost as apiCreatePost,
 } from '../../services/webApi';

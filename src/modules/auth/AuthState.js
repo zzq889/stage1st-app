@@ -1,9 +1,8 @@
 import { take, call/* , fork, select*/ } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
-import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
-  fetchEntity,
   userLogin as apiUserLogin,
 } from '../../services/webApi';
 import { USER, USER_SIGN_REQ } from '../user/UserState';

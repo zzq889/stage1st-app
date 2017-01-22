@@ -1,8 +1,7 @@
 import { Map, Set } from 'immutable';
 import { take, call, fork, select } from 'redux-saga/effects';
-import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
-  fetchEntity,
   fetchForum as apiFetchForum,
   fetchChannels as apiFetchChannels,
 } from '../../services/webApi';

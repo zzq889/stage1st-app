@@ -43,6 +43,8 @@ export const postSchema = new schema.Entity('posts', {}, {
   idAttribute: 'pid',
 });
 
+export const articleSchema = new schema.Entity('articles');
+
 channelSchema.define({
   child: [forumSchema],
 });

@@ -1,6 +1,6 @@
 import { normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
-import { put, call, select } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
 import { getConfiguration } from '../utils/configuration';
 import * as SCHEMA from './schema';
 
@@ -103,24 +103,6 @@ export function get(endpoint, params, ...otherArgs) {
 export function post(endpoint, body, ...args) {
   return callApiAsync('POST', endpoint, body || {}, ...args);
 }
-
-// resuable fetch Subroutine
-// entity :  user | repo | starred | stargazers
-// apiFn  : api.fetchUser | api.fetchRepo | ...
-// id     : login | fullName
-// url    : next page url. If not provided will use pass it to apiFn
-export function* fetchEntity(entity, apiFn, args) {
-  try {
-    yield put(entity.request(args));
-    const response = yield call(apiFn, args);
-    yield put(entity.success(args, response));
-  } catch (error) {
-    const message = error.message || 'Something bad happened';
-    // console.warn(message);
-    yield put(entity.failure(args, message));
-  }
-}
-
 
 /** ****************************************************************************/
 /** ***************************** API Services *********************************/
