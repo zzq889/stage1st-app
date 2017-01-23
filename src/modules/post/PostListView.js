@@ -63,6 +63,8 @@ class PostListView extends Component {
       author={rowData.get('author')}
       authorId={rowData.get('authorid')}
       timestamp={rowData.get('dateline')}
+      grouptitle={rowData.get('grouptitle')}
+      e={rowData.get('e')}
       onReplyPress={() => this.showReply(rowData.get('pid'))}
     />
   );

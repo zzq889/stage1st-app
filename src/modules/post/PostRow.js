@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import {
   View,
   Text,
@@ -31,7 +31,7 @@ const renderNode = (node, index) => {
     const imgStyle = {
       width: imgWidth,
       height: imgHeight,
-      backgroundColor: isEmoji ? null : palette.lightGrey,
+      backgroundColor: isEmoji ? null : palette.mint2,
     };
 
     const uri = attribs.src;
@@ -74,46 +74,69 @@ async function onLinkPress(url) {
   }
 }
 
-const PostRow = ({
-  message,
-  position,
-  author,
-  authorId,
-  timestamp,
-  onReplyPress,
-}) => (
-  <View style={styles.row}>
-    <View style={styles.header}>
-      <Avatar style={styles.avatar} uid={authorId} />
-      <View style={styles.headerText}>
-        <View style={styles.rowOne}>
-          <Text style={styles.title}>{author}</Text>
-          <Text style={styles.position}>{`#${position}`}</Text>
+class PostRow extends Component {
+  state = {
+    showsUserDetail: false,
+  }
+
+  toggleUserDetail = () => {
+    this.setState({
+      showsUserDetail: !this.state.showsUserDetail,
+    });
+  }
+
+  render() {
+    const {
+      message,
+      position,
+      author,
+      authorId,
+      grouptitle,
+      e,
+      timestamp,
+      onReplyPress,
+    } = this.props;
+    return (
+      <View style={styles.row}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={this.toggleUserDetail}>
+            <Avatar style={styles.avatar} uid={authorId} />
+          </TouchableOpacity>
+          <View style={styles.headerText}>
+            <View style={styles.rowOne}>
+              <Text style={styles.title}>{author}</Text>
+              <Text style={styles.position}>{`#${position}`}</Text>
+            </View>
+            {
+              this.state.showsUserDetail
+              ? <Text style={styles.detail}>{`等级: ${grouptitle} / 战斗力: ${e}`}</Text>
+              : <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
+            }
+          </View>
         </View>
-        <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
+        {message ? (
+          <HtmlView
+            style={styles.content}
+            value={message}
+            renderNode={renderNode}
+            onLinkPress={onLinkPress}
+          />
+        ) : null}
+        <View style={styles.actions}>
+          <TouchableOpacity
+            hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
+            onPress={onReplyPress}
+          >
+            <View style={styles.iconView}>
+              <Icon name="reply" size={16} color={palette.secondary} />
+              <Text style={styles.iconText}>回复</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-    {message ? (
-      <HtmlView
-        style={styles.content}
-        value={message}
-        renderNode={renderNode}
-        onLinkPress={onLinkPress}
-      />
-    ) : null}
-    <View style={styles.actions}>
-      <TouchableOpacity
-        hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
-        onPress={onReplyPress}
-      >
-        <View style={styles.iconView}>
-          <Icon name="reply" size={16} color={palette.secondary} />
-          <Text style={styles.iconText}>回复</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  </View>
-);
+    );
+  }
+}
 
 PostRow.propTypes = {
   message: PropTypes.string,
@@ -121,6 +144,8 @@ PostRow.propTypes = {
   author: PropTypes.string.isRequired,
   authorId: PropTypes.number.isRequired,
   timestamp: PropTypes.number.isRequired,
+  grouptitle: PropTypes.string.isRequired,
+  e: PropTypes.number.isRequired,
   onReplyPress: PropTypes.func,
 };
 
