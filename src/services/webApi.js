@@ -29,13 +29,25 @@ function getRequestHeaders(body, token) {
 // This makes every API response have the same shape, regardless of how nested it was.
 async function callApi(token, method, endpoint, body, schema, mapResponseToKey) {
   // console.warn(method, endpoint, body);
-  const fullUrl = endpoint.match(/^http/) ? endpoint : url(endpoint);
+  const paramsString = (method === 'GET' && body)
+    ? Object.keys(body).reduce((str, key) => {
+      const value = body[key];
+      if (value) {
+        return str === ''
+          ? `?${key}=${encodeURIComponent(value)}`
+          : `${str}&${key}=${encodeURIComponent(value)}`;
+      }
+      return str;
+    }, '')
+    : '';
+
+  const fullUrl = (endpoint.match(/^http/) ? endpoint : url(endpoint)) + paramsString;
   const headers = getRequestHeaders(body, token);
   const initialForm = new FormData();
   if (token) {
     initialForm.append('sid', token);
   }
-  const options = body
+  const options = (method !== 'GET' && body)
     ? {
       method,
       headers,
@@ -80,28 +92,25 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
 
 const getToken = state => state.getIn(['auth', 'token']);
 
-export function* callApiAsync(...args) {
+export function* callApiAsync(method, ...args) {
   const token = yield select(getToken);
-  return yield call(callApi, token, ...args);
+  let newMethod = method || 'GET';
+  if (token && !method) {
+    newMethod = 'POST';
+  }
+  return yield call(callApi, token, newMethod, ...args);
 }
 
-export function get(endpoint, params, ...otherArgs) {
-  const paramsString = params
-    ? Object.keys(params).reduce((str, key) => {
-      const value = params[key];
-      if (value) {
-        return str === ''
-          ? `?${key}=${encodeURIComponent(value)}`
-          : `${str}&${key}=${encodeURIComponent(value)}`;
-      }
-      return str;
-    }, '')
-    : '';
-  return callApiAsync('GET', endpoint + paramsString, null, ...otherArgs);
+export function get(...args) {
+  return callApiAsync('GET', ...args);
 }
 
-export function post(endpoint, body, ...args) {
-  return callApiAsync('POST', endpoint, body || {}, ...args);
+export function post(...args) {
+  return callApiAsync('POST', ...args);
+}
+
+export function request(...args) {
+  return callApiAsync(null, ...args);
 }
 
 /** ****************************************************************************/
@@ -144,13 +153,13 @@ export const fetchForum = fid =>
 
 // thread
 export const fetchThreads = ({ fid, pageNo }) =>
-  post('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
+  request('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
 
 export const fetchThreadInfo = tid =>
-  post('thread', { tid }, SCHEMA.threadSchema);
+  request('thread', { tid }, SCHEMA.threadSchema);
 
 export const fetchSubscribedThreads = ({ fid, list, pageNo }) =>
-  post('forum/subscribed', { fid, list, pageNo }, SCHEMA.threadSchemaArray);
+  request('forum/subscribed', { fid, list, pageNo }, SCHEMA.threadSchemaArray);
 
 
 export const favThread = tid =>
@@ -164,7 +173,7 @@ export const createThread = ({ fid, typeid, title, content }) =>
 
 // post
 export const fetchPosts = ({ tid, uid, pageNo }) =>
-  post('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
+  request('thread/page', { tid, uid, pageNo }, SCHEMA.postSchemaArray);
 
 // pid: optional
 // tid: required
