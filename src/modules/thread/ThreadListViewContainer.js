@@ -18,12 +18,12 @@ const ThreadListViewContainer = connect(
         const forumName = state.getIn(['entities', 'forums', String(threadFid), 'name']);
         return thread.set('forumName', forumName);
       })
-      .sortBy((post) => {
-        const pinned = post.get('statusicon') === 'pined';
-        const lastpost = post.get('lastpost');
-        return pinned ? `1.${lastpost}` : `0.${lastpost}`;
-      })
-      .reverse()
+      // .sortBy((post) => {
+      //   const pinned = post.get('statusicon') === 'pined';
+      //   const lastpost = post.get('lastpost');
+      //   return pinned ? `1.${lastpost}` : `0.${lastpost}`;
+      // })
+      // .reverse()
       .toList(),
     loading: state.getIn(['pagination', 'threadsByFid', fid, 'isFetching'], false),
     refresh: state.getIn(['pagination', 'threadsByFid', fid, 'refresh'], false),

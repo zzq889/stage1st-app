@@ -1,4 +1,4 @@
-import { Set, Map } from 'immutable';
+import { OrderedSet, Set, Map } from 'immutable';
 
 function getNextPage(currentPage = 1, totalPage) {
   if (currentPage < totalPage) {
@@ -36,7 +36,7 @@ export default function paginate({ types, mapActionToKey }) {
     refresh: false,
     totalPage: 0,
     lastPageSize: 0,
-    ids: Set(),
+    ids: OrderedSet(),
     pages: Map(),
   }), action) {
     switch (action.type) {
@@ -57,7 +57,7 @@ export default function paginate({ types, mapActionToKey }) {
           .set('lastPageSize', lastPageSize);
         if (action.refresh) {
           return newState
-            .set('ids', Set(result))
+            .set('ids', OrderedSet(result))
             .set('pages', Map({
               [pageNo]: Set(result),
             }));

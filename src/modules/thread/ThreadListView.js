@@ -13,6 +13,7 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
 import Router from '../AppRouter';
+import { palette } from '../../styles/config';
 
 @withNavigation
 class ThreadListView extends Component {
@@ -77,6 +78,7 @@ class ThreadListView extends Component {
     const { threads, loading, refresh, nextPage } = this.props;
     return (
       <ImmutableListView
+        style={styles.container}
         ref={(c) => { this.listView = c; }}
         immutableData={threads}
         refreshControl={
@@ -119,6 +121,7 @@ ThreadListView.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: palette.background,
   },
   centered: {
     flex: 1,

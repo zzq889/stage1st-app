@@ -10,10 +10,12 @@ const baseColors = {
   grey: '#888',
   lightGrey: '#ccc',
   blue: '#448aff',
+  navyblue: '#022c80',
   red: '#ff5a5f',
   orange: '#f70',
   yellow: '#ffeb3b',
   green: '#1c7',
+  lightgreen: '#F6F7EB',
 };
 
 export const palette = {
@@ -28,10 +30,10 @@ export const palette = {
   warning: baseColors.orange,
   error: baseColors.red,
   inverted: baseColors.white,
-  foreground: baseColors.black,
-  background: baseColors.white,
+  foreground: baseColors.navyblue,
+  background: baseColors.lightgreen,
   underlayColor: baseColors.lightGrey,
-  separator: '#8E8E8E',
+  separator: 'rgba(0,0,0,0.3)',
 };
 
 export const rounded = {
