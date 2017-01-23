@@ -126,13 +126,18 @@ PostRow.propTypes = {
 
 const styles = StyleSheet.create({
   row: {
-    margin: 15,
+    padding: 15,
+    backgroundColor: palette.background,
   },
   header: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    paddingBottom: 15,
+    marginBottom: 15,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: palette.mint3,
+    borderStyle: 'solid',
   },
   avatar: {
     marginRight: 10,
@@ -146,13 +151,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    color: palette.black,
+    color: palette.foreground,
   },
   position: {
-    color: palette.grey,
+    color: palette.default,
   },
   detail: {
-    color: palette.grey,
+    color: palette.default,
     marginTop: 5,
   },
   actions: {

@@ -19,30 +19,27 @@ const ThreadRow = ({
   onPress,
 }) => (
   <TouchableHighlight
-    underlayColor={palette.lightGrey}
+    underlayColor={palette.underlayColor}
     onPress={onPress}
-    style={styles[status]}
   >
     <View style={styles.row}>
-      <Text style={styles.title}>
+      <Text style={[styles.title, styles[status]]}>
         {subject}
-        {
-          forumName
+        {forumName
           ? <Text style={styles.subtitle}>&nbsp;[{forumName}]</Text>
-          : null
-        }
+          : null}
       </Text>
       <View style={styles.content}>
         <View style={styles.iconText}>
-          <Icon name="user" size={16} color={palette.grey} />
+          <Icon name="user" size={13} color={palette.grey} />
           <Text style={styles.detail}>{author}</Text>
         </View>
         <View style={styles.iconText}>
-          <Icon name="speech" size={16} color={palette.grey} />
+          <Icon name="speech" size={13} color={palette.grey} />
           <Text style={styles.detail}>{replies}</Text>
         </View>
         <View style={styles.iconText}>
-          <Icon name="clock" size={16} color={palette.grey} />
+          <Icon name="clock" size={13} color={palette.grey} />
           <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
         </View>
       </View>
@@ -66,10 +63,10 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   hot: {
-    backgroundColor: palette.lightYellow,
+    color: palette.orange,
   },
   pined: {
-    backgroundColor: palette.lightBlue,
+    fontWeight: 'bold',
   },
   title: {
     fontSize: 17,
@@ -77,10 +74,10 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: palette.grey,
+    color: palette.default,
   },
   detail: {
-    color: palette.grey,
+    color: palette.default,
     marginLeft: 5,
   },
   iconText: {

@@ -1,13 +1,16 @@
 import { Map } from 'immutable';
 
+const DEBUG = true;
 const DEV_ROOT = 'saraba1st.asuscomm.com:20080';
 const PROD_ROOT = 'app.saraba1st.com';
+const WP_ROOT = 'localhost:8080';
 
-const URL_ROOT = (__DEV__ && true) ? DEV_ROOT : PROD_ROOT;
+const URL_ROOT = (__DEV__ && DEBUG) ? DEV_ROOT : PROD_ROOT;
 
 let configuration = Map({
   // Never put the slash at the end
   API_ROOT: `http://${URL_ROOT}/2b/api/app`,
+  WP_ROOT: `http://${WP_ROOT}/wp-json/wp/v2`,
   STATIC_ROOT: `http://${URL_ROOT}/2b`,
   SITE: `http://${URL_ROOT}`,
   APP_NAME: 'Stage1 论坛',

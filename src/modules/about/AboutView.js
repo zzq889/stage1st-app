@@ -40,6 +40,7 @@ export default class AboutView extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: palette.background,
   },
   content: {
     flex: 1,

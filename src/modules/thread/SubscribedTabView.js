@@ -3,6 +3,7 @@ import { Set } from 'immutable';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ThreadListViewContainer from './ThreadListViewContainer';
 import withMessage from '../error/withMessage';
+import { palette } from '../../styles/config';
 
 @withMessage
 export default class SubscribedTabView extends Component {
@@ -31,7 +32,13 @@ export default class SubscribedTabView extends Component {
     });
 
     return (
-      <ScrollableTabView>
+      <ScrollableTabView
+        tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
+        tabBarTextStyle={{ fontSize: 15 }}
+        tabBarActiveTextColor={palette.primary}
+        tabBarInactiveTextColor={palette.default}
+        tabBarBackgroundColor={palette.toolbar}
+      >
         <ThreadListViewContainer
           fid="subscribed"
           tabLabel="全部订阅"

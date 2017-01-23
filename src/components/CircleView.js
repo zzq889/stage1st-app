@@ -34,7 +34,7 @@ const getStyles = ({ size = 50 }) => {
       height: size,
       borderRadius: size * 0.5,
       overflow: 'hidden',
-      backgroundColor: palette.lightGrey,
+      backgroundColor: palette.mint2,
     },
     image: {
       width: size,

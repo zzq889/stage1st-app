@@ -1,8 +1,7 @@
 import { take, call, fork, select } from 'redux-saga/effects';
 import { EventEmitter } from 'fbemitter';
-import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
-  fetchEntity,
   fetchThreads as apiFetchThreads,
   fetchFavedThreads as apiFetchFavedThreads,
   fetchSubscribedThreads as apiFetchSubscribedThreads,
