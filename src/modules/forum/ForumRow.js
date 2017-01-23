@@ -11,7 +11,7 @@ import { palette } from '../../styles/config';
 
 const ForumRow = ({ name, isSubscribed, onPress, onSubscribePress }) => (
   <TouchableHighlight
-    underlayColor="#ccc"
+    underlayColor={palette.underlayColor}
     onPress={onPress}
   >
     <View style={styles.row} ref={(component) => { this._root = component; }} {...this.props}>
@@ -21,8 +21,8 @@ const ForumRow = ({ name, isSubscribed, onPress, onSubscribePress }) => (
         onPress={onSubscribePress}
       >
         {isSubscribed
-          ? <Icon style={styles.icon} name="ios-heart" size={20} color="#f00" />
-          : <Icon style={styles.icon} name="ios-add" size={28} color="#000" />
+          ? <Icon style={styles.icon} name="ios-heart" size={20} color={palette.red} />
+          : <Icon style={styles.icon} name="ios-add" size={28} color={palette.default} />
         }
       </TouchableOpacity>
     </View>

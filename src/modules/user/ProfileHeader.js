@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Map } from 'immutable';
-import { palette } from '../../styles/config';
+import { palette, rounded } from '../../styles/config';
 import Avatar from '../../components/Avatar';
 
 const ProfileHeader = ({ user, uid, userSign, isSigned, isSigning }) => {
@@ -80,10 +80,11 @@ const styles = StyleSheet.create({
     width: 80,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: palette.primary,
+    backgroundColor: palette.default,
+    ...rounded,
   },
   disabled: {
-    backgroundColor: palette.lightGrey,
+    backgroundColor: palette.mint3,
   },
   buttonText: {
     color: palette.white,

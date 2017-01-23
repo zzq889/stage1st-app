@@ -41,7 +41,14 @@ export default class ForumTabView extends Component {
     });
 
     return (
-      <ScrollableTabView style={styles.container}>
+      <ScrollableTabView
+        style={styles.container}
+        tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
+        tabBarTextStyle={{ fontSize: 15 }}
+        tabBarActiveTextColor={palette.primary}
+        tabBarInactiveTextColor={palette.default}
+        tabBarBackgroundColor={palette.toolbar}
+      >
         {channelsElement}
       </ScrollableTabView>
     );

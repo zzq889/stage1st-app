@@ -36,7 +36,7 @@ const baseStyles = StyleSheet.create({
   },
   blockquote: {
     color: palette.grey,
-    backgroundColor: palette.lightYellow,
+    backgroundColor: palette.white,
     padding: 10,
     marginBottom: 10,
   },

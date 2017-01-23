@@ -123,6 +123,7 @@ ThreadComposeView.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: palette.background,
   },
   row: {
     flexDirection: 'row',

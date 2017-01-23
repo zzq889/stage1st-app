@@ -5,35 +5,42 @@ import {
 import Color from 'color';
 
 const baseColors = {
-  black: '#000',
+  black: '#1C1D21',
   white: '#fff',
   grey: '#888',
   lightGrey: '#ccc',
+  transGrey: 'rgba(0,0,0,0.4)',
   blue: '#448aff',
-  navyblue: '#022c80',
+  navyBlue: '#022c80',
   red: '#ff5a5f',
-  orange: '#f70',
+  orange: '#EE5023',
   yellow: '#ffeb3b',
   green: '#1c7',
-  lightgreen: '#F6F7EB',
+  mint: '#F6F7EB',
+  mint2: '#E6EAD9',
+  mint3: '#CFD9BF',
+  deepMint: '#A3A78E',
 };
 
 export const palette = {
   ...baseColors,
   lightBlue: Color(baseColors.blue).lighten(0.5).string(),
   lightYellow: Color(baseColors.yellow).lighten(0.5).string(),
-  primary: baseColors.black,
-  secondary: baseColors.blue,
-  default: baseColors.grey,
+  primary: baseColors.navyBlue,
+  secondary: baseColors.deepMint,
+  default: baseColors.transGrey,
   info: baseColors.blue,
   success: baseColors.green,
   warning: baseColors.orange,
   error: baseColors.red,
   inverted: baseColors.white,
-  foreground: baseColors.navyblue,
-  background: baseColors.lightgreen,
-  underlayColor: baseColors.lightGrey,
-  separator: 'rgba(0,0,0,0.3)',
+  foreground: baseColors.navyBlue,
+  background: baseColors.mint,
+  underlayColor: baseColors.mint3,
+  toolbar: baseColors.mint3,
+  tabbar: baseColors.mint2,
+  separator: baseColors.mint3,
+  // separator: '#8E8E8E',
 };
 
 export const rounded = {

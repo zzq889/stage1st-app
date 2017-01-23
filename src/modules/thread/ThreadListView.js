@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   separator: {
     flex: 1,
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#8E8E8E',
+    backgroundColor: palette.separator,
   },
   footer: {
     height: 60,

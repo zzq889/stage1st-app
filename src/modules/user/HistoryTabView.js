@@ -3,10 +3,7 @@ import {
   StyleSheet,
   Text,
 } from 'react-native';
-import {
-  SlidingTabNavigation,
-  SlidingTabNavigationItem,
-} from '@exponent/ex-navigation';
+import ScrollableTabView from 'react-native-scrollable-tab-view';
 import withMessage from '../error/withMessage';
 import { palette } from '../../styles/config';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
@@ -21,7 +18,6 @@ export default class HistoryTabView extends Component {
   static route = {
     navigationBar: {
       title: '我的发言',
-      ...SlidingTabNavigation.navigationBarStyles,
     },
   }
 
@@ -32,21 +28,17 @@ export default class HistoryTabView extends Component {
 
   render() {
     return (
-      <SlidingTabNavigation
-        id="history"
-        navigatorUID="history"
-        renderLabel={this._renderLabel}
-        barBackgroundColor="#ddd"
-        indicatorStyle={styles.tabIndicator}
-        lazy // Hack: the lazy property must be required for ListView
+      <ScrollableTabView
+        style={styles.container}
+        tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
+        tabBarTextStyle={{ fontSize: 15 }}
+        tabBarActiveTextColor={palette.primary}
+        tabBarInactiveTextColor={palette.default}
+        tabBarBackgroundColor={palette.toolbar}
       >
-        <SlidingTabNavigationItem id="thread">
-          <ThreadListViewContainer fid="history" />
-        </SlidingTabNavigationItem>
-        <SlidingTabNavigationItem id="post">
-          <Text>My Posts</Text>
-        </SlidingTabNavigationItem>
-      </SlidingTabNavigation>
+        <ThreadListViewContainer fid="history" tabLabel="我的帖子" />
+        <Text tabLabel="我的回复">My Posts</Text>
+      </ScrollableTabView>
     );
   }
 }

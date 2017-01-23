@@ -39,9 +39,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    borderTopColor: '#b2b2b2',
-    backgroundColor: '#fefefe',
-    borderTopWidth: StyleSheet.hairlineWidth,
+    // borderTopColor: '#b2b2b2',
+    // backgroundColor: '#fefefe',
+    // borderTopWidth: StyleSheet.hairlineWidth,
   },
   itemContainer: {
     flex: 1,

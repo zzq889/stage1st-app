@@ -59,11 +59,15 @@ PostToolbar.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: palette.tabbar,
+  },
   tabItem: {
     borderColor: palette.lightGrey,
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 4,
+    backgroundColor: palette.white,
   },
   indicator: {
     position: 'absolute',

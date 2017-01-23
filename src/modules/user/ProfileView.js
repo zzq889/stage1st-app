@@ -87,6 +87,7 @@ class ProfileView extends Component {
 
     return (
       <ImmutableListView
+        style={styles.container}
         immutableData={listData}
         renderRow={this.renderRow}
         renderHeader={this.renderHeader}
@@ -109,6 +110,9 @@ ProfileView.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: palette.background,
+  },
   separator: {
     flex: 1,
     height: StyleSheet.hairlineWidth,
