@@ -61,7 +61,7 @@ class LoginView extends Component {
           autoCorrect={false}
           underlineColorAndroid="transparent"
           clearButtonMode="while-editing"
-          label="username"
+          label="用户名"
           type="text"
           value={values.get('username')}
           onChangeText={val => onChange('username', val)}
@@ -73,7 +73,7 @@ class LoginView extends Component {
           autoCorrect={false}
           underlineColorAndroid="transparent"
           clearButtonMode="while-editing"
-          label="password"
+          label="请输入密码"
           type="password"
           value={values.get('password')}
           onChangeText={val => onChange('password', val)}
@@ -118,6 +118,7 @@ LoginView.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: palette.mint2,
   },
   content: {
     margin: 15,
@@ -128,9 +129,10 @@ const styles = StyleSheet.create({
   },
   input: {
     ...rounded,
-    borderColor: palette.grey,
+    borderColor: palette.mint3,
     borderWidth: 1,
     marginBottom: 10,
+    backgroundColor: palette.white,
   },
   button: {
     flexDirection: 'row',
@@ -142,7 +144,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   disabled: {
-    backgroundColor: palette.lightGrey,
+    backgroundColor: palette.mint3,
   },
   buttonText: {
     color: palette.white,

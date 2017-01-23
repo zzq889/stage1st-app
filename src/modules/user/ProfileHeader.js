@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     width: 80,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: palette.default,
+    backgroundColor: palette.primary,
     ...rounded,
   },
   disabled: {

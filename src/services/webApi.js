@@ -25,33 +25,34 @@ function getRequestHeaders(body, token) {
   return headers;
 }
 
+function objectToUriComponent(body) {
+  return body ? Object.keys(body).reduce((str, key) => {
+    const value = body[key];
+    if (value) {
+      return str === ''
+        ? `?${key}=${encodeURIComponent(value)}`
+        : `${str}&${key}=${encodeURIComponent(value)}`;
+    }
+    return str;
+  }, '') : '';
+}
+
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 async function callApi(token, method, endpoint, body, schema, mapResponseToKey) {
   // console.warn(method, endpoint, body);
-  const paramsString = (method === 'GET' && body)
-    ? Object.keys(body).reduce((str, key) => {
-      const value = body[key];
-      if (value) {
-        return str === ''
-          ? `?${key}=${encodeURIComponent(value)}`
-          : `${str}&${key}=${encodeURIComponent(value)}`;
-      }
-      return str;
-    }, '')
-    : '';
-
+  const paramsString = (method === 'GET') ? objectToUriComponent(body) : '';
   const fullUrl = (endpoint.match(/^http/) ? endpoint : url(endpoint)) + paramsString;
   const headers = getRequestHeaders(body, token);
   const initialForm = new FormData();
   if (token) {
     initialForm.append('sid', token);
   }
-  const options = (method !== 'GET' && body)
+  const options = (method !== 'GET')
     ? {
       method,
       headers,
-      body: Object.keys(body).reduce(
+      body: Object.keys(body || {}).reduce(
         (form, key) => {
           if (body[key]) {
             form.append(key, body[key]);
