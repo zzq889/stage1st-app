@@ -45,12 +45,12 @@ export const threadInfoEntity = {
 };
 
 export const threadFavEntity = {
-  request: tid => createAction(
-    THREAD_FAV.REQUEST, { tid }),
-  success: (tid, response) => createAction(
-    THREAD_FAV.SUCCESS, { tid, response }),
-  failure: (tid, error) => createAction(
-    THREAD_FAV.FAILURE, { tid, error }),
+  request: args => createAction(
+    THREAD_FAV.REQUEST, { ...args }),
+  success: (args, response) => createAction(
+    THREAD_FAV.SUCCESS, { ...args, response }),
+  failure: (args, error) => createAction(
+    THREAD_FAV.FAILURE, { ...args, error }),
 };
 
 export const threadCreationEntity = {
@@ -74,8 +74,8 @@ export const newThread = args =>
 export const loadThreadInfo = tid =>
   createAction(LOAD_THREAD_INFO, { tid });
 
-export const favThread = tid =>
-  createAction(FAV_THREAD, { tid });
+export const favThread = (tid, fav) =>
+  createAction(FAV_THREAD, { tid, fav });
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
@@ -157,8 +157,8 @@ export function* watchNewThread() {
 
 export function* watchFavThread() {
   while (true) {
-    const { tid } = yield take(FAV_THREAD);
-    yield call(postFavThread, tid);
+    const { tid, fav } = yield take(FAV_THREAD);
+    yield call(postFavThread, { tid, fav });
   }
 }
 

@@ -163,8 +163,8 @@ export const fetchSubscribedThreads = ({ fid, list, pageNo }) =>
   request('forum/subscribed', { fid, list, pageNo }, SCHEMA.threadSchemaArray);
 
 
-export const favThread = tid =>
-  post('thread/favor', { tid, action: 'add' });
+export const favThread = ({ tid, fav }) =>
+  post('thread/favor', { tid, action: fav ? 'add' : 'remove' });
 
 export const fetchFavedThreads = () =>
   post('favor/page', null, SCHEMA.threadSchemaArray);

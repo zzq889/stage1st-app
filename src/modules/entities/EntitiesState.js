@@ -9,8 +9,8 @@ export default function entities(state = Map(), action) {
   }
   switch (action.type) {
     case THREAD_FAV.SUCCESS: {
-      const { tid } = action;
-      return state.setIn(['threads', String(tid), 'isFav'], true);
+      const { tid, fav } = action;
+      return state.setIn(['threads', String(tid), 'isFav'], fav);
     }
     case SUBSCRIBE_FORUM: {
       const { fid } = action;
