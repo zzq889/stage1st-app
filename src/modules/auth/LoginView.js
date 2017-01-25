@@ -1,12 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import {
   ScrollView,
-  View,
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
 } from 'react-native';
 import { fromJS, Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
