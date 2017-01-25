@@ -15,7 +15,10 @@ import PreImage from '../../../images/pre.png';
 import CircleView from '../../components/CircleView';
 import DismissButton from '../../components/DismissButton';
 import { authEmitter } from './AuthState';
+import withMessage from '../error/withMessage';
+import QuestionPicker from './QuestionPicker';
 
+@withMessage
 class LoginView extends Component {
   static route = {
     navigationBar: {
@@ -52,6 +55,8 @@ class LoginView extends Component {
       onChange,
     } = this.props;
     const disabled = invalid || submitting;
+    const qid = values.get('questionid');
+    const showsAnswer = qid && qid !== 0;
     const children = (
       <View style={styles.content}>
         <CircleView size={100} source={PreImage} style={styles.image} />
@@ -78,6 +83,27 @@ class LoginView extends Component {
           value={values.get('password')}
           onChangeText={val => onChange('password', val)}
         />
+        <QuestionPicker
+          style={styles.input}
+          selectedValue={qid}
+          onValueChange={val => onChange('questionid', val)}
+        />
+        {
+          showsAnswer
+          ? (
+            <TextField
+              style={styles.input}
+              autoCapitalize="none"
+              autoCorrect={false}
+              underlineColorAndroid="transparent"
+              clearButtonMode="while-editing"
+              label="请输入安全提问答案"
+              type="text"
+              value={values.get('answer')}
+              onChangeText={val => onChange('answer', val)}
+            />
+          ) : null
+        }
         <TouchableOpacity
           style={disabled ? [styles.button, styles.disabled] : styles.button}
           disabled={disabled}
