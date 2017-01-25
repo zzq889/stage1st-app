@@ -26,7 +26,7 @@ class ThreadListView extends Component {
 
   componentWillMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.props.loadThreadPage();
+      this.props.loadThreadPage('load');
     });
   }
 
@@ -75,7 +75,7 @@ class ThreadListView extends Component {
   )
 
   render() {
-    const { threads, loading, refresh, nextPage } = this.props;
+    const { threads, loading, loadType, nextPage } = this.props;
     return (
       <ImmutableListView
         style={styles.container}
@@ -83,8 +83,8 @@ class ThreadListView extends Component {
         immutableData={threads}
         refreshControl={
           <RefreshControl
-            refreshing={refresh && loading}
-            onRefresh={() => this.props.loadThreadPage(true)}
+            refreshing={loadType === 'refresh' && loading}
+            onRefresh={() => this.props.loadThreadPage('refresh')}
           />
         }
         renderRow={this.renderRow}
@@ -105,7 +105,7 @@ class ThreadListView extends Component {
 ThreadListView.propTypes = {
   threads: PropTypes.instanceOf(List).isRequired,
   nextPage: PropTypes.number,
-  refresh: PropTypes.bool.isRequired,
+  loadType: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   loadThreadPage: PropTypes.func.isRequired,
   loadMoreThreads: PropTypes.func.isRequired,

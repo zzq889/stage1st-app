@@ -33,7 +33,7 @@ export default function paginate({ types, mapActionToKey }) {
   function updatePagination(state = Map({
     isFetching: false,
     nextPage: undefined,
-    refresh: false,
+    loadType: undefined,
     totalPage: 0,
     lastPageSize: 0,
     ids: OrderedSet(),
@@ -43,7 +43,7 @@ export default function paginate({ types, mapActionToKey }) {
       case requestType:
         return state
           .set('isFetching', true)
-          .set('refresh', action.refresh || action.force || false);
+          .set('loadType', action.loadType);
       case successType: {
         const { pageNo, pageSize, totalCount, result } = action.response;
         const totalPage = getTotalPage(totalCount, pageSize);
