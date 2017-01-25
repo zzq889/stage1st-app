@@ -76,9 +76,9 @@ class ThreadComposeView extends Component {
 
   render() {
     const { types } = this.props;
-    const title = this.props.values.get('title');
+    const title = this.props.values.get('title', '');
     const typeid = this.props.values.get('typeid');
-    const content = this.props.values.get('content');
+    const content = this.props.values.get('content', '');
     const charLeft = CHAR_LIMIT - unescape(encodeURIComponent(title)).length;
     const children = (
       <View style={styles.container}>
