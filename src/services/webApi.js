@@ -4,6 +4,8 @@ import { call, select } from 'redux-saga/effects';
 import { getConfiguration } from '../utils/configuration';
 import * as SCHEMA from './schema';
 
+const DEBUG = __DEV__ && false;
+
 //
 export function url(path) {
   const apiRoot = getConfiguration('API_ROOT');
@@ -40,7 +42,9 @@ function objectToUriComponent(body) {
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
 async function callApi(token, method, endpoint, body, schema, mapResponseToKey) {
-  // console.warn(method, endpoint, body);
+  if (DEBUG) {
+    console.warn(method, endpoint, body);
+  }
   const paramsString = (method === 'GET') ? objectToUriComponent(body) : '';
   const fullUrl = (endpoint.match(/^http/) ? endpoint : url(endpoint)) + paramsString;
   const headers = getRequestHeaders(body, token);
@@ -155,7 +159,7 @@ export const fetchChannels = () =>
   get('forum/all', null, SCHEMA.forumSchemaArray);
 
 export const fetchForum = fid =>
-  get('forum', { fid }, SCHEMA.forumSchema);
+  request('forum', { fid }, SCHEMA.forumSchema);
 
 // thread
 export const fetchThreads = ({ fid, pageNo }) =>
