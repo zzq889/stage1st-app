@@ -7,19 +7,8 @@ import {
   StyleSheet,
   Picker,
 } from 'react-native';
-import { fromJS } from 'immutable';
+import { List } from 'immutable';
 import { palette } from '../../styles/config';
-
-const items = fromJS([
-  '安全提问(未设置请忽略)',
-  '母亲的名字',
-  '爷爷的名字',
-  '父亲出生的城市',
-  '您其中一位老师的名字',
-  '您个人计算机的型号',
-  '您最喜欢的餐馆名称',
-  '驾驶执照最后四位数字',
-]);
 
 class QuestionPicker extends Component {
   state = {
@@ -31,7 +20,7 @@ class QuestionPicker extends Component {
   }
 
   render() {
-    const { style, selectedValue, ...props } = this.props;
+    const { items, style, selectedValue, ...props } = this.props;
     return (
       <TouchableOpacity
         onPress={() => this._setModalVisible(true)}
@@ -76,6 +65,7 @@ class QuestionPicker extends Component {
 
 QuestionPicker.propTypes = {
   style: PropTypes.number,
+  items: PropTypes.instanceOf(List),
   selectedValue: PropTypes.number,
   onValueChange: PropTypes.func,
 };

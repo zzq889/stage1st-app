@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   Platform,
+  View,
 } from 'react-native';
 import { Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
@@ -70,7 +71,11 @@ export default class PostComposeView extends Component {
         </KeyboardAvoidingView>
       );
     }
-    return children;
+    return (
+      <View style={styles.container}>
+        {children}
+      </View>
+    );
   }
 }
 

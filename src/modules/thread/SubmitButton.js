@@ -13,7 +13,7 @@ const SubmitButton = ({ invalid, submitting }) => {
     <TouchableOpacity
       style={styles.iconContainer}
       disabled={disabled}
-      onPress={() => { threadEmitter.emit('submitThread'); }}
+      onPress={() => { threadEmitter.emit('SUBMIT_THREAD'); }}
     >
       <Text style={disabled ? [styles.text, styles.disabled] : styles.text}>发布</Text>
     </TouchableOpacity>

@@ -21,7 +21,7 @@ class ThreadComposeViewContainer extends PureComponent {
       title: ({ title }) => title || '发布主题',
       backgroundColor: palette.black,
       tintColor: palette.inverted,
-      renderLeft: () => <DismissButton />,
+      renderLeft: () => <DismissButton onPress={() => { threadEmitter.emit('DISMISS_THREAD_COMPOSE'); }} />,
       renderRight: () => <SubmitButton />,
     },
     styles: {

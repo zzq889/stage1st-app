@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import {
+  ScrollView,
   View,
   KeyboardAvoidingView,
   Text,
@@ -7,7 +8,7 @@ import {
   StyleSheet,
   Platform,
 } from 'react-native';
-import { Map } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
 import { palette, rounded, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
@@ -18,11 +19,22 @@ import { authEmitter } from './AuthState';
 import withMessage from '../error/withMessage';
 import QuestionPicker from './QuestionPicker';
 
+const questions = fromJS([
+  '安全提问(未设置请忽略)',
+  '母亲的名字',
+  '爷爷的名字',
+  '父亲出生的城市',
+  '您其中一位老师的名字',
+  '您个人计算机的型号',
+  '您最喜欢的餐馆名称',
+  '驾驶执照最后四位数字',
+]);
+
 @withMessage
 class LoginView extends Component {
   static route = {
     navigationBar: {
-      title: 'Login',
+      title: '登录',
       backgroundColor: palette.black,
       tintColor: palette.inverted,
       renderLeft: () => <DismissButton />,
@@ -58,7 +70,11 @@ class LoginView extends Component {
     const qid = values.get('questionid');
     const showsAnswer = qid && qid !== 0;
     const children = (
-      <View style={styles.content}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps
+      >
         <CircleView size={100} source={PreImage} style={styles.image} />
         <TextField
           style={styles.input}
@@ -71,8 +87,10 @@ class LoginView extends Component {
           value={values.get('username')}
           onChangeText={val => onChange('username', val)}
           autoFocus
+          onSubmitEditing={() => { this.passField.focus(); }}
         />
         <TextField
+          fieldRef={(c) => { this.passField = c; }}
           style={styles.input}
           autoCapitalize="none"
           autoCorrect={false}
@@ -85,6 +103,7 @@ class LoginView extends Component {
         />
         <QuestionPicker
           style={styles.input}
+          items={questions}
           selectedValue={qid}
           onValueChange={val => onChange('questionid', val)}
         />
@@ -111,21 +130,18 @@ class LoginView extends Component {
         >
           <Text style={styles.buttonText}>登录</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     );
 
-    if (Platform.OS === 'ios') {
-      return (
-        <KeyboardAvoidingView
-          keyboardVerticalOffset={keyboardVerticalOffset}
-          behavior="padding"
-          style={styles.container}
-        >
-          {children}
-        </KeyboardAvoidingView>
-      );
-    }
-    return children;
+    return (
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={keyboardVerticalOffset}
+        behavior="padding"
+        style={styles.container}
+      >
+        {children}
+      </KeyboardAvoidingView>
+    );
   }
 }
 
@@ -144,7 +160,7 @@ LoginView.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.mint2,
+    backgroundColor: palette.background,
   },
   content: {
     margin: 15,

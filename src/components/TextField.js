@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 
 const TextField = ({
+  fieldRef,
   style,
   label,
   multiline,
@@ -14,6 +15,7 @@ const TextField = ({
   ...otherProps
 }) => (
   <TextInput
+    ref={fieldRef}
     style={[multiline ? styles.multiline : styles.input, style]}
     secureTextEntry={type === 'password'}
     placeholder={label}
@@ -23,6 +25,7 @@ const TextField = ({
 );
 
 TextField.propTypes = {
+  fieldRef: PropTypes.func,
   label: PropTypes.string,
   type: PropTypes.string,
   style: PropTypes.number,
