@@ -1,10 +1,13 @@
 import React, { PropTypes, Component } from 'react';
 import {
+  View,
   ScrollView,
   KeyboardAvoidingView,
   Text,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { fromJS, Map } from 'immutable';
 import { NavigationStyles } from '@exponent/ex-navigation';
@@ -68,13 +71,10 @@ class LoginView extends Component {
     const qid = values.get('questionid');
     const showsAnswer = qid && qid !== 0;
     const children = (
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps
-      >
+      <View style={styles.content}>
         <CircleView size={100} source={PreImage} style={styles.image} />
         <TextField
+          fieldRef={(c) => { this.nameField = c; }}
           style={styles.input}
           autoCapitalize="none"
           autoCorrect={false}
@@ -86,6 +86,7 @@ class LoginView extends Component {
           onChangeText={val => onChange('username', val)}
           autoFocus
           onSubmitEditing={() => { this.passField.focus(); }}
+          disabled={submitting}
         />
         <TextField
           fieldRef={(c) => { this.passField = c; }}
@@ -98,6 +99,7 @@ class LoginView extends Component {
           type="password"
           value={values.get('password')}
           onChangeText={val => onChange('password', val)}
+          disabled={submitting}
         />
         <QuestionPicker
           style={styles.input}
@@ -109,6 +111,7 @@ class LoginView extends Component {
           showsAnswer
           ? (
             <TextField
+              fieldRef={(c) => { this.answerField = c; }}
               style={styles.input}
               autoCapitalize="none"
               autoCorrect={false}
@@ -118,27 +121,51 @@ class LoginView extends Component {
               type="text"
               value={values.get('answer')}
               onChangeText={val => onChange('answer', val)}
+              disabled={submitting}
             />
           ) : null
         }
         <TouchableOpacity
-          style={disabled ? [styles.button, styles.disabled] : styles.button}
+          style={invalid ? [styles.button, styles.disabled] : styles.button}
           disabled={disabled}
-          onPress={() => onSubmit()}
+          onPress={() => {
+            this.nameField.blur();
+            this.passField.blur();
+            if (this.answerField) {
+              this.answerField.blur();
+            }
+            onSubmit();
+          }}
         >
-          <Text style={styles.buttonText}>登录</Text>
+          {
+            submitting
+            ? <ActivityIndicator color={palette.white} />
+            : <Text style={styles.buttonText}>登录</Text>
+          }
         </TouchableOpacity>
-      </ScrollView>
+      </View>
     );
 
+    if (Platform.OS === 'ios') {
+      return (
+        <KeyboardAvoidingView
+          keyboardVerticalOffset={keyboardVerticalOffset}
+          behavior="padding"
+          style={styles.container}
+        >
+          <ScrollView
+            keyboardShouldPersistTaps
+          >
+            {children}
+          </ScrollView>
+        </KeyboardAvoidingView>
+      );
+    }
+
     return (
-      <KeyboardAvoidingView
-        keyboardVerticalOffset={keyboardVerticalOffset}
-        behavior="padding"
-        style={styles.container}
-      >
+      <View style={styles.container}>
         {children}
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }

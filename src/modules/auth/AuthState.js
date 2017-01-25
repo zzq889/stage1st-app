@@ -53,30 +53,32 @@ export function* watchUserAuth() {
 
 // Initial state
 const initialState = Map({
+  // login
   isLoggedIn: false,
-  isSigned: false,
-  isSigning: false,
+  isSubmitting: false,
   currentUser: null,
   token: null,
+  // sign
+  isSigned: false,
+  isSigning: false,
 });
 
 export default function AuthStateReducer(state = initialState, action = {}) {
   switch (action.type) {
+    case LOGIN.REQUEST:
+      return state.set('isSubmitting', true);
     case LOGIN.SUCCESS: {
       const { uid, username, sid } = action.response.data;
       authEmitter.emit('dismiss');
       return state
         .set('isLoggedIn', true)
+        .set('isSubmitting', false)
         .set('currentUser', Map({ uid, username }))
         .set('token', sid);
     }
     case USER_LOGOUT:
-    case LOGIN.FAILURE: {
-      if (action.error) {
-        console.warn(action.error);
-      }
+    case LOGIN.FAILURE:
       return initialState;
-    }
     // sign status
     case USER.SUCCESS: {
       const uid = state.getIn(['currentUser', 'uid']);
