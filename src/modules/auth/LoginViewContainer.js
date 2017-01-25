@@ -7,7 +7,7 @@ import validate from './authValidate';
 
 export default formConnect('loginForm', validate)(connect(
   state => ({
-    submitting: state.getIn(['auth', 'isSigning']),
+    submitting: state.getIn(['auth', 'isSubmitting']),
   }),
   (dispatch, { values }) => ({
     onSubmit: bindActionCreators(

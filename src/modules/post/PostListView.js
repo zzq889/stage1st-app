@@ -82,7 +82,7 @@ class PostListView extends Component {
         <TouchableOpacity
           style={styles.favButton}
           hitSlop={{ left: 10, right: 10, top: 10, bottom: 10 }}
-          onPress={() => this.props.favThread()}
+          onPress={() => this.props.favThread(!isFav)}
         >
           <Icon
             name={isFav ? 'star' : 'star-o'}

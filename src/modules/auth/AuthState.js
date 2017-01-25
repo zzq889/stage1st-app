@@ -1,4 +1,4 @@
-import { take, call/* , fork, select*/ } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
 import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
@@ -19,16 +19,16 @@ export const USER_AUTH = 'AuthState/USER_AUTH';
 export const USER_LOGOUT = 'AuthState/USER_LOGOUT';
 
 export const loginEntity = {
-  request: () => createAction(
-    LOGIN.REQUEST),
-  success: (_, response) => createAction(
-    LOGIN.SUCCESS, { response }),
-  failure: (_, error) => createAction(
-    LOGIN.FAILURE, { error }),
+  request: args => createAction(
+    LOGIN.REQUEST, args),
+  success: (args, response) => createAction(
+    LOGIN.SUCCESS, { ...args, response }),
+  failure: (args, error) => createAction(
+    LOGIN.FAILURE, { ...args, error }),
 };
 
-export const userAuth = (data, requiredFields = []) =>
-  createAction(USER_AUTH, { data, requiredFields });
+export const userAuth = args =>
+  createAction(USER_AUTH, { ...args });
 
 export const userLogout = () => createAction(USER_LOGOUT);
 
@@ -36,17 +36,15 @@ export const userLogout = () => createAction(USER_LOGOUT);
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const loginRequest = args => fetchEntity(loginEntity, apiUserLogin, args);
+const loginRequest = ({ username, password, questionid, answer }) =>
+  fetchEntity(loginEntity, apiUserLogin, { username, password, questionid, answer });
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/
 /** ****************************************************************************/
 
 export function* watchUserAuth() {
-  while (true) {
-    const { data } = yield take(USER_AUTH);
-    yield call(loginRequest, data);
-  }
+  yield takeEvery(USER_AUTH, loginRequest);
 }
 
 /** ****************************************************************************/
@@ -55,30 +53,32 @@ export function* watchUserAuth() {
 
 // Initial state
 const initialState = Map({
+  // login
   isLoggedIn: false,
-  isSigned: false,
-  isSigning: false,
+  isSubmitting: false,
   currentUser: null,
   token: null,
+  // sign
+  isSigned: false,
+  isSigning: false,
 });
 
 export default function AuthStateReducer(state = initialState, action = {}) {
   switch (action.type) {
+    case LOGIN.REQUEST:
+      return state.set('isSubmitting', true);
     case LOGIN.SUCCESS: {
       const { uid, username, sid } = action.response.data;
       authEmitter.emit('dismiss');
       return state
         .set('isLoggedIn', true)
+        .set('isSubmitting', false)
         .set('currentUser', Map({ uid, username }))
         .set('token', sid);
     }
     case USER_LOGOUT:
-    case LOGIN.FAILURE: {
-      if (action.error) {
-        console.warn(action.error);
-      }
+    case LOGIN.FAILURE:
       return initialState;
-    }
     // sign status
     case USER.SUCCESS: {
       const uid = state.getIn(['currentUser', 'uid']);

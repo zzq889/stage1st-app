@@ -17,6 +17,7 @@ class DismissButton extends Component {
       <TouchableOpacity
         style={styles.iconContainer}
         onPress={this._pop}
+        {...this.props}
       >
         <Icon style={styles.icon} name="close" size={28} color="#fff" />
       </TouchableOpacity>

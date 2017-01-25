@@ -7,22 +7,7 @@ import {
   Picker,
 } from 'react-native';
 
-const MyPicker = ({ value, onChange, label, items, ...otherProps }) => {
-  const pickerItem = [];
-  pickerItem.push(<Picker.Item key={-1} label={label} value={null} />);
-  items.map((item) => {
-    const itemLabel = item.get('label');
-    const itemValue = item.get('value');
-    pickerItem.push(
-      <Picker.Item
-        key={itemValue}
-        label={itemLabel}
-        value={itemValue}
-      />,
-    );
-    return null;
-  });
-
+const MyPicker = ({ value, onChange, items, ...otherProps }) => {
   return (
     <Picker
       mode="dropdown"
@@ -30,7 +15,17 @@ const MyPicker = ({ value, onChange, label, items, ...otherProps }) => {
       onValueChange={val => onChange(val)}
       {...otherProps}
     >
-      {pickerItem}
+      {items.toJS().map((item) => {
+        const itemLabel = item.label;
+        const itemValue = item.value;
+        return (
+          <Picker.Item
+            key={itemValue}
+            label={itemLabel}
+            value={itemValue}
+          />
+        );
+      })}
     </Picker>
   );
 };

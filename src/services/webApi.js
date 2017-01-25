@@ -119,8 +119,13 @@ export function request(...args) {
 /** ****************************************************************************/
 
 // user
-export const userLogin = ({ username, password }) =>
-  post('user/login', { username, password });
+export const userLogin = ({ username, password, questionid, answer }) => {
+  if (questionid && questionid !== 0) {
+    return post('user/login', { username, password, questionid, answer });
+  }
+  return post('user/login', { username, password });
+};
+
 
 export const userRegister = ({ username, password, email }) =>
   post('user/register', { username, password, email });
@@ -163,8 +168,8 @@ export const fetchSubscribedThreads = ({ fid, list, pageNo }) =>
   request('forum/subscribed', { fid, list, pageNo }, SCHEMA.threadSchemaArray);
 
 
-export const favThread = tid =>
-  post('thread/favor', { tid, action: 'add' });
+export const favThread = ({ tid, fav }) =>
+  post('thread/favor', { tid, action: fav ? 'add' : 'remove' });
 
 export const fetchFavedThreads = () =>
   post('favor/page', null, SCHEMA.threadSchemaArray);

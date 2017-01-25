@@ -13,6 +13,7 @@ import {
 import { ActionSheetProvider } from '@exponent/react-native-action-sheet';
 import Router from './AppRouter';
 import DeveloperMenu from '../components/DeveloperMenu';
+import { palette } from '../styles/config';
 
 const AppView = ({ isReady }) => {
   if (!isReady) {
@@ -47,6 +48,7 @@ AppView.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: palette.background,
   },
 
   centered: {

@@ -9,6 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { Map, List } from 'immutable';
+import { connectActionSheet } from '@exponent/react-native-action-sheet';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import Picker from '../../components/Picker';
@@ -16,6 +17,7 @@ import { threadEmitter } from './ThreadState';
 
 const CHAR_LIMIT = 80;
 
+@connectActionSheet
 class ThreadComposeView extends Component {
   state = {
     isExpand: false,
@@ -23,7 +25,8 @@ class ThreadComposeView extends Component {
 
   componentWillMount() {
     this.initialize(this.props, true);
-    this._subscription = threadEmitter.addListener('submitThread', () => this.props.onSubmit());
+    this._dismiss = threadEmitter.addListener('DISMISS_THREAD_COMPOSE', this.showActionSheet);
+    this._submit = threadEmitter.addListener('SUBMIT_THREAD', () => this.props.onSubmit());
   }
 
   componentWillReceiveProps(nextProps) {
@@ -31,7 +34,8 @@ class ThreadComposeView extends Component {
   }
 
   componentWillUnmount() {
-    this._subscription.remove();
+    this._dismiss.remove();
+    this._submit.remove();
   }
 
   initialize = (props, always) => {
@@ -42,17 +46,45 @@ class ThreadComposeView extends Component {
     }
   }
 
+  showActionSheet = () => {
+    const title = this.props.values.get('title') || '';
+    const content = this.props.values.get('content') || '';
+    if (title === '' && content === '') {
+      this.props.navigator.pop();
+    } else {
+      this.titleField.blur();
+      this.contentField.blur();
+      const options = ['删除', '保存', '取消'];
+      const destructiveButtonIndex = 0;
+      const cancelButtonIndex = 2;
+      this.props.showActionSheetWithOptions({
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          this.props.reset();
+          this.props.navigator.pop();
+        } else if (buttonIndex === 1) {
+          this.props.navigator.pop();
+        }
+      });
+    }
+  }
+
 
   render() {
     const { types } = this.props;
-    const title = this.props.values.get('title');
+    const title = this.props.values.get('title', '');
     const typeid = this.props.values.get('typeid');
-    const content = this.props.values.get('content');
+    const content = this.props.values.get('content', '');
     const charLeft = CHAR_LIMIT - unescape(encodeURIComponent(title)).length;
     const children = (
       <View style={styles.container}>
         <View style={styles.row}>
           <TextField
+            fieldRef={(c) => { this.titleField = c; }}
             style={styles.container}
             autoCapitalize="none"
             autoCorrect={false}
@@ -81,6 +113,7 @@ class ThreadComposeView extends Component {
         />
         <View style={styles.separator} />
         <TextField
+          fieldRef={(c) => { this.contentField = c; }}
           style={styles.textarea}
           autoCapitalize="none"
           autoCorrect={false}
@@ -118,6 +151,11 @@ ThreadComposeView.propTypes = {
   initialValues: PropTypes.shape({
     typeid: PropTypes.number,
   }).isRequired,
+  reset: PropTypes.func.isRequired,
+  navigator: PropTypes.shape({
+    pop: PropTypes.func.isRequired,
+  }),
+  showActionSheetWithOptions: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
