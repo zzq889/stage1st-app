@@ -21,7 +21,7 @@ const PostListViewContainer = connect(
         .sortBy(post => post.get('position'))
         .toList(),
       thread: state.getIn(['entities', 'threads', String(tid)]),
-      refresh: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'refresh'], false),
+      loadType: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'loadType']),
       loading: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'isFetching'], false),
       totalPage: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'totalPage']),
     };

@@ -148,8 +148,8 @@ export const fetchNotication = () =>
   post('notice/reply');
 
 // history
-export const fetchThreadHistory = () =>
-  post('history/thread', null, SCHEMA.threadSchemaArray);
+export const fetchThreadHistory = ({ pageNo }) =>
+  post('history/thread', { pageNo }, SCHEMA.threadSchemaArray);
 
 export const fetchPostHistory = () =>
   post('history/post', null, SCHEMA.postSchemaArray);
@@ -175,8 +175,8 @@ export const fetchSubscribedThreads = ({ fid, list, pageNo }) =>
 export const favThread = ({ tid, fav }) =>
   post('thread/favor', { tid, action: fav ? 'add' : 'remove' });
 
-export const fetchFavedThreads = () =>
-  post('favor/page', null, SCHEMA.threadSchemaArray);
+export const fetchFavedThreads = ({ pageNo }) =>
+  post('favor/page', { pageNo }, SCHEMA.threadSchemaArray);
 
 export const createThread = ({ fid, typeid, title, content }) =>
   post('post/thread', { fid, typeid, title, content }, SCHEMA.threadSchema);

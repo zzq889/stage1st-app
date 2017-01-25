@@ -39,8 +39,8 @@ export const postCreationEntity = {
 export const newPost = ({ tid, pid, content }) =>
   createAction(NEW_POST, { tid, pid, content });
 
-export const loadPostPage = (tid, uid, pageNo = 1, force) =>
-  createAction(LOAD_POST_PAGE, { tid, uid, pageNo, force });
+export const loadPostPage = (tid, uid, pageNo = 1, loadType) =>
+  createAction(LOAD_POST_PAGE, { tid, uid, pageNo, loadType });
 
 export const jumpToPage = (tid, uid, pageNo = 1) =>
   createAction(JUMP_TO_PAGE, { tid, uid, pageNo });
@@ -60,7 +60,7 @@ const getPosts = (state, { tid, uid = 'all' }) =>
   state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`]);
 
 // load repo unless it is cached
-function* loadPosts({ tid, uid, pageNo, force }) {
+function* loadPosts({ tid, uid, pageNo, loadType }) {
   const posts = yield select(getPosts, { tid, uid });
   let page;
   let totalPage;
@@ -77,9 +77,9 @@ function* loadPosts({ tid, uid, pageNo, force }) {
     || !page
     || (!isLast && page.size < 30)
     || (isLast && page.size < lastPageSize)
-    || force
+    || loadType === 'refresh'
   ) {
-    yield call(fetchPosts, { tid, uid, pageNo });
+    yield call(fetchPosts, { tid, uid, pageNo, loadType });
   }
 }
 

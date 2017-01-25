@@ -1,4 +1,4 @@
-import { take, call, fork, select } from 'redux-saga/effects';
+import { takeEvery, take, call, fork, select } from 'redux-saga/effects';
 import { EventEmitter } from 'fbemitter';
 import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -62,11 +62,11 @@ export const threadCreationEntity = {
     THREAD_CREATION.FAILURE, { ...args, error }),
 };
 
-export const loadThreadPage = (fid, refresh, params) =>
-  createAction(LOAD_THREAD_PAGE, { fid, refresh, params });
+export const loadThreadPage = (fid, loadType) =>
+  createAction(LOAD_THREAD_PAGE, { fid, loadType });
 
-export const loadMoreThreads = (fid, params) =>
-  createAction(LOAD_MORE_THREADS, { fid, params });
+export const loadMoreThreads = fid =>
+  createAction(LOAD_MORE_THREADS, { fid });
 
 export const newThread = args =>
   createAction(NEW_THREAD, { ...args });
@@ -103,17 +103,17 @@ const getThreads = (state, fid) => state.getIn(['pagination', 'threadsByFid', fi
 const getSubscriptions = state => state.getIn(['forum', 'subscriptions']);
 
 // type: ['refresh', 'loadmore', null]
-function* loadThreads(fid, type) {
+function* loadThreads(fid, loadType) {
   const params = {};
   if (fid === 'subscribed') {
     const subscriptions = yield select(getSubscriptions);
     params.list = subscriptions && subscriptions.reduce((li, sub) => `${li},${sub}`);
   }
-  if (type === 'refresh') {
-    yield call(fetchThreads(fid), { fid, pageNo: 1, refresh: true, ...params });
+  if (loadType === 'refresh' || loadType === 'load') {
+    yield call(fetchThreads(fid), { fid, pageNo: 1, refresh: true, loadType, ...params });
   } else {
     const threads = yield select(getThreads, fid);
-    if (!threads || !threads.get('ids').size || type === 'loadmore') {
+    if (!threads || !threads.get('ids').size || loadType === 'loadmore') {
       yield call(fetchThreads(fid), { fid, pageNo: threads && threads.get('nextPage'), ...params });
     }
   }
@@ -124,28 +124,18 @@ function* loadThreads(fid, type) {
 /** ****************************************************************************/
 
 export function* watchLoadThreadPage() {
-  while (true) {
-    const { fid, refresh } = yield take(LOAD_THREAD_PAGE);
-    yield fork(
-      loadThreads,
-      fid,
-      refresh ? 'refresh' : null,
-    );
-  }
+  yield takeEvery(LOAD_THREAD_PAGE, ({ fid, loadType }) =>
+    loadThreads(fid, loadType));
 }
 
 export function* watchLoadThreadInfo() {
-  while (true) {
-    const { tid } = yield take(LOAD_THREAD_INFO);
-    yield call(fetchThreadInfo, tid);
-  }
+  yield takeEvery(LOAD_THREAD_INFO, ({ tid }) =>
+    fetchThreadInfo(tid));
 }
 
 export function* watchLoadMoreThreads() {
-  while (true) {
-    const { fid } = yield take(LOAD_MORE_THREADS);
-    yield fork(loadThreads, fid, 'loadmore');
-  }
+  yield takeEvery(LOAD_MORE_THREADS, ({ fid }) =>
+    loadThreads(fid, 'loadmore'));
 }
 
 export function* watchNewThread() {
