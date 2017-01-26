@@ -32,7 +32,7 @@ class PostListView extends Component {
 
   componentWillMount() {
     this._subscription = postEmitter.addListener(
-      'POST_CREATION_SUCESS', () => this.props.loadPostPage(true));
+      'POST_CREATION_SUCESS', () => this.props.loadPostPage('load'));
     InteractionManager.runAfterInteractions(() => {
       this.props.loadPostPage();
       this.props.loadThreadInfo();
