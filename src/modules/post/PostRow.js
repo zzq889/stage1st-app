@@ -3,76 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  Linking,
-  Image,
   TouchableOpacity,
-  Dimensions,
 } from 'react-native';
-import SafariView from 'react-native-safari-view';
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/Entypo';
 import HtmlView from '../../components/HtmlView';
 // import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
-import { getConfiguration } from '../../utils/configuration';
 import { palette } from '../../styles/config';
-
-// node, index, parent, opts, renderChild
-const renderNode = (node, index) => {
-  const attribs = node.attribs;
-
-  if (node.name === 'img') {
-    const isEmoji = attribs.smilieid;
-    const { width: screenWidth } = Dimensions.get('window');
-    const defaultSize = isEmoji ? 32 : (screenWidth - 30);
-    const imgWidth = Number((attribs.width && Math.min(attribs.width, defaultSize)) || defaultSize);
-    const imgHeight = Number((attribs.height && (attribs.height / attribs.width) * imgWidth) || defaultSize);
-
-    const imgStyle = {
-      width: imgWidth,
-      height: imgHeight,
-      backgroundColor: isEmoji ? null : palette.mint2,
-    };
-
-    const uri = attribs.src;
-    let assembledUri = uri.match(/^\//)
-      ? getConfiguration('STATIC_ROOT') + uri
-      : `${getConfiguration('STATIC_ROOT')}/${uri}`;
-    assembledUri = uri.match(/^http/) ? uri : assembledUri;
-    // Hack for API mistake
-    // related issue: https://github.com/mixslice/stage1st-app/issues/41
-    assembledUri = assembledUri.replace(
-      /\/attachments\/(?!forum)/, '/attachments/forum/');
-
-    const source = {
-      uri: assembledUri,
-      width: imgWidth,
-      height: imgHeight,
-    };
-
-    return <Image key={index} source={source} style={imgStyle} />;
-  }
-
-  return undefined;
-};
-
-async function onLinkPress(url) {
-  try {
-    let available = true;
-    try {
-      await SafariView.isAvailable();
-    } catch (e) {
-      available = false;
-    }
-    if (available) {
-      SafariView.show({ url });
-    } else {
-      Linking.openURL(url);
-    }
-  } catch (err) {
-    console.error('An error occurred', err);
-  }
-}
 
 class PostRow extends Component {
   state = {
@@ -118,8 +56,6 @@ class PostRow extends Component {
           <HtmlView
             style={styles.content}
             value={message}
-            renderNode={renderNode}
-            onLinkPress={onLinkPress}
           />
         ) : null}
         <View style={styles.actions}>

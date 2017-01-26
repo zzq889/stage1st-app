@@ -1,5 +1,5 @@
 import { PropTypes } from 'react';
-import { List } from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PostListView from './PostListView';
@@ -8,22 +8,23 @@ import { loadThreadInfo, favThread } from '../thread/ThreadState';
 import withMessage from '../error/withMessage';
 
 const PostListViewContainer = connect(
-  (state, { tid }) => {
+  (state, { tid, pageNo }) => {
     const uid = state.getIn(['post', tid, 'uid']);
-    const queryUid = uid || 'all';
-    const pageNo = state.getIn(['post', tid, queryUid, 'pageNo'], 1);
+    const quid = uid || 'all';
+    const key = `${tid}.${quid}`;
+    const currentPageNo = pageNo || state.getIn(['post', tid, quid, 'pageNo'], 1);
     return {
       uid,
-      pageNo,
+      pageNo: currentPageNo,
       posts: state
-        .getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'pages', pageNo], List())
+        .getIn(['pagination', 'postsByTid', key, 'pages', currentPageNo], List())
         .map(pid => state.getIn(['entities', 'posts', String(pid)]))
         .sortBy(post => post.get('position'))
         .toList(),
-      thread: state.getIn(['entities', 'threads', String(tid)]),
-      loadType: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'loadType']),
-      loading: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'isFetching'], false),
-      totalPage: state.getIn(['pagination', 'postsByTid', `${tid}.${queryUid}`, 'totalPage']),
+      thread: state.getIn(['entities', 'threads', String(tid)], Map()),
+      loadType: state.getIn(['pagination', 'postsByTid', key, 'loadType']),
+      loading: state.getIn(['pagination', 'postsByTid', key, 'isFetching'], false),
+      totalPage: state.getIn(['pagination', 'postsByTid', key, 'totalPage']),
     };
   },
 )(connect(

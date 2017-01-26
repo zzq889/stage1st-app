@@ -10,23 +10,21 @@ import { List } from 'immutable';
 import { withNavigation } from '@exponent/ex-navigation';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
-import ComposeButton from '../../components/ComposeButton';
-import Row from './ThreadRow';
+import Row from './PostHistoryRow';
 import Router from '../AppRouter';
 import { palette } from '../../styles/config';
 
 @withNavigation
-class ThreadListView extends Component {
+class PostHistoryView extends Component {
   static route = {
     navigationBar: {
       title: ({ title }) => title,
-      renderRight: ({ params: { fid } }) => (Number.isInteger(fid) ? <ComposeButton fid={fid} /> : null),
     },
   }
 
   componentWillMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.props.loadThreadPage('load');
+      this.props.loadPostPage('load');
     });
   }
 
@@ -35,16 +33,11 @@ class ThreadListView extends Component {
     // After fetching data, you should update your ListView data source
     // manually.
     // This function does not have a return value.
-    this.props.loadMoreThreads();
+    this.props.loadPostPage('loadmore');
   }
 
   _onRefresh = () => {
-    // TODO: on refresh
-  }
-
-  handleScroll = (event) => {
-    // TODO: event.nativeEvent.contentOffset.y
-    console.log(event.nativeEvent.contentOffset.y);
+    this.props.loadPostPage('refresh');
   }
 
   renderFooter = () => (
@@ -56,18 +49,19 @@ class ThreadListView extends Component {
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       subject={rowData.get('subject')}
-      forumName={rowData.get('forumName')}
+      message={rowData.get('message')}
+      position={rowData.get('position')}
       author={rowData.get('author')}
-      timestamp={Number(rowData.get('lastpost'))}
-      status={rowData.get('statusicon')}
-      replies={rowData.get('replies')}
-      views={rowData.get('views')}
+      authorId={rowData.get('authorid')}
+      timestamp={Number(rowData.get('dateline'))}
+      type={rowData.get('type')}
       onPress={() => {
         this.props.navigation
         .getNavigator('master')
         .push(Router.getRoute('posts', {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
+          pageNo: Math.floor(rowData.get('position', 0) / 30) + 1,
         }));
         highlightRow(sectionID, rowID);
       }}
@@ -75,23 +69,21 @@ class ThreadListView extends Component {
   )
 
   render() {
-    const { threads, loading, loadType, nextPage } = this.props;
+    const { posts, loading, loadType, nextPage } = this.props;
     return (
       <ImmutableListView
         style={styles.container}
-        ref={(c) => { this.listView = c; }}
-        immutableData={threads}
+        immutableData={posts}
         refreshControl={
           <RefreshControl
             refreshing={loadType === 'refresh' && loading}
-            onRefresh={() => this.props.loadThreadPage('refresh')}
+            onRefresh={this._onRefresh}
           />
         }
         renderRow={this.renderRow}
         renderFooter={(loadType !== 'refresh' && loading) ? this.renderFooter : null}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={15}
-        // onScroll={this.handleScroll}
         // InfiniteScrollView props
         renderScrollComponent={props => <InfiniteScrollView {...props} />}
         canLoadMore={!loading && !!nextPage}
@@ -102,26 +94,25 @@ class ThreadListView extends Component {
   }
 }
 
-ThreadListView.propTypes = {
-  threads: PropTypes.instanceOf(List).isRequired,
+PostHistoryView.propTypes = {
+  posts: PropTypes.instanceOf(List).isRequired,
   nextPage: PropTypes.number,
   loadType: PropTypes.string,
   loading: PropTypes.bool.isRequired,
-  loadThreadPage: PropTypes.func.isRequired,
-  loadMoreThreads: PropTypes.func.isRequired,
+  loadPostPage: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     getNavigator: PropTypes.func.isRequired,
   }),
 };
 
-ThreadListView.defaultProps = {
-  threads: List(),
+PostHistoryView.defaultProps = {
+  posts: List(),
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: palette.background,
+    backgroundColor: palette.mint2,
   },
   centered: {
     flex: 1,
@@ -139,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ThreadListView;
+export default PostHistoryView;

@@ -13,6 +13,7 @@ import {
 } from '../modules/thread/ThreadState';
 import {
   watchLoadPostPage,
+  watchLoadPostHistoryPage,
   watchNewPost,
   watchNewPostSuccess,
 } from '../modules/post/PostState';
@@ -34,9 +35,10 @@ export default function* root() {
     fork(watchNewThread),
     fork(watchNewThreadSuccess),
     fork(watchFavThread),
+    fork(watchLoadPostPage),
+    fork(watchLoadPostHistoryPage),
     fork(watchNewPost),
     fork(watchNewPostSuccess),
-    fork(watchLoadPostPage),
     fork(watchUserAuth),
     fork(watchLoadUserPage),
     fork(watchUserSign),
