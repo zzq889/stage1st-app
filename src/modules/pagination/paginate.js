@@ -1,18 +1,18 @@
 import { OrderedSet, Set, Map } from 'immutable';
 
-function getNextPage(currentPage = 1, totalPage) {
+function getNextPage(currentPage, totalPage, pageNo, pageSize, resultSize) {
+  if (!totalPage && resultSize === pageSize) {
+    return pageNo + 1;
+  }
+
   if (currentPage < totalPage) {
     return currentPage + 1;
   }
-  return null;
+  return undefined;
 }
 
-function getTotalPage(totalCount, pageSize = 30) {
-  return (totalCount && Math.ceil(totalCount / pageSize)) || 1;
-}
-
-function getLastPageSize(totalCount, pageSize = 30) {
-  return totalCount % pageSize;
+function getTotalPage(totalCount, pageSize) {
+  return (totalCount && Math.ceil(totalCount / pageSize)) || undefined;
 }
 
 // Creates a reducer managing pagination, given the action types to handle,
@@ -34,8 +34,7 @@ export default function paginate({ types, mapActionToKey }) {
     isFetching: false,
     nextPage: undefined,
     loadType: undefined,
-    totalPage: 0,
-    lastPageSize: 0,
+    totalPage: undefined,
     ids: OrderedSet(),
     pages: Map(),
   }), action) {
@@ -45,17 +44,25 @@ export default function paginate({ types, mapActionToKey }) {
           .set('isFetching', true)
           .set('loadType', action.loadType);
       case successType: {
-        const { pageNo, pageSize, totalCount, result } = action.response;
+        const {
+          pageNo = 1,
+          response: {
+            pageSize = 30,
+            totalCount,
+            result,
+          },
+        } = action;
+        const resultSize = result.length;
         const totalPage = getTotalPage(totalCount, pageSize);
-        const lastPageSize = getLastPageSize(totalCount, pageSize);
-        const nextPage = getNextPage(pageNo, totalPage);
+        const nextPage = getNextPage(pageNo, totalPage, pageNo, pageSize, resultSize);
+
         const newState = state
           .set('isFetching', false)
-          .set('currentPage', pageNo)
           .set('totalPage', totalPage)
-          .set('nextPage', nextPage)
-          .set('lastPageSize', lastPageSize);
+          .set('nextPage', nextPage);
+
         if (action.refresh) {
+          // clear cached pages
           return newState
             .set('ids', OrderedSet(result))
             .set('pages', Map({

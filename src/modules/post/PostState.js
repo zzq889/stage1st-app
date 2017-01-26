@@ -63,20 +63,13 @@ const getPosts = (state, { tid, uid = 'all' }) =>
 function* loadPosts({ tid, uid, pageNo, loadType }) {
   const posts = yield select(getPosts, { tid, uid });
   let page;
-  let totalPage;
-  let lastPageSize;
-  let isLast;
   if (posts) {
     page = posts.getIn(['pages', pageNo]);
-    totalPage = posts.get('totalPage');
-    lastPageSize = posts.get('lastPageSize');
-    isLast = pageNo === totalPage;
   }
   if (
     !posts
     || !page
-    || (!isLast && page.size < 30)
-    || (isLast && page.size < lastPageSize)
+    || (page.size < 30)
     || loadType === 'refresh'
   ) {
     yield call(fetchPosts, { tid, uid, pageNo, loadType });

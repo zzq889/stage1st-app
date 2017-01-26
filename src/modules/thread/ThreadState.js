@@ -71,8 +71,8 @@ export const loadMoreThreads = fid =>
 export const newThread = args =>
   createAction(NEW_THREAD, { ...args });
 
-export const loadThreadInfo = tid =>
-  createAction(LOAD_THREAD_INFO, { tid });
+export const loadThreadInfo = (tid, requiredFields = []) =>
+  createAction(LOAD_THREAD_INFO, { tid, requiredFields });
 
 export const favThread = (tid, fav) =>
   createAction(FAV_THREAD, { tid, fav });
