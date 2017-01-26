@@ -7,6 +7,7 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 import withMessage from '../error/withMessage';
 import { palette } from '../../styles/config';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
+import PostHistoryViewContainer from '../post/PostHistoryViewContainer';
 
 const titles = {
   thread: '帖子',
@@ -37,13 +38,16 @@ export default class HistoryTabView extends Component {
         tabBarBackgroundColor={palette.toolbar}
       >
         <ThreadListViewContainer fid="history" tabLabel="我的帖子" />
-        <Text tabLabel="我的回复">My Posts</Text>
+        <PostHistoryViewContainer tabLabel="我的回复" />
       </ScrollableTabView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: palette.background,
+  },
   tabLabel: {
     margin: 8,
     fontSize: 13,

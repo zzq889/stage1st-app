@@ -5,6 +5,7 @@ import { fetchEntity, createRequestTypes, createAction } from '../../utils/actio
 import {
   fetchPosts as apiFetchPosts,
   createPost as apiCreatePost,
+  fetchPostHistory as apiFetchPostHistory,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -14,6 +15,7 @@ import {
 export const POST = createRequestTypes('POST');
 export const POST_CREATION = createRequestTypes('POST_CREATION');
 export const LOAD_POST_PAGE = 'PostState/LOAD_POST_PAGE';
+export const LOAD_POST_HISTORY_PAGE = 'PostState/LOAD_POST_HISTORY_PAGE';
 export const JUMP_TO_PAGE = 'PostState/JUMP_TO_PAGE';
 export const UPDATE_POST_OFFSET = 'PostState/UPDATE_POST_OFFSET';
 export const NEW_POST = 'ThreadState/NEW_POST';
@@ -42,6 +44,9 @@ export const newPost = ({ tid, pid, content }) =>
 export const loadPostPage = (tid, uid, pageNo = 1, loadType) =>
   createAction(LOAD_POST_PAGE, { tid, uid, pageNo, loadType });
 
+export const loadPostHistoryPage = loadType =>
+  createAction(LOAD_POST_HISTORY_PAGE, { loadType });
+
 export const jumpToPage = (tid, uid, pageNo = 1) =>
   createAction(JUMP_TO_PAGE, { tid, uid, pageNo });
 
@@ -55,13 +60,15 @@ export const updatePostOffset = (tid, uid, pageNo = 1) =>
 export const postEmitter = new EventEmitter();
 
 const fetchPosts = args => fetchEntity(postEntity, apiFetchPosts, args);
+const fetchPostHistory = args => fetchEntity(postEntity, apiFetchPostHistory, args);
 const createPost = args => fetchEntity(postCreationEntity, apiCreatePost, args);
-const getPosts = (state, { tid, uid = 'all' }) =>
-  state.getIn(['pagination', 'postsByTid', `${tid}.${uid}`]);
+const getPosts = (state, key) =>
+  state.getIn(['pagination', 'postsByTid', key]);
 
 // load repo unless it is cached
 function* loadPosts({ tid, uid, pageNo, loadType }) {
-  const posts = yield select(getPosts, { tid, uid });
+  const paginationKey = `${tid}.${uid || 'all'}`;
+  const posts = yield select(getPosts, paginationKey);
   let page;
   if (posts) {
     page = posts.getIn(['pages', pageNo]);
@@ -72,7 +79,19 @@ function* loadPosts({ tid, uid, pageNo, loadType }) {
     || (page.size < 30)
     || loadType === 'refresh'
   ) {
-    yield call(fetchPosts, { tid, uid, pageNo, loadType });
+    yield call(fetchPosts, { paginationKey, tid, uid, pageNo, loadType });
+  }
+}
+
+function* loadPostHistory({ loadType }) {
+  const paginationKey = 'history';
+  if (loadType === 'refresh' || loadType === 'load') {
+    yield call(fetchPostHistory, { paginationKey, pageNo: 1, refresh: true, loadType });
+  } else {
+    const posts = yield select(getPosts, paginationKey);
+    if (!posts || !posts.get('ids').size || loadType === 'loadmore') {
+      yield call(fetchPostHistory, { paginationKey, pageNo: posts && posts.get('nextPage') });
+    }
   }
 }
 
@@ -82,6 +101,10 @@ function* loadPosts({ tid, uid, pageNo, loadType }) {
 
 export function* watchLoadPostPage() {
   yield takeEvery(LOAD_POST_PAGE, loadPosts);
+}
+
+export function* watchLoadPostHistoryPage() {
+  yield takeEvery(LOAD_POST_HISTORY_PAGE, loadPostHistory);
 }
 
 export function* watchNewPost() {

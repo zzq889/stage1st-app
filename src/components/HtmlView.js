@@ -2,11 +2,15 @@
 
 import React, { Component, PropTypes } from 'react';
 import {
+  Image,
   Linking,
   StyleSheet,
   Text,
   View,
+  Dimensions,
 } from 'react-native';
+import SafariView from 'react-native-safari-view';
+import { getConfiguration } from '../utils/configuration';
 import htmlToElement from '../utils/htmlToElement';
 import { palette } from '../styles/config';
 
@@ -42,6 +46,24 @@ const baseStyles = StyleSheet.create({
   },
 });
 
+async function onLinkPress(url) {
+  try {
+    let available = true;
+    try {
+      await SafariView.isAvailable();
+    } catch (e) {
+      available = false;
+    }
+    if (available) {
+      SafariView.show({ url });
+    } else {
+      Linking.openURL(url);
+    }
+  } catch (err) {
+    console.error('An error occurred', err);
+  }
+}
+
 class HtmlView extends Component {
   constructor() {
     super();
@@ -73,7 +95,7 @@ class HtmlView extends Component {
     const opts = {
       linkHandler: this.props.onLinkPress,
       styles: Object.assign({}, baseStyles, this.props.stylesheet),
-      customRenderer: this.props.renderNode,
+      customRenderer: this.renderNode,
     };
 
     htmlToElement(value, opts, (err, element) => {
@@ -85,6 +107,46 @@ class HtmlView extends Component {
         this.setState({ element });
       }
     });
+  }
+
+  // node, index, parent, opts, renderChild
+  renderNode = (node, index) => {
+    const attribs = node.attribs;
+    const margin = this.props.margin || 30;
+
+    if (node.name === 'img') {
+      const isEmoji = attribs.smilieid;
+      const { width: screenWidth } = Dimensions.get('window');
+      const defaultSize = isEmoji ? 32 : (screenWidth - margin);
+      const imgWidth = Number((attribs.width && Math.min(attribs.width, defaultSize)) || defaultSize);
+      const imgHeight = Number((attribs.height && (attribs.height / attribs.width) * imgWidth) || defaultSize);
+
+      const imgStyle = {
+        width: imgWidth,
+        height: imgHeight,
+        backgroundColor: isEmoji ? null : palette.mint2,
+      };
+
+      const uri = attribs.src;
+      let assembledUri = uri.match(/^\//)
+        ? getConfiguration('STATIC_ROOT') + uri
+        : `${getConfiguration('STATIC_ROOT')}/${uri}`;
+      assembledUri = uri.match(/^http/) ? uri : assembledUri;
+      // Hack for API mistake
+      // related issue: https://github.com/mixslice/stage1st-app/issues/41
+      assembledUri = assembledUri.replace(
+        /\/attachments\/(?!forum)/, '/attachments/forum/');
+
+      const source = {
+        uri: assembledUri,
+        width: imgWidth,
+        height: imgHeight,
+      };
+
+      return <Image key={index} source={source} style={imgStyle} />;
+    }
+
+    return undefined;
   }
 
   render() {
@@ -100,11 +162,11 @@ HtmlView.propTypes = {
   stylesheet: PropTypes.any,
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
-  renderNode: PropTypes.func,
+  margin: PropTypes.number,
 };
 
 HtmlView.defaultProps = {
-  onLinkPress: url => Linking.openURL(url),
+  onLinkPress,
   onError: console.error.bind(console),
 };
 

@@ -151,8 +151,8 @@ export const fetchNotication = () =>
 export const fetchThreadHistory = ({ pageNo }) =>
   post('history/thread', { pageNo }, SCHEMA.threadSchemaArray);
 
-export const fetchPostHistory = () =>
-  post('history/post', null, SCHEMA.postSchemaArray);
+export const fetchPostHistory = ({ pageNo }) =>
+  post('history/post', { pageNo }, SCHEMA.postSchemaArray);
 
 // forum
 export const fetchChannels = () =>

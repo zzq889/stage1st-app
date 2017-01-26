@@ -6,7 +6,7 @@ import { POST } from '../post/PostState';
 // Updates the pagination data for different actions.
 export default combineReducers({
   threadsByFid: paginate({
-    mapActionToKey: action => action.fid,
+    mapActionToKey: ({ fid }) => fid,
     types: [
       THREAD.REQUEST,
       THREAD.SUCCESS,
@@ -14,8 +14,7 @@ export default combineReducers({
     ],
   }),
   postsByTid: paginate({
-    mapActionToKey: ({ tid, uid = 'all' }) =>
-      tid && `${tid}.${uid}`,
+    mapActionToKey: ({ paginationKey }) => paginationKey,
     types: [
       POST.REQUEST,
       POST.SUCCESS,

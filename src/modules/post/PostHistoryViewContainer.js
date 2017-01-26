@@ -1,44 +1,25 @@
-import { PropTypes } from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import PostListView from './PostListView';
+import PostHistoryView from './PostHistoryView';
 import {
-  loadHistoryPosts,
-  loadMoreHistoryPosts,
+  loadPostHistoryPage,
 } from './PostState';
 
 const PostHistoryViewContainer = connect(
-  (state, { fid }) => ({
-    threads: state
-      .getIn(['pagination', 'threadsByFid', fid, 'ids'], List())
-      .map((tid) => {
-        const thread = state.getIn(['entities', 'threads', String(tid)]);
-        const threadFid = thread.get('fid');
-        const forumName = state.getIn(['entities', 'forums', String(threadFid), 'name']);
-        return thread.set('forumName', forumName);
-      })
-      .sortBy((post) => {
-        const pinned = post.get('statusicon') === 'pined';
-        const lastpost = post.get('lastpost');
-        return pinned ? `1.${lastpost}` : `0.${lastpost}`;
-      })
-      .reverse()
-      .toList(),
-    loading: state.getIn(['pagination', 'threadsByFid', fid, 'isFetching'], false),
-    nextPage: state.getIn(['pagination', 'threadsByFid', fid, 'nextPage']),
-  }),
-  (dispatch, { fid }) => ({
-    loadThreadPage: bindActionCreators(loadThreadPage.bind(null, fid), dispatch),
-    loadMoreThreads: bindActionCreators(loadMoreThreads.bind(null, fid), dispatch),
-  }),
-)(ThreadListView);
-
-PostHistoryViewContainer.propTypes = {
-  fid: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string,
-  ]).isRequired,
-};
+  (state) => {
+    const paginationKey = 'history';
+    return {
+      posts: state
+        .getIn(['pagination', 'postsByTid', paginationKey, 'ids'], List())
+        .map(pid => state.getIn(['entities', 'posts', String(pid)]))
+        .sortBy(post => post.get('dateline'))
+        .reverse()
+        .toList(),
+      loading: state.getIn(['pagination', 'postsByTid', paginationKey, 'isFetching'], false),
+      nextPage: state.getIn(['pagination', 'postsByTid', paginationKey, 'nextPage']),
+    };
+  },
+  { loadPostPage: loadPostHistoryPage },
+)(PostHistoryView);
 
 export default PostHistoryViewContainer;
