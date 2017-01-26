@@ -144,8 +144,8 @@ export const fetchUserInfo = uid =>
   get('user', { uid }, SCHEMA.userSchema);
 
 // notification
-export const fetchNotication = () =>
-  post('notice/reply');
+export const fetchReplies = () =>
+  post('notice/reply', null, SCHEMA.notificationSchemaArray);
 
 // history
 export const fetchThreadHistory = ({ pageNo }) =>

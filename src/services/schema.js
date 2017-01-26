@@ -43,6 +43,8 @@ export const postSchema = new schema.Entity('posts', {}, {
   idAttribute: 'pid',
 });
 
+export const notificationSchema = new schema.Entity('notifications');
+
 export const articleSchema = new schema.Entity('articles');
 
 channelSchema.define({
@@ -59,5 +61,5 @@ export const forumSchemaArray = new schema.Array({
 }, input => (input.child ? 'channel' : 'forum'));
 
 export const threadSchemaArray = [threadSchema];
-
 export const postSchemaArray = [postSchema];
+export const notificationSchemaArray = [notificationSchema];

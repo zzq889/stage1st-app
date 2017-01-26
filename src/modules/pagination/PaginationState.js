@@ -2,6 +2,7 @@ import { combineReducers } from 'redux-immutable';
 import paginate from './paginate';
 import { THREAD } from '../thread/ThreadState';
 import { POST } from '../post/PostState';
+import { NOTIFICATION } from '../notification/NotificationState';
 
 // Updates the pagination data for different actions.
 export default combineReducers({
@@ -19,6 +20,14 @@ export default combineReducers({
       POST.REQUEST,
       POST.SUCCESS,
       POST.FAILURE,
+    ],
+  }),
+  notificationsByKey: paginate({
+    mapActionToKey: ({ paginationKey }) => paginationKey,
+    types: [
+      NOTIFICATION.REQUEST,
+      NOTIFICATION.SUCCESS,
+      NOTIFICATION.FAILURE,
     ],
   }),
 });
