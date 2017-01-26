@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { StyleSheet } from 'react-native';
 import { Set } from 'immutable';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ThreadListViewContainer from './ThreadListViewContainer';
@@ -33,6 +34,7 @@ export default class SubscribedTabView extends Component {
 
     return (
       <ScrollableTabView
+        style={styles.container}
         tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
         tabBarTextStyle={{ fontSize: 15 }}
         tabBarActiveTextColor={palette.primary}
@@ -52,3 +54,9 @@ export default class SubscribedTabView extends Component {
 SubscribedTabView.propTypes = {
   forums: PropTypes.instanceOf(Set),
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: palette.background,
+  },
+});

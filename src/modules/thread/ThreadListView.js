@@ -88,7 +88,7 @@ class ThreadListView extends Component {
           />
         }
         renderRow={this.renderRow}
-        renderFooter={loading ? this.renderFooter : null}
+        renderFooter={(loadType !== 'refresh' && loading) ? this.renderFooter : null}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={15}
         // onScroll={this.handleScroll}

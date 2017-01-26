@@ -12,7 +12,7 @@ import {
 import { List, Map } from 'immutable';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImmutableListView from 'react-native-immutable-list-view';
-import { palette } from '../../styles/config';
+import { palette, gestures } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbar from './PostToolbar';
 import Router from '../AppRouter';
@@ -24,6 +24,9 @@ class PostListView extends Component {
       title: 'Posts',
       backgroundColor: palette.black,
       tintColor: palette.inverted,
+    },
+    styles: {
+      gestures,
     },
   }
 
@@ -117,7 +120,7 @@ class PostListView extends Component {
             />
           }
           renderHeader={this.renderHeader}
-          renderFooter={loading ? this.renderFooter : null}
+          renderFooter={(loadType !== 'refresh' && loading) ? this.renderFooter : null}
           renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
           rowsDuringInteraction={5}
         />

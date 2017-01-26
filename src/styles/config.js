@@ -3,6 +3,7 @@ import {
   Platform,
 } from 'react-native';
 import Color from 'color';
+import { NavigationStyles } from '@exponent/ex-navigation';
 
 const baseColors = {
   black: '#1C1D21',
@@ -49,10 +50,19 @@ export const rounded = {
 
 export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 
+export const gestures = (params) => {
+  const newParams = { ...params };
+  newParams.gestureResponseDistance = 50;
+  return NavigationStyles.SlideHorizontal.gestures(newParams);
+};
+
 export const defaultRouteConfig = fromJS({
   navigationBar: {
     backgroundColor: palette.black,
     tintColor: palette.inverted,
+  },
+  styles: {
+    gestures,
   },
 });
 
