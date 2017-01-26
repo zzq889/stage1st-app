@@ -1,4 +1,4 @@
-import { takeEvery, take, call, fork, select } from 'redux-saga/effects';
+import { takeEvery, take, call, select } from 'redux-saga/effects';
 import { EventEmitter } from 'fbemitter';
 import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
@@ -71,8 +71,8 @@ export const loadMoreThreads = fid =>
 export const newThread = args =>
   createAction(NEW_THREAD, { ...args });
 
-export const loadThreadInfo = tid =>
-  createAction(LOAD_THREAD_INFO, { tid });
+export const loadThreadInfo = (tid, requiredFields = []) =>
+  createAction(LOAD_THREAD_INFO, { tid, requiredFields });
 
 export const favThread = (tid, fav) =>
   createAction(FAV_THREAD, { tid, fav });
