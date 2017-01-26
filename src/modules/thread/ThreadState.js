@@ -1,4 +1,4 @@
-import { takeEvery, take, call, fork, select } from 'redux-saga/effects';
+import { takeEvery, take, call, select } from 'redux-saga/effects';
 import { EventEmitter } from 'fbemitter';
 import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
