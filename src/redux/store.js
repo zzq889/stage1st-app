@@ -3,7 +3,6 @@
 import { applyMiddleware, createStore } from 'redux';
 import { Map } from 'immutable';
 import { composeWithDevTools } from 'remote-redux-devtools';
-import { createNavigationEnabledStore } from '@exponent/ex-navigation';
 import createSagaMiddleware, { END } from 'redux-saga';
 import { persistStore, autoRehydrate } from 'redux-persist-immutable';
 import { AsyncStorage } from 'react-native';
@@ -18,13 +17,8 @@ const enhancer = composeEnhancers(
   applyMiddleware(sagaMiddleware, ...middleware),
 );
 
-const createStoreWithNavigation = createNavigationEnabledStore({
-  createStore,
-  navigationStateKey: 'navigation',
-});
-
 // create the store
-const store = createStoreWithNavigation(
+const store = createStore(
   reducer,
   Map(),
   enhancer,
