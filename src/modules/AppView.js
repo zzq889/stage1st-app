@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import {
   NavigationProvider,
-  StackNavigation,
 } from '@exponent/ex-navigation';
 import { ActionSheetProvider } from '@exponent/react-native-action-sheet';
+import { AppWithNavigationState } from './navigation/AppNavigator';
 import Router from './AppRouter';
 import DeveloperMenu from '../components/DeveloperMenu';
 import { palette } from '../styles/config';
@@ -28,10 +28,7 @@ const AppView = ({ isReady }) => {
     <View style={styles.container}>
       <ActionSheetProvider>
         <NavigationProvider router={Router}>
-          <StackNavigation
-            id="master"
-            initialRoute={Router.getRoute('app')}
-          />
+          <AppWithNavigationState />
         </NavigationProvider>
       </ActionSheetProvider>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" animated />}

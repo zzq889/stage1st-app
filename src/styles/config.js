@@ -48,6 +48,8 @@ export const rounded = {
   borderRadius: 4,
 };
 
+export const gestureResponseDistance = 50;
+
 export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 
 export const gestures = (params) => {
@@ -64,6 +66,14 @@ export const defaultRouteConfig = fromJS({
   styles: {
     gestures,
   },
+});
+
+export const header = (navigation, defaultHeader) => ({
+  ...defaultHeader,
+  style: {
+    backgroundColor: palette.black,
+  },
+  tintColor: palette.inverted,
 });
 
 export const defaultAlertStyle = {
