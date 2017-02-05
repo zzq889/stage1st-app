@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import { Map } from 'immutable';
-import { NavigationStyles } from '@exponent/ex-navigation';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import DismissButton from '../../components/DismissButton';
@@ -22,10 +21,6 @@ export default class PostComposeView extends Component {
       tintColor: palette.inverted,
       renderLeft: () => <DismissButton />,
       renderRight: () => <SubmitButton />,
-    },
-    styles: {
-      ...NavigationStyles.SlideVertical,
-      gestures: null,
     },
   }
 

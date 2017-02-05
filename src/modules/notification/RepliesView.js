@@ -8,13 +8,11 @@ import {
   RefreshControl,
 } from 'react-native';
 import { List } from 'immutable';
-import { withNavigation } from '@exponent/ex-navigation';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
 import Row from './RepliesRow';
 import { palette } from '../../styles/config';
 
-@withNavigation
 class RepliesView extends Component {
   static route = {
     navigationBar: {

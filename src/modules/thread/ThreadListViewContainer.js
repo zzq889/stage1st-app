@@ -2,6 +2,7 @@ import { PropTypes } from 'react';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { addNavigationHelpers } from 'react-navigation';
 import ThreadListView from './ThreadListView';
 import {
   loadThreadPage,
@@ -9,6 +10,11 @@ import {
 } from './ThreadState';
 
 const ThreadListViewContainer = connect(
+  (state, { fid, navigation }) => ({
+    nav: state.get('nav'),
+    fid: fid || (navigation && navigation.state.params.fid),
+  }),
+)(connect(
   (state, { fid }) => ({
     threads: state
       .getIn(['pagination', 'threadsByFid', fid, 'ids'], List())
@@ -29,17 +35,18 @@ const ThreadListViewContainer = connect(
     loadType: state.getIn(['pagination', 'threadsByFid', fid, 'loadType']),
     nextPage: state.getIn(['pagination', 'threadsByFid', fid, 'nextPage']),
   }),
-  (dispatch, { fid }) => ({
+  (dispatch, { fid, nav }) => ({
     loadThreadPage: bindActionCreators(loadThreadPage.bind(null, fid), dispatch),
     loadMoreThreads: bindActionCreators(loadMoreThreads.bind(null, fid), dispatch),
+    navigation: addNavigationHelpers({ dispatch, state: nav }),
   }),
-)(ThreadListView);
+)(ThreadListView));
 
 ThreadListViewContainer.propTypes = {
   fid: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
-  ]).isRequired,
+  ]),
 };
 
 export default ThreadListViewContainer;

@@ -37,7 +37,7 @@ sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store, {
   storage: AsyncStorage,
-  whitelist: ['entities', 'pagination', 'auth', 'forum', 'post'],
+  whitelist: ['entities', 'pagination', 'auth', 'forum', 'post', 'nav'],
 });
 
 export default store;

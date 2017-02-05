@@ -1,7 +1,7 @@
-import { takeEvery } from 'redux-saga/effects';
+import { put, call, takeEvery } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
-import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
+import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   userLogin as apiUserLogin,
 } from '../../services/webApi';
@@ -36,8 +36,21 @@ export const userLogout = () => createAction(USER_LOGOUT);
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const loginRequest = ({ username, password, questionid, answer }) =>
-  fetchEntity(loginEntity, apiUserLogin, { username, password, questionid, answer });
+function* loginRequest({ username, password, questionid, answer }) {
+  const args = { username, password, questionid, answer };
+  const entity = loginEntity;
+  const apiFn = apiUserLogin;
+  try {
+    yield put(entity.request(args));
+    const response = yield call(apiFn, args);
+    yield put(entity.success(args, response));
+    authEmitter.emit('LOGIN.SUCCESS');
+  } catch (error) {
+    const message = error.message || 'Something bad happened';
+    // console.warn(message);
+    yield put(entity.failure(args, message));
+  }
+}
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/
@@ -69,7 +82,6 @@ export default function AuthStateReducer(state = initialState, action = {}) {
       return state.set('isSubmitting', true);
     case LOGIN.SUCCESS: {
       const { uid, username, sid } = action.response.data;
-      authEmitter.emit('dismiss');
       return state
         .set('isLoggedIn', true)
         .set('isSubmitting', false)

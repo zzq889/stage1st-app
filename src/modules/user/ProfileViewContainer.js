@@ -34,9 +34,9 @@ class ProfileViewContainer extends Component {
 
   componentWillMount() {
     this.props.loadUserPage();
-    this.props.navigator.updateCurrentRouteParams({
-      title: this.props.username,
-    });
+    // this.props.navigator.updateCurrentRouteParams({
+    //   title: this.props.username,
+    // });
   }
 
   render() {
@@ -47,9 +47,6 @@ class ProfileViewContainer extends Component {
 ProfileViewContainer.propTypes = {
   loadUserPage: PropTypes.func,
   username: PropTypes.string,
-  navigator: PropTypes.shape({
-    updateCurrentRouteParams: PropTypes.func.isRequired,
-  }),
 };
 
 export default ProfileViewContainer;

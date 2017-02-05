@@ -3,6 +3,7 @@ import { Map } from 'immutable';
 import {
   View,
   StyleSheet,
+  InteractionManager,
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ForumListViewContainer from './ForumListViewContainer';
@@ -18,7 +19,9 @@ export default class ForumTabView extends Component {
   }
 
   componentWillMount() {
-    this.props.loadChannelPage();
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadChannelPage();
+    });
   }
 
   render() {
@@ -36,6 +39,7 @@ export default class ForumTabView extends Component {
           key={key}
           forumIds={chan.get('child')}
           tabLabel={name}
+          navigation={this.props.navigation}
         />
       );
     });
@@ -58,6 +62,9 @@ export default class ForumTabView extends Component {
 ForumTabView.propTypes = {
   channels: PropTypes.instanceOf(Map).isRequired,
   loadChannelPage: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const styles = StyleSheet.create({

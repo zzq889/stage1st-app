@@ -3,7 +3,6 @@ import { InteractionManager } from 'react-native';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { NavigationStyles } from '@exponent/ex-navigation';
 import ThreadComposeView from './ThreadComposeView';
 import DismissButton from '../../components/DismissButton';
 import { palette } from '../../styles/config';
@@ -23,10 +22,6 @@ class ThreadComposeViewContainer extends PureComponent {
       tintColor: palette.inverted,
       renderLeft: () => <DismissButton onPress={() => { threadEmitter.emit('DISMISS_THREAD_COMPOSE'); }} />,
       renderRight: () => <SubmitButton />,
-    },
-    styles: {
-      ...NavigationStyles.SlideVertical,
-      gestures: null,
     },
   }
 

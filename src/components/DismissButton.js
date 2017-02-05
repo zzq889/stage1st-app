@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { withNavigation } from '@exponent/ex-navigation';
 import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/EvilIcons';
 
-@withNavigation
 class DismissButton extends Component {
   _pop = () => {
     this.props.navigator.pop();

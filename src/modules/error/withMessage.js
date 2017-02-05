@@ -1,5 +1,4 @@
 import React, { PropTypes, PureComponent } from 'react';
-import { withNavigation } from '@exponent/ex-navigation';
 import hoistStatics from 'hoist-non-react-statics';
 import { defaultAlertStyle } from '../../styles/config';
 import { errorEmitter } from './ErrorState';
@@ -9,28 +8,27 @@ function getDisplayName(WrappedComponent): string {
 }
 
 export default function withMessage(WrappedComponent) {
-  @withNavigation
   class InnerComponent extends PureComponent {
-    componentWillMount() {
-      this._subscription = errorEmitter.addListener('error', this.listener);
-    }
+    // componentWillMount() {
+    //   this._subscription = errorEmitter.addListener('error', this.listener);
+    // }
 
-    componentWillUnmount() {
-      this._subscription.remove();
-    }
+    // componentWillUnmount() {
+    //   this._subscription.remove();
+    // }
 
-    listener = error => this.props.navigator.showLocalAlert(error, defaultAlertStyle);
+    // listener = error => this.props.navigator.showLocalAlert(error, defaultAlertStyle);
 
     render() {
       return <WrappedComponent {...this.props} />;
     }
   }
 
-  InnerComponent.propTypes = {
-    navigator: PropTypes.shape({
-      showLocalAlert: PropTypes.func.isRequired,
-    }).isRequired,
-  };
+  // InnerComponent.propTypes = {
+  //   navigator: PropTypes.shape({
+  //     showLocalAlert: PropTypes.func.isRequired,
+  //   }).isRequired,
+  // };
 
   InnerComponent.displayName = `WithMessage(${getDisplayName(WrappedComponent)})`;
 

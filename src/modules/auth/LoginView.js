@@ -10,12 +10,11 @@ import {
   Platform,
 } from 'react-native';
 import { fromJS, Map } from 'immutable';
-import { NavigationStyles } from '@exponent/ex-navigation';
 import { palette, rounded, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import PreImage from '../../../images/pre.png';
 import CircleView from '../../components/CircleView';
-import DismissButton from '../../components/DismissButton';
+// import DismissButton from '../../components/DismissButton';
 import { authEmitter } from './AuthState';
 import withMessage from '../error/withMessage';
 import QuestionPicker from './QuestionPicker';
@@ -33,21 +32,8 @@ const questions = fromJS([
 
 @withMessage
 class LoginView extends Component {
-  static route = {
-    navigationBar: {
-      title: '登录',
-      backgroundColor: palette.black,
-      tintColor: palette.inverted,
-      renderLeft: () => <DismissButton />,
-    },
-    styles: {
-      ...NavigationStyles.SlideVertical,
-      gestures: null,
-    },
-  }
-
   componentWillMount() {
-    this._subscription = authEmitter.once('dismiss', this.dismiss);
+    this._subscription = authEmitter.once('LOGIN.SUCCESS', this.dismiss);
   }
 
   componentWillUnmount() {
@@ -56,7 +42,7 @@ class LoginView extends Component {
   }
 
   dismiss = () => {
-    this.props.navigator.pop();
+    this.props.navigation.goBack(null);
   }
 
   render() {
@@ -154,7 +140,7 @@ class LoginView extends Component {
           style={styles.container}
         >
           <ScrollView
-            keyboardShouldPersistTaps
+            keyboardShouldPersistTaps={'always'}
           >
             {children}
           </ScrollView>
@@ -177,9 +163,9 @@ LoginView.propTypes = {
   values: PropTypes.instanceOf(Map).isRequired,
   onChange: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
-  navigator: PropTypes.shape({
-    pop: PropTypes.func.isRequired,
-  }),
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const styles = StyleSheet.create({

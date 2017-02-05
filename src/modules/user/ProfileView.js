@@ -7,17 +7,16 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import { connectActionSheet } from '@exponent/react-native-action-sheet';
 import { Map, List } from 'immutable';
 import TableCell from '../../components/TableCell';
-import Router from '../AppRouter';
 import { palette } from '../../styles/config';
 import ProfileHeaderContainer from './ProfileHeaderContainer';
 
 const listData = List([
-  Map({ title: '我的发言', route: 'history' }),
-  Map({ title: '我的消息', route: 'notification' }),
-  Map({ title: '我的收藏', route: 'threads', params: { fid: 'favorite' } }),
+  Map({ title: '我的发言', route: 'History' }),
+  Map({ title: '我的消息', route: 'Notifications' }),
+  Map({ title: '我的收藏', route: 'MyFavorites', params: { fid: 'favorite' } }),
   // Map({ title: '我的马甲', route: 'color' }),
   // Map({ title: '搜索', route: 'color' }),
-  Map({ title: '关于', route: 'about' }),
+  Map({ title: '关于', route: 'About' }),
   Map({ title: '退出登录', name: 'logout' }),
 ]);
 
@@ -58,11 +57,11 @@ class ProfileView extends Component {
           text={rowData.get('title')}
           accessoryType="arrow"
           onPress={() => {
-            this.props.navigator
-              .push(Router.getRoute(route, {
+            this.props.navigation
+              .navigate(route, {
                 title: rowData.get('title'),
                 ...rowData.get('params', {}),
-              }));
+              });
             highlightRow(sectionID, rowID);
           }}
         />
@@ -101,9 +100,8 @@ class ProfileView extends Component {
 ProfileView.propTypes = {
   uid: PropTypes.string.isRequired,
   user: PropTypes.instanceOf(Map),
-  navigator: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-    updateCurrentRouteParams: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
   }).isRequired,
   userLogout: PropTypes.func.isRequired,
   showActionSheetWithOptions: PropTypes.func,

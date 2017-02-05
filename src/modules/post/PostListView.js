@@ -15,7 +15,6 @@ import ImmutableListView from 'react-native-immutable-list-view';
 import { palette, gestures } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbar from './PostToolbar';
-import Router from '../AppRouter';
 import { postEmitter } from './PostState';
 
 class PostListView extends Component {
@@ -55,8 +54,7 @@ class PostListView extends Component {
 
   showReply = (pid) => {
     this.props.navigation
-    .getNavigator('master')
-    .push(Router.getRoute('reply', { tid: this.props.tid, pid }));
+    .navigate('reply', { tid: this.props.tid, pid });
   }
 
   renderRow = rowData => (
@@ -152,8 +150,8 @@ PostListView.propTypes = {
   loadThreadInfo: PropTypes.func.isRequired,
   favThread: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
-    getNavigator: PropTypes.func.isRequired,
-  }),
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 PostListView.defaultProps = {

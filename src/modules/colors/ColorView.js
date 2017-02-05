@@ -12,14 +12,6 @@ const color = () => Math.floor(360 * Math.random());
  * @TODO remove this module in a live application.
  */
 class ColorView extends Component {
-  static navigationOptions = {
-    title: ({ state: { params } }) => (
-      params
-      ? `Color Screen ${params.index}`
-      : 'Color Screen'
-    ),
-  }
-
   state = {
     background: `hsl(${color()},50%,80%)`,
   };
