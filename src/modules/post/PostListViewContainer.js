@@ -16,10 +16,12 @@ const PostListViewContainer = connect(
     const uid = state.getIn(['post', tid, 'uid']);
     const quid = uid || 'all';
     const key = `${tid}.${quid}`;
-    const currentPageNo = (navigation && navigation.state.params.pageNo) || state.getIn(['post', tid, quid, 'pageNo'], 1);
+    const currentPageNo = (navigation && navigation.state.params.pageNo)
+      || state.getIn(['post', tid, quid, 'pageNo'], 1);
     return {
       uid,
       pageNo: currentPageNo,
+      highlightPosition: navigation && navigation.state.params.highlightPosition,
       posts: state
         .getIn(['pagination', 'postsByTid', key, 'pages', currentPageNo], List())
         .map(pid => state.getIn(['entities', 'posts', String(pid)]))

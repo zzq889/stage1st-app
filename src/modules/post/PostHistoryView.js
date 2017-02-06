@@ -58,6 +58,7 @@ class PostHistoryView extends Component {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
           pageNo: Math.floor(rowData.get('position', 0) / 30) + 1,
+          highlightPosition: rowData.get('position'),
         });
         highlightRow(sectionID, rowID);
       }}

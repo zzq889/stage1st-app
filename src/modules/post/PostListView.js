@@ -56,6 +56,7 @@ class PostListView extends Component {
       grouptitle={rowData.get('grouptitle')}
       e={rowData.get('e')}
       onReplyPress={() => this.showReply(rowData.get('pid'))}
+      isHighlighted={rowData.get('position') === this.props.highlightPosition}
     />
   );
 
@@ -131,6 +132,7 @@ PostListView.propTypes = {
     PropTypes.string,
   ]),
   pageNo: PropTypes.number,
+  highlightPosition: PropTypes.number,
   totalPage: PropTypes.number,
   loadType: PropTypes.string,
   loading: PropTypes.bool.isRequired,
