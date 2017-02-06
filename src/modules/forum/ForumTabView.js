@@ -7,10 +7,8 @@ import {
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import ForumListViewContainer from './ForumListViewContainer';
-import withMessage from '../error/withMessage';
 import { palette } from '../../styles/config';
 
-@withMessage
 export default class ForumTabView extends Component {
   static route = {
     navigationBar: {

@@ -10,6 +10,7 @@ import { ActionSheetProvider } from '@exponent/react-native-action-sheet';
 import { AppWithNavigationState } from './navigation/AppNavigator';
 import DeveloperMenu from '../components/DeveloperMenu';
 import { palette } from '../styles/config';
+import withMessage from './error/withMessage';
 
 const AppView = ({ isReady }) => {
   if (!isReady) {
@@ -49,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppView;
+export default withMessage(AppView);

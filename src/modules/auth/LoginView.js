@@ -16,7 +16,6 @@ import PreImage from '../../../images/pre.png';
 import CircleView from '../../components/CircleView';
 import DismissButton from '../../components/DismissButton';
 import { authEmitter } from './AuthState';
-import withMessage from '../error/withMessage';
 import QuestionPicker from './QuestionPicker';
 
 const questions = fromJS([
@@ -30,7 +29,6 @@ const questions = fromJS([
   '驾驶执照最后四位数字',
 ]);
 
-@withMessage
 class LoginView extends Component {
   static navigationOptions = {
     header: (navigation, defaultHeader) => ({

@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import PostListView from './PostListView';
 import { loadPostPage, jumpToPage } from './PostState';
 import { loadThreadInfo, favThread } from '../thread/ThreadState';
-import withMessage from '../error/withMessage';
 
 const PostListViewContainer = connect(
   (state, { tid, navigation }) => ({
@@ -59,4 +58,4 @@ PostListViewContainer.propTypes = {
   tid: PropTypes.number,
 };
 
-export default withMessage(PostListViewContainer);
+export default PostListViewContainer;

@@ -4,7 +4,6 @@ import {
   Text,
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import withMessage from '../error/withMessage';
 import { palette } from '../../styles/config';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
 import PostHistoryViewContainer from '../post/PostHistoryViewContainer';
@@ -14,7 +13,6 @@ const titles = {
   post: '回复',
 };
 
-@withMessage
 export default class HistoryTabView extends Component {
   static route = {
     navigationBar: {
