@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 
-import React from 'react';
+import React, { Component } from 'react';
+import { BackAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import {
   addNavigationHelpers,
@@ -232,11 +233,50 @@ export const AppNavigator = StackNavigator({
   },
 });
 
-export const AppWithNavigationState = connect(state => ({
+@connect(state => ({
   nav: state.get('nav'),
-}))(({ dispatch, nav }) => (
-  <AppNavigator
-    navigation={addNavigationHelpers({ dispatch, state: nav })}
-    gestureResponseDistance={gestureResponseDistance}
-  />
-));
+}))
+@connect(
+  () => ({}),
+  (dispatch, { nav }) => ({
+    navigation: addNavigationHelpers({ dispatch, state: nav }),
+  }),
+)
+export class AppWithNavigationState extends Component {
+  componentDidMount() {
+    this._listener = BackAndroid.addEventListener('hardwareBackPress', () => {
+      if (!this.onMainScreen()) {
+        this.props.navigation.goBack(null);
+        return true;
+      }
+      return false;
+    });
+  }
+
+  componentWillUnmount() {
+    this._listener.remove();
+  }
+
+  onMainScreen = () => {
+    // warning: ugly hack
+    const state = this.props.navigation.state;
+    if (state.index === 0) {
+      const state2 = state.routes[0];
+      if (state2.index === 0) {
+        const routeValue = state2.routes[0].routes.reduce((sum, route) => sum + route.index, 0);
+        return routeValue === 0;
+      }
+    }
+    return false;
+  }
+
+  render() {
+    const { navigation } = this.props;
+    return (
+      <AppNavigator
+        navigation={navigation}
+        gestureResponseDistance={gestureResponseDistance}
+      />
+    );
+  }
+}
