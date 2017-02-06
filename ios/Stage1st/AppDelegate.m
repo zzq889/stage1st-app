@@ -8,10 +8,10 @@
  */
 
 #import "AppDelegate.h"
-#import "CodePush.h"
+#import <CodePush/CodePush.h>
 
-#import "RCTBundleURLProvider.h"
-#import "RCTRootView.h"
+#import <React/RCTBundleURLProvider.h>
+#import <React/RCTRootView.h>
 
 @implementation AppDelegate
 
@@ -19,7 +19,7 @@
 {
   NSURL *jsCodeLocation;
 
-  
+
 #ifdef DEBUG
     jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
 #else

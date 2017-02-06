@@ -1,18 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-import { withNavigation } from '@exponent/ex-navigation';
 import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Router from '../modules/AppRouter';
 
-@withNavigation
 class ComposeButton extends Component {
   gotoComposeView = () => {
     this.props.navigation
-    .getNavigator('master')
-    .push(Router.getRoute('newThread', { fid: this.props.fid }));
+    .navigate('NewThread', { fid: this.props.fid });
   }
 
   render() {
@@ -33,13 +29,12 @@ ComposeButton.propTypes = {
     PropTypes.number,
   ]).isRequired,
   navigation: PropTypes.shape({
-    getNavigator: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
   }),
 };
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

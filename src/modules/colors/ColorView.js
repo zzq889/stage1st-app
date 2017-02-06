@@ -4,8 +4,6 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
-import Router from '../AppRouter';
-import requireAuth from '../auth/requireAuth';
 
 const color = () => Math.floor(360 * Math.random());
 
@@ -13,33 +11,26 @@ const color = () => Math.floor(360 * Math.random());
  * Sample view to demonstrate navigation patterns.
  * @TODO remove this module in a live application.
  */
-@requireAuth
 class ColorView extends Component {
-  static route = {
-    navigationBar: {
-      title: ({ title }) => title || 'Color Screen',
-    },
-  }
-
   state = {
     background: `hsl(${color()},50%,80%)`,
   };
 
   onNextPress = () => {
-    const index = this.props.index;
-    this.props.navigator.push(Router.getRoute('color', {
-      index: index + 1,
-      title: `Color Screen #${index + 1}`,
-    }));
+    const { state: { params } } = this.props.navigation;
+    const index = (params ? params.index : 0) + 1;
+    this.props.navigation.navigate('Color', { index });
+    // this.props.navigator.push(Router.getRoute('color', {
+    //   index: index + 1,
+    //   title: `Color Screen #${index + 1}`,
+    // }));
   }
 
   render() {
-    const index = this.props.index;
-    const text = `View #${index}`;
     return (
       <View style={[styles.container, { backgroundColor: this.state.background }]}>
         <Text onPress={this.onNextPress}>
-          {text}
+          {'View'}
         </Text>
       </View>
     );
@@ -47,11 +38,14 @@ class ColorView extends Component {
 }
 
 ColorView.propTypes = {
-  index: PropTypes.number.isRequired,
-  navigator: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      params: PropTypes.shape({
+        index: PropTypes.number.isRequired,
+      }),
+    }).isRequired,
   }).isRequired,
-  dispatch: PropTypes.func.isRequired,
 };
 
 ColorView.defaultProps = {

@@ -7,14 +7,11 @@ import {
   RefreshControl,
 } from 'react-native';
 import { List } from 'immutable';
-import { withNavigation } from '@exponent/ex-navigation';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
 import Row from './PostHistoryRow';
-import Router from '../AppRouter';
 import { palette } from '../../styles/config';
 
-@withNavigation
 class PostHistoryView extends Component {
   static route = {
     navigationBar: {
@@ -57,12 +54,11 @@ class PostHistoryView extends Component {
       type={rowData.get('type')}
       onPress={() => {
         this.props.navigation
-        .getNavigator('master')
-        .push(Router.getRoute('posts', {
+        .navigate('posts', {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
           pageNo: Math.floor(rowData.get('position', 0) / 30) + 1,
-        }));
+        });
         highlightRow(sectionID, rowID);
       }}
     />
@@ -101,7 +97,7 @@ PostHistoryView.propTypes = {
   loading: PropTypes.bool.isRequired,
   loadPostPage: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
-    getNavigator: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
   }),
 };
 

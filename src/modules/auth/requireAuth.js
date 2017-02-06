@@ -8,7 +8,6 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { withNavigation } from '@exponent/ex-navigation';
 import hoistStatics from 'hoist-non-react-statics';
 import { palette, rounded } from '../../styles/config';
 
@@ -17,13 +16,12 @@ function getDisplayName(WrappedComponent): string {
 }
 
 export default function requireAuth(WrappedComponent) {
-  @withNavigation
   @connect(state => ({
     isLoggedIn: state.getIn(['auth', 'isLoggedIn']),
   }))
   class InnerComponent extends PureComponent {
     showLogin = () => {
-      this.props.navigation.getNavigator('master').push('login');
+      this.props.navigation.navigate('Login');
     }
 
     render() {
@@ -45,7 +43,7 @@ export default function requireAuth(WrappedComponent) {
   InnerComponent.propTypes = {
     isLoggedIn: PropTypes.bool,
     navigation: PropTypes.shape({
-      getNavigator: PropTypes.func.isRequired,
+      navigate: PropTypes.func.isRequired,
     }).isRequired,
   };
 

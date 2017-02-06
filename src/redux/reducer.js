@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux-immutable';
-import { NavigationReducer } from '@exponent/ex-navigation';
+import NavigationStateReducer from '../modules/navigation/NavigationState';
 import SessionStateReducer from '../modules/session/SessionState';
 import ErrorStateReducer from '../modules/error/ErrorState';
 import EntitiesStateReducer from '../modules/entities/EntitiesState';
@@ -13,7 +13,7 @@ import FormStateReducer from '../modules/form/FormState';
 export default combineReducers({
   // @NOTE: By convention, the navigation state must live in a subtree called
   // `navigation`
-  navigation: NavigationReducer,
+  nav: NavigationStateReducer,
   form: FormStateReducer,
   session: SessionStateReducer,
   error: ErrorStateReducer,

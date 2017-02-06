@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import { Map } from 'immutable';
-import { NavigationStyles } from '@exponent/ex-navigation';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import DismissButton from '../../components/DismissButton';
@@ -15,18 +14,12 @@ import { postEmitter } from './PostState';
 
 
 export default class PostComposeView extends Component {
-  static route = {
-    navigationBar: {
-      title: ({ title }) => title || '回复',
-      backgroundColor: palette.black,
-      tintColor: palette.inverted,
-      renderLeft: () => <DismissButton />,
-      renderRight: () => <SubmitButton />,
-    },
-    styles: {
-      ...NavigationStyles.SlideVertical,
-      gestures: null,
-    },
+  static navigationOptions = {
+    header: (navigation, defaultHeader) => ({
+      ...defaultHeader,
+      left: <DismissButton navigation={navigation} />,
+      right: <SubmitButton />,
+    }),
   }
 
   state = { value: null };
@@ -43,7 +36,7 @@ export default class PostComposeView extends Component {
 
   dismiss = () => {
     this.props.reset();
-    this.props.navigator.pop();
+    this.props.navigation.goBack(null);
   }
 
   render() {
@@ -83,8 +76,8 @@ PostComposeView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   values: PropTypes.instanceOf(Map),
   onChange: PropTypes.func.isRequired,
-  navigator: PropTypes.shape({
-    pop: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
   }),
   reset: PropTypes.func.isRequired,
 };

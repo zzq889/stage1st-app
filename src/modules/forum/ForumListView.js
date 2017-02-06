@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { withNavigation } from '@exponent/ex-navigation';
 import {
   View,
   StyleSheet,
@@ -7,31 +6,17 @@ import {
 import { List } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
-
-// import ImmutableDataSource from '../../components/ImmutableDataSource';
-import Router from '../AppRouter';
 import Row from './ForumRow';
 
-@withNavigation
 class ForumListView extends Component {
-  static route = {
-    navigationBar: {
-      title: '论坛',
-    },
-  }
-
-  _push = (route) => {
-    this.props.navigation.getNavigator('forums').push(route);
-  };
-
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
       onPress={() => {
-        this._push(Router.getRoute('threads', {
+        this.props.navigation.navigate('Threads', {
           fid: rowData.get('fid'),
           title: rowData.get('name'),
-        }));
+        });
         highlightRow(sectionID, rowID);
       }}
       isSubscribed={rowData.get('isSubscribed')}
@@ -60,7 +45,7 @@ class ForumListView extends Component {
 ForumListView.propTypes = {
   forums: PropTypes.instanceOf(List).isRequired,
   navigation: PropTypes.shape({
-    getNavigator: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
   }),
   subscribeForum: PropTypes.func.isRequired,
   unsubscribeForum: PropTypes.func.isRequired,

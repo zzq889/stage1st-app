@@ -6,12 +6,8 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import {
-  NavigationProvider,
-  StackNavigation,
-} from '@exponent/ex-navigation';
 import { ActionSheetProvider } from '@exponent/react-native-action-sheet';
-import Router from './AppRouter';
+import { AppWithNavigationState } from './navigation/AppNavigator';
 import DeveloperMenu from '../components/DeveloperMenu';
 import { palette } from '../styles/config';
 
@@ -20,6 +16,7 @@ const AppView = ({ isReady }) => {
     return (
       <View style={styles.container}>
         <ActivityIndicator style={styles.centered} />
+        {__DEV__ && <DeveloperMenu />}
       </View>
     );
   }
@@ -27,12 +24,7 @@ const AppView = ({ isReady }) => {
   return (
     <View style={styles.container}>
       <ActionSheetProvider>
-        <NavigationProvider router={Router}>
-          <StackNavigation
-            id="master"
-            initialRoute={Router.getRoute('app')}
-          />
-        </NavigationProvider>
+        <AppWithNavigationState />
       </ActionSheetProvider>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" animated />}
       {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}

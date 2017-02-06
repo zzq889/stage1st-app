@@ -8,6 +8,10 @@ import { loadThreadInfo, favThread } from '../thread/ThreadState';
 import withMessage from '../error/withMessage';
 
 const PostListViewContainer = connect(
+  (state, { tid, navigation }) => ({
+    tid: tid || (navigation && navigation.state.params.tid),
+  }),
+)(connect(
   (state, { tid, pageNo }) => {
     const uid = state.getIn(['post', tid, 'uid']);
     const quid = uid || 'all';
@@ -47,10 +51,10 @@ const PostListViewContainer = connect(
       dispatch,
     ),
   }),
-)(PostListView));
+)(PostListView)));
 
 PostListViewContainer.propTypes = {
-  tid: PropTypes.number.isRequired,
+  tid: PropTypes.number,
 };
 
 export default withMessage(PostListViewContainer);

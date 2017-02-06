@@ -1,15 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { withNavigation } from '@exponent/ex-navigation';
 import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/EvilIcons';
 
-@withNavigation
 class DismissButton extends Component {
   _pop = () => {
-    this.props.navigator.pop();
+    this.props.navigation.goBack(null);
   }
 
   render() {
@@ -26,14 +24,13 @@ class DismissButton extends Component {
 }
 
 DismissButton.propTypes = {
-  navigator: PropTypes.shape({
-    pop: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
   }),
 };
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

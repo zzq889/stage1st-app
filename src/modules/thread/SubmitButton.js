@@ -6,6 +6,8 @@ import {
 } from 'react-native';
 import { threadEmitter } from './ThreadState';
 import { palette } from '../../styles/config';
+import formConnect from '../form/helper';
+import validate from './threadValidate';
 
 const SubmitButton = ({ invalid, submitting }) => {
   const disabled = invalid || submitting;
@@ -27,7 +29,6 @@ SubmitButton.propTypes = {
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -42,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SubmitButton;
+export default formConnect('threadComposeForm', validate)(SubmitButton);

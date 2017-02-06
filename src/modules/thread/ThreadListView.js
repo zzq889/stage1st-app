@@ -7,20 +7,20 @@ import {
   RefreshControl,
 } from 'react-native';
 import { List } from 'immutable';
-import { withNavigation } from '@exponent/ex-navigation';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
 import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
-import Router from '../AppRouter';
 import { palette } from '../../styles/config';
 
-@withNavigation
 class ThreadListView extends Component {
-  static route = {
-    navigationBar: {
-      title: ({ title }) => title,
-      renderRight: ({ params: { fid } }) => (Number.isInteger(fid) ? <ComposeButton fid={fid} /> : null),
+  static navigationOptions = {
+    header: (navigation, defaultHeader) => {
+      const fid = navigation.state.params.fid;
+      return {
+        ...defaultHeader,
+        right: (Number.isInteger(fid) ? <ComposeButton fid={fid} navigation={navigation} /> : null),
+      };
     },
   }
 
@@ -63,12 +63,10 @@ class ThreadListView extends Component {
       replies={rowData.get('replies')}
       views={rowData.get('views')}
       onPress={() => {
-        this.props.navigation
-        .getNavigator('master')
-        .push(Router.getRoute('posts', {
+        this.props.navigation.navigate('Posts', {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
-        }));
+        });
         highlightRow(sectionID, rowID);
       }}
     />
@@ -110,8 +108,8 @@ ThreadListView.propTypes = {
   loadThreadPage: PropTypes.func.isRequired,
   loadMoreThreads: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
-    getNavigator: PropTypes.func.isRequired,
-  }),
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 ThreadListView.defaultProps = {
