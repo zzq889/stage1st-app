@@ -7,6 +7,7 @@ import {
   addNavigationHelpers,
   StackNavigator,
   TabNavigator,
+  TabView,
 } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { header, palette, gestureResponseDistance } from '../../styles/config';
@@ -157,13 +158,19 @@ export const TabScreen = TabNavigator({
   },
 }, {
   initialRouteName: 'ForumTab',
+  tabBarComponent: TabView.TabBarBottom,
   tabBarPosition: 'bottom',
   animationEnabled: false,
   swipeEnabled: false,
   tabBarOptions: {
+    showIcon: true,
+    showLabel: false,
     activeTintColor: palette.primary,
     style: {
       backgroundColor: palette.tabbar,
+    },
+    indicatorStyle: {
+      backgroundColor: 'transparent',
     },
   },
 });
