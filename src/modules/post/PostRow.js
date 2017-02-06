@@ -33,9 +33,10 @@ class PostRow extends Component {
       e,
       timestamp,
       onReplyPress,
+      isHighlighted,
     } = this.props;
     return (
-      <View style={styles.row}>
+      <View style={isHighlighted ? [styles.row, styles.highlightedRow] : styles.row}>
         <View style={styles.header}>
           <TouchableOpacity onPress={this.toggleUserDetail}>
             <Avatar style={styles.avatar} uid={authorId} />
@@ -83,12 +84,16 @@ PostRow.propTypes = {
   grouptitle: PropTypes.string.isRequired,
   e: PropTypes.number.isRequired,
   onReplyPress: PropTypes.func,
+  isHighlighted: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
   row: {
     padding: 15,
     backgroundColor: palette.background,
+  },
+  highlightedRow: {
+    backgroundColor: palette.lightYellow,
   },
   header: {
     flex: 1,
