@@ -54,7 +54,7 @@ class PostHistoryView extends Component {
       type={rowData.get('type')}
       onPress={() => {
         this.props.navigation
-        .navigate('posts', {
+        .navigate('Posts', {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
           pageNo: Math.floor(rowData.get('position', 0) / 30) + 1,
