@@ -50,7 +50,7 @@ class ThreadComposeView extends Component {
     const title = this.props.values.get('title') || '';
     const content = this.props.values.get('content') || '';
     if (title === '' && content === '') {
-      this.props.navigator.pop();
+      this.props.navigation.goBack(null);
     } else {
       this.titleField.blur();
       this.contentField.blur();
@@ -65,9 +65,9 @@ class ThreadComposeView extends Component {
       (buttonIndex) => {
         if (buttonIndex === 0) {
           this.props.reset();
-          this.props.navigator.pop();
+          this.props.navigation.goBack(null);
         } else if (buttonIndex === 1) {
-          this.props.navigator.pop();
+          this.props.navigation.goBack(null);
         }
       });
     }
@@ -152,8 +152,8 @@ ThreadComposeView.propTypes = {
     typeid: PropTypes.number,
   }).isRequired,
   reset: PropTypes.func.isRequired,
-  navigator: PropTypes.shape({
-    pop: PropTypes.func.isRequired,
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
   }),
   showActionSheetWithOptions: PropTypes.func,
 };

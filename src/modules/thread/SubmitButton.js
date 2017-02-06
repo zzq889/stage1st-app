@@ -27,7 +27,6 @@ SubmitButton.propTypes = {
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

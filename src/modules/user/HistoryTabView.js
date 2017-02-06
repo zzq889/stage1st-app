@@ -37,8 +37,8 @@ export default class HistoryTabView extends Component {
         tabBarInactiveTextColor={palette.default}
         tabBarBackgroundColor={palette.toolbar}
       >
-        <ThreadListViewContainer fid="history" tabLabel="我的帖子" />
-        <PostHistoryViewContainer tabLabel="我的回复" />
+        <ThreadListViewContainer fid="history" tabLabel="我的帖子" {...this.props} />
+        <PostHistoryViewContainer tabLabel="我的回复" {...this.props} />
       </ScrollableTabView>
     );
   }

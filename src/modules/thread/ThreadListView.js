@@ -14,10 +14,13 @@ import Row from './ThreadRow';
 import { palette } from '../../styles/config';
 
 class ThreadListView extends Component {
-  static route = {
-    navigationBar: {
-      title: ({ title }) => title,
-      renderRight: ({ params: { fid } }) => (Number.isInteger(fid) ? <ComposeButton fid={fid} /> : null),
+  static navigationOptions = {
+    header: (navigation, defaultHeader) => {
+      const fid = navigation.state.params.fid;
+      return {
+        ...defaultHeader,
+        right: (Number.isInteger(fid) ? <ComposeButton fid={fid} navigation={navigation} /> : null),
+      };
     },
   }
 

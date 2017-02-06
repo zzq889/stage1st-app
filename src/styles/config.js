@@ -56,6 +56,7 @@ export const header = (navigation, defaultHeader) => ({
     backgroundColor: palette.black,
   },
   tintColor: palette.inverted,
+  visible: true,
 });
 
 export const defaultAlertStyle = {

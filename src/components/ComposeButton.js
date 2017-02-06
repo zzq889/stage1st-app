@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 class ComposeButton extends Component {
   gotoComposeView = () => {
     this.props.navigation
-    .navigate('newThread', { fid: this.props.fid });
+    .navigate('NewThread', { fid: this.props.fid });
   }
 
   render() {
@@ -35,7 +35,6 @@ ComposeButton.propTypes = {
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },

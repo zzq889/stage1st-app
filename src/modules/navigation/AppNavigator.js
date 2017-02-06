@@ -167,9 +167,35 @@ export const TabScreen = TabNavigator({
   },
 });
 
-export const AppNavigator = StackNavigator({
+export const MasterNavigator = StackNavigator({
   Master: {
     screen: TabScreen,
+    path: '/',
+  },
+  Posts: {
+    screen: PostListViewContainer,
+    path: '/posts/:tid',
+    navigationOptions: {
+      title: 'Posts',
+      header,
+    },
+  },
+}, {
+  headerMode: 'screen',
+  navigationOptions: {
+    header: {
+      visible: false,
+    },
+  },
+});
+
+MasterNavigator.defaultProps = {
+  gestureResponseDistance,
+};
+
+export const AppNavigator = StackNavigator({
+  Default: {
+    screen: MasterNavigator,
     path: '/',
   },
   Login: {
@@ -177,29 +203,23 @@ export const AppNavigator = StackNavigator({
     path: '/login',
     navigationOptions: {
       title: '登录',
-      header: (navigation, defaultHeader) => ({
-        ...defaultHeader,
-        style: {
-          backgroundColor: palette.black,
-        },
-        tintColor: palette.inverted,
-        visible: true,
-      }),
+      header,
     },
   },
-  Posts: {
-    screen: PostListViewContainer,
-    path: '/posts/:tid',
+  NewThread: {
+    screen: ThreadComposeViewContainer,
+    path: '/newThread/:fid',
     navigationOptions: {
-      title: 'Posts',
-      header: (navigation, defaultHeader) => ({
-        ...defaultHeader,
-        style: {
-          backgroundColor: palette.black,
-        },
-        tintColor: palette.inverted,
-        visible: true,
-      }),
+      title: '发布主题',
+      header,
+    },
+  },
+  Reply: {
+    screen: PostComposeViewContainer,
+    path: '/reply/:tid/:pid',
+    navigationOptions: {
+      title: '回复',
+      header,
     },
   },
 }, {

@@ -81,7 +81,7 @@ class ProfileView extends Component {
   render() {
     const { user } = this.props;
     if (!user) {
-      return <View />;
+      return <View style={styles.container} />;
     }
 
     return (
@@ -91,7 +91,6 @@ class ProfileView extends Component {
         renderRow={this.renderRow}
         renderHeader={this.renderHeader}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-        rowsDuringInteraction={30}
       />
     );
   }
@@ -109,6 +108,7 @@ ProfileView.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: palette.background,
   },
   separator: {
