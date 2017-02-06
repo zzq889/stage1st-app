@@ -14,7 +14,7 @@ import { palette, rounded, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import PreImage from '../../../images/pre.png';
 import CircleView from '../../components/CircleView';
-// import DismissButton from '../../components/DismissButton';
+import DismissButton from '../../components/DismissButton';
 import { authEmitter } from './AuthState';
 import withMessage from '../error/withMessage';
 import QuestionPicker from './QuestionPicker';
@@ -32,6 +32,13 @@ const questions = fromJS([
 
 @withMessage
 class LoginView extends Component {
+  static navigationOptions = {
+    header: (navigation, defaultHeader) => ({
+      ...defaultHeader,
+      left: <DismissButton navigation={navigation} />,
+    }),
+  }
+
   componentWillMount() {
     this._subscription = authEmitter.once('LOGIN.SUCCESS', this.dismiss);
   }
