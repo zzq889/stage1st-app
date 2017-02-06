@@ -6,7 +6,10 @@ import formConnect from '../form/helper';
 
 export default formConnect('postComposeForm')(connect(
   () => ({}),
-  (dispatch, { tid, pid, values }) => ({
+  (dispatch, {
+    navigation: { state: { params: { tid, pid } } },
+    values,
+  }) => ({
     onSubmit: bindActionCreators(
       newPost.bind(null, { tid, pid, ...values.toJS() }),
       dispatch,
