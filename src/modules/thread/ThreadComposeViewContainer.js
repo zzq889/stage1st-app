@@ -7,12 +7,10 @@ import ThreadComposeView from './ThreadComposeView';
 import DismissButton from '../../components/DismissButton';
 import { newThread, threadEmitter } from './ThreadState';
 import { loadForumPage } from '../forum/ForumState';
-import withMessage from '../error/withMessage';
 import SubmitButton from './SubmitButton';
 import formConnect from '../form/helper';
 import validate from './threadValidate';
 
-@withMessage
 class ThreadComposeViewContainer extends PureComponent {
   static navigationOptions = {
     header: (navigation, defaultHeader) => ({
