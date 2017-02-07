@@ -1,7 +1,7 @@
 import { takeEvery, call, select } from 'redux-saga/effects';
 import { fetchEntity, createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
-  fetchReplies as apiFetchReplies,
+  fetchNotifications as apiFetchNotifications,
 } from '../../services/webApi';
 
 /** ****************************************************************************/
@@ -9,7 +9,7 @@ import {
 /** ****************************************************************************/
 
 export const NOTIFICATION = createRequestTypes('NOTIFICATION');
-export const LOAD_REPLIES_PAGE = 'NotificationState/LOAD_REPLIES_PAGE';
+export const LOAD_NOTIFICATIONS_PAGE = 'NotificationState/LOAD_NOTIFICATIONS_PAGE';
 
 export const notificationEntity = {
   request: args => createAction(
@@ -20,19 +20,19 @@ export const notificationEntity = {
     NOTIFICATION.FAILURE, { ...args, error }),
 };
 
-export const loadRepliesPage = loadType =>
-  createAction(LOAD_REPLIES_PAGE, { loadType });
+export const loadNotificationsPage = (notificationType, loadType) =>
+  createAction(LOAD_NOTIFICATIONS_PAGE, { notificationType, loadType });
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
-const fetchNotifications = args => fetchEntity(notificationEntity, apiFetchReplies, args);
+const fetchNotifications = args => fetchEntity(notificationEntity, apiFetchNotifications, args);
 const getNotifications = (state, key) =>
   state.getIn(['pagination', 'notificationsByKey', key]);
 
-function* loadReplies({ loadType }) {
-  const paginationKey = 'replies';
+function* loadNotifications({ notificationType, loadType }) {
+  const paginationKey = notificationType;
   if (loadType === 'refresh' || loadType === 'load') {
     yield call(fetchNotifications, { paginationKey, pageNo: 1, refresh: true, loadType });
   } else {
@@ -47,6 +47,6 @@ function* loadReplies({ loadType }) {
 /** ***************************** WATCHERS *************************************/
 /** ****************************************************************************/
 
-export function* watchLoadRepliesPage() {
-  yield takeEvery(LOAD_REPLIES_PAGE, loadReplies);
+export function* watchLoadNotificationsPage() {
+  yield takeEvery(LOAD_NOTIFICATIONS_PAGE, loadNotifications);
 }

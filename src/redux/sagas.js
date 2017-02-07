@@ -25,7 +25,7 @@ import {
   watchUserSign,
 } from '../modules/user/UserState';
 import {
-  watchLoadRepliesPage,
+  watchLoadNotificationsPage,
 } from '../modules/notification/NotificationState';
 
 export default function* root() {
@@ -45,6 +45,6 @@ export default function* root() {
     fork(watchUserAuth),
     fork(watchLoadUserPage),
     fork(watchUserSign),
-    fork(watchLoadRepliesPage),
+    fork(watchLoadNotificationsPage),
   ];
 }

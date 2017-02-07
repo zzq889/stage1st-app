@@ -11,7 +11,7 @@ import PostComposeViewContainer from './post/PostComposeViewContainer';
 import ProfileViewContainer from './user/ProfileViewContainer';
 import HistoryTabView from './user/HistoryTabView';
 import AboutView from './about/AboutView';
-import RepliesViewContainer from './notification/RepliesViewContainer';
+import NotificationsViewContainer from './notification/NotificationsViewContainer';
 
 /**
  * AppRouter is responsible for mapping a navigator scene to a view
@@ -29,7 +29,7 @@ const AppRouter = createRouter(() => ({
   profile: () => ProfileViewContainer,
   history: () => HistoryTabView,
   about: () => AboutView,
-  notification: () => RepliesViewContainer,
+  notification: () => NotificationsViewContainer,
 }));
 
 export default AppRouter;

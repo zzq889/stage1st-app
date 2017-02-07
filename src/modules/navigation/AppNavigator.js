@@ -22,7 +22,7 @@ import PostComposeViewContainer from '../post/PostComposeViewContainer';
 import ProfileViewContainer from '../user/ProfileViewContainer';
 import HistoryTabView from '../user/HistoryTabView';
 import AboutView from '../about/AboutView';
-import RepliesViewContainer from '../notification/RepliesViewContainer';
+import NotificationTabView from '../notification/NotificationTabView';
 
 export const FeedTab = StackNavigator({
   Subscribed: {
@@ -93,7 +93,7 @@ export const SettingsTab = StackNavigator({
     },
   },
   Notifications: {
-    screen: RepliesViewContainer,
+    screen: NotificationTabView,
     path: '/notifications',
     navigationOptions: {
       title: '我的消息',
