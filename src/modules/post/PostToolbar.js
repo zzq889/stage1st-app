@@ -6,9 +6,9 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import Toolbar from '../../components/Toolbar';
-import PagePicker from '../../components/PagePicker';
 import BarButtonItem from '../../components/BarButtonItem';
 import { palette } from '../../styles/config';
+import PagePicker from './PagePicker';
 
 class PostToolbar extends PureComponent {
   state = {
@@ -46,8 +46,11 @@ class PostToolbar extends PureComponent {
         >
           <Text>{ pageNo } / {totalPage}</Text>
           <PagePicker
+            currentPage={pageNo}
+            maximumPage={totalPage}
             visible={this.state.modalVisible}
             onRequestClose={() => this._setModalVisible(false)}
+            jumpToPage={jumpToPage}
           />
         </BarButtonItem>
         <BarButtonItem
