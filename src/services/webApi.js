@@ -144,8 +144,9 @@ export const fetchUserInfo = uid =>
   get('user', { uid }, SCHEMA.userSchema);
 
 // notification
-export const fetchReplies = () =>
-  post('notice/reply', null, SCHEMA.notificationSchemaArray);
+// paginationKey should be 'reply' or 'at'
+export const fetchNotifications = ({ paginationKey, pageNo }) =>
+  post(`notice/${paginationKey}`, { pageNo }, SCHEMA.notificationSchemaArray);
 
 // history
 export const fetchThreadHistory = ({ pageNo }) =>

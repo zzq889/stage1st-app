@@ -4,10 +4,10 @@ import {
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { palette } from '../../styles/config';
-import ThreadListViewContainer from '../thread/ThreadListViewContainer';
-import PostHistoryViewContainer from '../post/PostHistoryViewContainer';
+import NotificationsViewContainer from './NotificationsViewContainer';
 
-const HistoryTabView = props => (
+
+const NotificationTabView = props => (
   <ScrollableTabView
     style={styles.container}
     tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
@@ -16,12 +16,12 @@ const HistoryTabView = props => (
     tabBarInactiveTextColor={palette.default}
     tabBarBackgroundColor={palette.toolbar}
   >
-    <ThreadListViewContainer fid="history" tabLabel="我的帖子" {...props} />
-    <PostHistoryViewContainer tabLabel="我的回复" {...props} />
+    <NotificationsViewContainer type="reply" tabLabel="回复我的" {...props} />
+    <NotificationsViewContainer type="at" tabLabel="@我的" {...props} />
   </ScrollableTabView>
 );
 
-export default HistoryTabView;
+export default NotificationTabView;
 
 const styles = StyleSheet.create({
   container: {

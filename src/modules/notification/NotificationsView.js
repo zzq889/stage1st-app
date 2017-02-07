@@ -10,10 +10,10 @@ import {
 import { List } from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
-import Row from './RepliesRow';
+import Row from './NotificationsRow';
 import { palette } from '../../styles/config';
 
-class RepliesView extends Component {
+class NotificationsView extends Component {
   static route = {
     navigationBar: {
       title: ({ title }) => title,
@@ -22,7 +22,7 @@ class RepliesView extends Component {
 
   componentWillMount() {
     InteractionManager.runAfterInteractions(() => {
-      this.props.loadRepliesPage('load');
+      this.props.loadNotificationsPage('load');
       this.initialized = true;
     });
   }
@@ -32,11 +32,11 @@ class RepliesView extends Component {
     // After fetching data, you should update your ListView data source
     // manually.
     // This function does not have a return value.
-    this.props.loadRepliesPage('loadmore');
+    this.props.loadNotificationsPage('loadmore');
   }
 
   _onRefresh = () => {
-    this.props.loadRepliesPage('refresh');
+    this.props.loadNotificationsPage('refresh');
   }
 
   renderFooter = () => (
@@ -100,15 +100,15 @@ class RepliesView extends Component {
   }
 }
 
-RepliesView.propTypes = {
+NotificationsView.propTypes = {
   notifications: PropTypes.instanceOf(List).isRequired,
   nextPage: PropTypes.number,
   loadType: PropTypes.string,
   loading: PropTypes.bool.isRequired,
-  loadRepliesPage: PropTypes.func.isRequired,
+  loadNotificationsPage: PropTypes.func.isRequired,
 };
 
-RepliesView.defaultProps = {
+NotificationsView.defaultProps = {
   notifications: List(),
 };
 
@@ -133,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RepliesView;
+export default NotificationsView;

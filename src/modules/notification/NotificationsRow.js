@@ -16,7 +16,7 @@ const PostHistoryRow = ({
   timestamp,
   isNew,
 }) => (
-  <View style={styles.row}>
+  <View style={isNew ? [styles.row, styles.highlightRow] : styles.row}>
     <View style={styles.header}>
       <Avatar style={styles.avatar} uid={authorId} />
       <View style={styles.headerText}>
@@ -47,6 +47,9 @@ PostHistoryRow.propTypes = {
 const styles = StyleSheet.create({
   row: {
     margin: 15,
+  },
+  highlightRow: {
+    backgroundColor: palette.lightYellow,
   },
   subject: {
     fontSize: 16,
