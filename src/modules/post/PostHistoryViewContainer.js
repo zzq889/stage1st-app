@@ -10,13 +10,13 @@ const PostHistoryViewContainer = connect(
     const paginationKey = 'history';
     return {
       posts: state
-        .getIn(['pagination', 'postsByTid', paginationKey, 'ids'], List())
+        .getIn(['pagination', 'postsByKey', paginationKey, 'ids'], List())
         .map(pid => state.getIn(['entities', 'posts', String(pid)]))
         .sortBy(post => post.get('dateline'))
         .reverse()
         .toList(),
-      loading: state.getIn(['pagination', 'postsByTid', paginationKey, 'isFetching'], false),
-      nextPage: state.getIn(['pagination', 'postsByTid', paginationKey, 'nextPage']),
+      loading: state.getIn(['pagination', 'postsByKey', paginationKey, 'isFetching'], false),
+      nextPage: state.getIn(['pagination', 'postsByKey', paginationKey, 'nextPage']),
     };
   },
   { loadPostPage: loadPostHistoryPage },

@@ -1,7 +1,7 @@
 import { Map } from 'immutable';
 
 const DEBUG = true;
-const DEV_ROOT = 'saraba1st.asuscomm.com:20080';
+const DEV_ROOT = 's165.asuscomm.com:20080';
 const PROD_ROOT = 'app.saraba1st.com';
 const WP_ROOT = 'localhost:8080';
 

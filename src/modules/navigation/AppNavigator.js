@@ -14,6 +14,7 @@ import { header, palette, gestureResponseDistance } from '../../styles/config';
 // import ColorViewContainer from '../colors/ColorViewContainer';
 import LoginViewContainer from '../auth/LoginViewContainer';
 import ForumTabViewContainer from '../forum/ForumTabViewContainer';
+import ThreadsTabViewContainer from '../thread/ThreadsTabViewContainer';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
 import SubscribedTabViewContainer from '../thread/SubscribedTabViewContainer';
 import ThreadComposeViewContainer from '../thread/ThreadComposeViewContainer';
@@ -49,7 +50,7 @@ export const ForumTab = StackNavigator({
     },
   },
   Threads: {
-    screen: ThreadListViewContainer,
+    screen: ThreadsTabViewContainer,
     path: '/threads/:fid',
     navigationOptions: {
       title: ({ state: { params: { title } = {} } = {} }) => title,

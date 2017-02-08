@@ -163,8 +163,8 @@ export const fetchForum = fid =>
   request('forum', { fid }, SCHEMA.forumSchema);
 
 // thread
-export const fetchThreads = ({ fid, pageNo }) =>
-  request('forum/page', { fid, pageNo }, SCHEMA.threadSchemaArray);
+export const fetchThreads = ({ fid, pageNo, typeid }) =>
+  request('forum/page', { fid, pageNo, typeid }, SCHEMA.threadSchemaArray);
 
 export const fetchThreadInfo = tid =>
   request('thread', { tid }, SCHEMA.threadSchema);

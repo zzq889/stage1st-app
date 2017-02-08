@@ -22,14 +22,14 @@ const PostListViewContainer = connect(
       pageNo: currentPageNo,
       highlightPosition: navigation && navigation.state.params.highlightPosition,
       posts: state
-        .getIn(['pagination', 'postsByTid', key, 'pages', currentPageNo], List())
+        .getIn(['pagination', 'postsByKey', key, 'pages', currentPageNo], List())
         .map(pid => state.getIn(['entities', 'posts', String(pid)]))
         .sortBy(post => post.get('position'))
         .toList(),
       thread: state.getIn(['entities', 'threads', String(tid)], Map()),
-      loadType: state.getIn(['pagination', 'postsByTid', key, 'loadType']),
-      loading: state.getIn(['pagination', 'postsByTid', key, 'isFetching'], false),
-      totalPage: state.getIn(['pagination', 'postsByTid', key, 'totalPage']),
+      loadType: state.getIn(['pagination', 'postsByKey', key, 'loadType']),
+      loading: state.getIn(['pagination', 'postsByKey', key, 'isFetching'], false),
+      totalPage: state.getIn(['pagination', 'postsByKey', key, 'totalPage']),
     };
   },
 )(connect(

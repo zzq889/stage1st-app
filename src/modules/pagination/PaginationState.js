@@ -6,15 +6,15 @@ import { NOTIFICATION } from '../notification/NotificationState';
 
 // Updates the pagination data for different actions.
 export default combineReducers({
-  threadsByFid: paginate({
-    mapActionToKey: ({ fid }) => fid,
+  threadsByKey: paginate({
+    mapActionToKey: ({ paginationKey }) => paginationKey,
     types: [
       THREAD.REQUEST,
       THREAD.SUCCESS,
       THREAD.FAILURE,
     ],
   }),
-  postsByTid: paginate({
+  postsByKey: paginate({
     mapActionToKey: ({ paginationKey }) => paginationKey,
     types: [
       POST.REQUEST,

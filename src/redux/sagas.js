@@ -6,7 +6,6 @@ import {
 import {
   watchLoadThreadInfo,
   watchLoadThreadPage,
-  watchLoadMoreThreads,
   watchNewThread,
   watchFavThread,
   watchNewThreadSuccess,
@@ -34,7 +33,6 @@ export default function* root() {
     fork(watchLoadForumPage),
     fork(watchLoadThreadInfo),
     fork(watchLoadThreadPage),
-    fork(watchLoadMoreThreads),
     fork(watchNewThread),
     fork(watchNewThreadSuccess),
     fork(watchFavThread),
