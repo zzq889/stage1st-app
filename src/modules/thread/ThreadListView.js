@@ -45,7 +45,9 @@ class ThreadListView extends Component {
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       subject={rowData.get('subject')}
+      showForumName={this.props.fid === 'subscribed'}
       forumName={rowData.get('forumName')}
+      type={rowData.get('type')}
       author={rowData.get('author')}
       timestamp={Number(rowData.get('lastpost'))}
       status={rowData.get('statusicon')}
@@ -90,6 +92,10 @@ class ThreadListView extends Component {
 }
 
 ThreadListView.propTypes = {
+  fid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   threads: PropTypes.instanceOf(List).isRequired,
   nextPage: PropTypes.number,
   loadType: PropTypes.string,
