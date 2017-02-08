@@ -1177,7 +1177,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.saraba1st.Stage1st;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stage1.app;
 				PRODUCT_NAME = Stage1st;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1196,7 +1196,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.saraba1st.Stage1st;
+				PRODUCT_BUNDLE_IDENTIFIER = org.stage1.app;
 				PRODUCT_NAME = Stage1st;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
