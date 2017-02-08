@@ -9,21 +9,10 @@ import {
 import { List } from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
-import ComposeButton from '../../components/ComposeButton';
 import Row from './ThreadRow';
 import { palette } from '../../styles/config';
 
 class ThreadListView extends Component {
-  static navigationOptions = {
-    header: (navigation, defaultHeader) => {
-      const fid = navigation.state.params.fid;
-      return {
-        ...defaultHeader,
-        right: (Number.isInteger(fid) ? <ComposeButton fid={fid} navigation={navigation} /> : null),
-      };
-    },
-  }
-
   componentWillMount() {
     InteractionManager.runAfterInteractions(() => {
       this.props.loadThreadPage('load');

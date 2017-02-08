@@ -1,6 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
 import {
-  Text,
   StyleSheet,
   InteractionManager,
 } from 'react-native';
@@ -9,8 +8,19 @@ import ScrollableTabView from 'react-native-scrollable-tab-view';
 import { palette } from '../../styles/config';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
 import ScrollTabBar from '../../components/ScrollTabBar';
+import ComposeButton from '../../components/ComposeButton';
 
 export default class ThreadsTabView extends PureComponent {
+  static navigationOptions = {
+    header: (navigation, defaultHeader) => {
+      const fid = navigation.state.params.fid;
+      return {
+        ...defaultHeader,
+        right: (Number.isInteger(fid) ? <ComposeButton fid={fid} navigation={navigation} /> : null),
+      };
+    },
+  }
+
   componentWillMount() {
     InteractionManager.runAfterInteractions(() => {
       this.props.loadForumPage();
