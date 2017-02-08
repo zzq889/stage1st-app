@@ -35,7 +35,7 @@ class ThreadListView extends Component {
     // After fetching data, you should update your ListView data source
     // manually.
     // This function does not have a return value.
-    this.props.loadMoreThreads();
+    this.props.loadThreadPage('loadmore');
   }
 
   _onRefresh = () => {
@@ -106,7 +106,6 @@ ThreadListView.propTypes = {
   loadType: PropTypes.string,
   loading: PropTypes.bool.isRequired,
   loadThreadPage: PropTypes.func.isRequired,
-  loadMoreThreads: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,

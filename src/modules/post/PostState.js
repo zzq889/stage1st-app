@@ -63,7 +63,7 @@ const fetchPosts = args => fetchEntity(postEntity, apiFetchPosts, args);
 const fetchPostHistory = args => fetchEntity(postEntity, apiFetchPostHistory, args);
 const createPost = args => fetchEntity(postCreationEntity, apiCreatePost, args);
 const getPosts = (state, key) =>
-  state.getIn(['pagination', 'postsByTid', key]);
+  state.getIn(['pagination', 'postsByKey', key]);
 
 // load repo unless it is cached
 function* loadPosts({ tid, uid, pageNo, loadType }) {
