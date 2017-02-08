@@ -12,7 +12,9 @@ import { palette } from '../../styles/config';
 const ThreadRow = ({
   status,
   subject,
+  showForumName,
   forumName,
+  type,
   author,
   timestamp,
   replies,
@@ -25,9 +27,9 @@ const ThreadRow = ({
     <View style={styles.row}>
       <Text style={[styles.title, styles[status]]}>
         {subject}
-        {forumName
+        {showForumName
           ? <Text style={styles.subtitle}>&nbsp;[{forumName}]</Text>
-          : null}
+          : <Text style={styles.subtitle}>&nbsp;[{type}]</Text>}
       </Text>
       <View style={styles.content}>
         <View style={styles.iconText}>
@@ -50,7 +52,9 @@ const ThreadRow = ({
 ThreadRow.propTypes = {
   subject: PropTypes.string.isRequired,
   status: PropTypes.string,
+  showForumName: PropTypes.bool,
   forumName: PropTypes.string,
+  type: PropTypes.string,
   author: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
   onPress: PropTypes.func.isRequired,
