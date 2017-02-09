@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Platform,
 } from 'react-native';
 import Image from 'react-native-fit-image';
 import Lightbox from 'react-native-lightbox';
@@ -122,6 +123,8 @@ class HtmlView extends Component {
         height: defaultSize,
       };
 
+      const marginBottom = { marginBottom: isEmoji ? 0 : 20 };
+
       const uri = attribs.src;
       let assembledUri = uri.match(/^\//)
         ? getConfiguration('STATIC_ROOT') + uri
@@ -140,11 +143,15 @@ class HtmlView extends Component {
         return null;
       }
 
-      return (
-        <Lightbox key={index} style={{ marginBottom: isEmoji ? 0 : 20 }}>
-          <Image source={source} style={imgStyles} />
-        </Lightbox>
-      );
+      if (Platform.OS === 'ios') {
+        return (
+          <Lightbox key={index} style={marginBottom}>
+            <Image source={source} style={imgStyles} />
+          </Lightbox>
+        );
+      }
+
+      return <Image key={index} source={source} style={[imgStyles, marginBottom]} />;
     }
 
     return undefined;
@@ -163,7 +170,6 @@ HtmlView.propTypes = {
   stylesheet: PropTypes.any,
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
-  margin: PropTypes.number,
 };
 
 HtmlView.defaultProps = {
