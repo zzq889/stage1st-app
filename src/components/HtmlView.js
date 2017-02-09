@@ -6,10 +6,8 @@ import {
   StyleSheet,
   Text,
   View,
-  Platform,
 } from 'react-native';
 import Image from 'react-native-fit-image';
-import Lightbox from 'react-native-lightbox';
 import SafariView from 'react-native-safari-view';
 import { getConfiguration } from '../utils/configuration';
 import htmlToElement from '../utils/htmlToElement';
@@ -143,15 +141,13 @@ class HtmlView extends Component {
         return null;
       }
 
-      if (Platform.OS === 'ios') {
-        return (
-          <Lightbox key={index} style={marginBottom}>
-            <Image source={source} style={imgStyles} />
-          </Lightbox>
-        );
-      }
-
-      return <Image key={index} source={source} style={[imgStyles, marginBottom]} />;
+      return (
+        <Image
+          key={index}
+          source={source}
+          style={[imgStyles, marginBottom]}
+        />
+      );
     }
 
     return undefined;
