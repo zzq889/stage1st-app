@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Text,
+  View,
 } from 'react-native';
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
@@ -61,12 +62,7 @@ function htmlToElement(rawHtml, opts, done) {
       if (opts.customRenderer) {
         const rendered = opts.customRenderer(node, index, parent, opts, () => domToElement(node.children, node));
         if (rendered || rendered === null) {
-          return (
-            <Text key={index}>
-              {rendered}
-              {shouldBreakLast && PARAGRAPH_BREAK}
-            </Text>
-          );
+          return rendered;
         }
       }
 

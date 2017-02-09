@@ -2,13 +2,13 @@
 
 import React, { Component, PropTypes } from 'react';
 import {
-  Image,
   Linking,
   StyleSheet,
   Text,
   View,
-  Dimensions,
 } from 'react-native';
+import Image from 'react-native-fit-image';
+import Lightbox from 'react-native-lightbox';
 import SafariView from 'react-native-safari-view';
 import { getConfiguration } from '../utils/configuration';
 import htmlToElement from '../utils/htmlToElement';
@@ -110,21 +110,16 @@ class HtmlView extends Component {
   }
 
   // node, index, parent, opts, renderChild
-  renderNode = (node, index) => {
+  renderNode = (node, index, parent) => {
     const attribs = node.attribs;
-    const margin = this.props.margin || 30;
 
     if (node.name === 'img') {
       const isEmoji = attribs.smilieid;
-      const { width: screenWidth } = Dimensions.get('window');
-      const defaultSize = isEmoji ? 32 : (screenWidth - margin);
-      const imgWidth = Number((attribs.width && Math.min(attribs.width, defaultSize)) || defaultSize);
-      const imgHeight = Number((attribs.height && (attribs.height / attribs.width) * imgWidth) || defaultSize);
+      const defaultSize = isEmoji ? 32 : null;
 
-      const imgStyle = {
-        width: imgWidth,
-        height: imgHeight,
-        backgroundColor: isEmoji ? null : palette.mint2,
+      const imgStyles = {
+        width: defaultSize,
+        height: defaultSize,
       };
 
       const uri = attribs.src;
@@ -139,11 +134,17 @@ class HtmlView extends Component {
 
       const source = {
         uri: assembledUri,
-        width: imgWidth,
-        height: imgHeight,
       };
 
-      return <Image key={index} source={source} style={imgStyle} />;
+      if (parent) {
+        return null;
+      }
+
+      return (
+        <Lightbox key={index} style={{ marginBottom: isEmoji ? 0 : 20 }}>
+          <Image source={source} style={imgStyles} />
+        </Lightbox>
+      );
     }
 
     return undefined;
