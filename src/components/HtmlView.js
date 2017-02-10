@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import Image from 'react-native-fit-image';
-import Lightbox from 'react-native-lightbox';
 import SafariView from 'react-native-safari-view';
 import { getConfiguration } from '../utils/configuration';
 import htmlToElement from '../utils/htmlToElement';
@@ -122,6 +121,8 @@ class HtmlView extends Component {
         height: defaultSize,
       };
 
+      const marginBottom = { marginBottom: isEmoji ? 0 : 20 };
+
       const uri = attribs.src;
       let assembledUri = uri.match(/^\//)
         ? getConfiguration('STATIC_ROOT') + uri
@@ -141,9 +142,11 @@ class HtmlView extends Component {
       }
 
       return (
-        <Lightbox key={index} style={{ marginBottom: isEmoji ? 0 : 20 }}>
-          <Image source={source} style={imgStyles} />
-        </Lightbox>
+        <Image
+          key={index}
+          source={source}
+          style={[imgStyles, marginBottom]}
+        />
       );
     }
 
@@ -163,7 +166,6 @@ HtmlView.propTypes = {
   stylesheet: PropTypes.any,
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
-  margin: PropTypes.number,
 };
 
 HtmlView.defaultProps = {

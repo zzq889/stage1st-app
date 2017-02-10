@@ -21,22 +21,22 @@ class PostToolbar extends PureComponent {
 
   render() {
     const {
-      pageNo = 0,
-      totalPage = 0,
+      pageNo = 1,
+      totalPage = 1,
       jumpToPage,
       onReplyPress,
     } = this.props;
     return (
       <Toolbar style={styles.container}>
         <BarButtonItem
-          disabled={pageNo <= 1}
+          disabled={pageNo < 2}
           onPress={() => jumpToPage(pageNo - 1)}
         >
           <Icon
             style={styles.icon}
             name="chevron-thin-left"
             size={20}
-            color={pageNo <= 1 ? palette.lightGrey : palette.black}
+            color={pageNo < 2 ? palette.lightGrey : palette.black}
           />
         </BarButtonItem>
         <BarButtonItem
@@ -54,14 +54,14 @@ class PostToolbar extends PureComponent {
           />
         </BarButtonItem>
         <BarButtonItem
-          disabled={pageNo === totalPage}
+          disabled={pageNo >= totalPage}
           onPress={() => jumpToPage(pageNo + 1)}
         >
           <Icon
             style={styles.icon}
             name="chevron-thin-right"
             size={20}
-            color={pageNo === totalPage ? palette.lightGrey : palette.black}
+            color={pageNo >= totalPage ? palette.lightGrey : palette.black}
           />
         </BarButtonItem>
         <View style={styles.separator} />

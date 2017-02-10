@@ -38,6 +38,7 @@ class LoginView extends Component {
   }
 
   componentWillMount() {
+    this.props.resetAuth('isSubmitting', false);
     this._subscription = authEmitter.once('LOGIN.SUCCESS', this.dismiss);
   }
 
@@ -54,11 +55,11 @@ class LoginView extends Component {
     const {
       onSubmit,
       invalid,
-      submitting,
+      isSubmitting,
       values,
       onChange,
     } = this.props;
-    const disabled = invalid || submitting;
+    const disabled = invalid || isSubmitting;
     const qid = values.get('questionid');
     const showsAnswer = qid && qid !== 0;
     const children = (
@@ -77,7 +78,7 @@ class LoginView extends Component {
           onChangeText={val => onChange('username', val)}
           autoFocus
           onSubmitEditing={() => { this.passField.focus(); }}
-          disabled={submitting}
+          disabled={isSubmitting}
         />
         <TextField
           fieldRef={(c) => { this.passField = c; }}
@@ -90,7 +91,7 @@ class LoginView extends Component {
           type="password"
           value={values.get('password')}
           onChangeText={val => onChange('password', val)}
-          disabled={submitting}
+          disabled={isSubmitting}
         />
         <QuestionPicker
           style={styles.input}
@@ -112,7 +113,7 @@ class LoginView extends Component {
               type="text"
               value={values.get('answer')}
               onChangeText={val => onChange('answer', val)}
-              disabled={submitting}
+              disabled={isSubmitting}
             />
           ) : null
         }
@@ -129,7 +130,7 @@ class LoginView extends Component {
           }}
         >
           {
-            submitting
+            isSubmitting
             ? <ActivityIndicator color={palette.white} />
             : <Text style={styles.buttonText}>登录</Text>
           }
@@ -164,9 +165,10 @@ class LoginView extends Component {
 LoginView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   invalid: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool.isRequired,
+  isSubmitting: PropTypes.bool.isRequired,
   values: PropTypes.instanceOf(Map).isRequired,
   onChange: PropTypes.func.isRequired,
+  resetAuth: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     goBack: PropTypes.func.isRequired,
