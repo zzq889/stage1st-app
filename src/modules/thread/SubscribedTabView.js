@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { StyleSheet } from 'react-native';
 import { Set } from 'immutable';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import ScrollTabBar from '../../components/ScrollTabBar';
 import ThreadListViewContainer from './ThreadListViewContainer';
 import { palette } from '../../styles/config';
 
@@ -26,6 +27,7 @@ const SubscribedTabView = ({ forums: forumsMap }) => {
   return (
     <ScrollableTabView
       style={styles.container}
+      renderTabBar={props => <ScrollTabBar {...props} />}
       tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
       tabBarTextStyle={{ fontSize: 15 }}
       tabBarActiveTextColor={palette.primary}
