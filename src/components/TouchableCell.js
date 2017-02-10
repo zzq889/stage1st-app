@@ -6,10 +6,11 @@ import {
 } from 'react-native';
 import { palette } from '../styles/config';
 
-const TouchableCell = ({ style, children, ...props }) => (
+const TouchableCell = ({ style, backgroundColor, children, ...props }) => (
   <View style={styles.container}>
     <TouchableOpacity
-      style={[styles.row, style]}
+      style={[styles.row, backgroundColor && { backgroundColor }, style]}
+      delayPressIn={30}
       {...props}
     >
       {children}
@@ -18,8 +19,9 @@ const TouchableCell = ({ style, children, ...props }) => (
 );
 
 TouchableCell.propTypes = {
-  children: PropTypes.node,
   style: PropTypes.number,
+  children: PropTypes.node,
+  backgroundColor: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

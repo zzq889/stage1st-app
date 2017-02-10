@@ -8,12 +8,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../styles/config';
 import TouchableCell from './TouchableCell';
 
-const TableCell = ({ text, accessoryType, onPress, ...props }) => {
+const TableCell = ({ text, accessoryType, ...props }) => {
   const styles = getStyles(props);
   return (
     <TouchableCell
       style={styles.row}
-      onPress={onPress}
+      {...props}
     >
       <Text style={styles.title}>{text}</Text>
       <View style={styles.iconContainer}>
@@ -30,17 +30,14 @@ const TableCell = ({ text, accessoryType, onPress, ...props }) => {
 TableCell.propTypes = {
   text: PropTypes.string.isRequired,
   accessoryType: PropTypes.oneOf(['none', 'arrow']),
-  onPress: PropTypes.func,
   color: PropTypes.string,
-  backgroundColor: PropTypes.string,
 };
 
 TableCell.defaultProps = {
   subscribed: false,
-  backgroundColor: palette.background,
 };
 
-const getStyles = ({ color, backgroundColor }) => StyleSheet.create({
+const getStyles = ({ color }) => StyleSheet.create({
   row: {
     height: 44,
     flex: 1,
@@ -48,7 +45,6 @@ const getStyles = ({ color, backgroundColor }) => StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor,
   },
   iconContainer: {
     marginRight: 15,
