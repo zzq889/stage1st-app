@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import Image from 'react-native-fit-image';
+import { withNavigation } from 'react-navigation';
 import SafariView from 'react-native-safari-view';
 import { getConfiguration } from '../utils/configuration';
 import htmlToElement from '../utils/htmlToElement';
@@ -45,7 +46,7 @@ const baseStyles = StyleSheet.create({
   },
 });
 
-async function onLinkPress(url) {
+async function openUrl(url) {
   try {
     let available = true;
     try {
@@ -63,6 +64,7 @@ async function onLinkPress(url) {
   }
 }
 
+@withNavigation
 class HtmlView extends Component {
   constructor() {
     super();
@@ -86,13 +88,24 @@ class HtmlView extends Component {
     this.mounted = false;
   }
 
+  linkHander = (url) => {
+    // url: forum.php?mod=redirect&goto=findpost&ptid=1345022&pid=34083134
+    const result = url.match(/(?:forum\.php.*ptid=)(\d+)/);
+    const tid = result && result[1];
+    if (tid) {
+      this.props.navigation.navigate('Posts', { tid });
+    } else {
+      openUrl(url);
+    }
+  }
+
   startHtmlRender(value) {
     if (!value) {
       this.setState({ element: null });
     }
 
     const opts = {
-      linkHandler: this.props.onLinkPress,
+      linkHandler: this.props.onLinkPress || this.linkHander,
       styles: Object.assign({}, baseStyles, this.props.stylesheet),
       customRenderer: this.renderNode,
     };
@@ -166,10 +179,12 @@ HtmlView.propTypes = {
   stylesheet: PropTypes.any,
   onLinkPress: PropTypes.func,
   onError: PropTypes.func,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }),
 };
 
 HtmlView.defaultProps = {
-  onLinkPress,
   onError: console.error.bind(console),
 };
 
