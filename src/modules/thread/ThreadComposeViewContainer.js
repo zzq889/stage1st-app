@@ -6,7 +6,7 @@ import ThreadComposeView from './ThreadComposeView';
 import DismissButton from '../../components/DismissButton';
 import { newThread, threadEmitter } from './ThreadState';
 import SubmitButton from './SubmitButton';
-import formConnect from '../form/helper';
+import formConnect from '../form/formConnect';
 import validate from './threadValidate';
 
 class ThreadComposeViewContainer extends PureComponent {

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PostComposeView from './PostComposeView';
 import { newPost } from './PostState';
-import formConnect from '../form/helper';
+import formConnect from '../form/formConnect';
 
 export default formConnect('postComposeForm')(connect(
   () => ({}),

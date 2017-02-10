@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { threadEmitter } from './ThreadState';
 import { palette } from '../../styles/config';
-import formConnect from '../form/helper';
+import formConnect from '../form/formConnect';
 import validate from './threadValidate';
 
 const SubmitButton = ({ invalid, submitting }) => {

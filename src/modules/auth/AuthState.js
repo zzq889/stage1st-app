@@ -17,6 +17,7 @@ export const authEmitter = new EventEmitter();
 export const LOGIN = createRequestTypes('LOGIN');
 export const USER_AUTH = 'AuthState/USER_AUTH';
 export const USER_LOGOUT = 'AuthState/USER_LOGOUT';
+export const RESET_AUTH = 'AuthState/RESET_AUTH';
 
 export const loginEntity = {
   request: args => createAction(
@@ -31,6 +32,7 @@ export const userAuth = args =>
   createAction(USER_AUTH, { ...args });
 
 export const userLogout = () => createAction(USER_LOGOUT);
+export const resetAuth = () => createAction(RESET_AUTH);
 
 /** ****************************************************************************/
 /** ***************************** Sagas *************************************/
@@ -71,7 +73,7 @@ const initialState = Map({
   isSubmitting: false,
   currentUser: null,
   token: null,
-  // sign
+  // TODO: rename sign
   isSigned: false,
   isSigning: false,
 });
@@ -88,6 +90,8 @@ export default function AuthStateReducer(state = initialState, action = {}) {
         .set('currentUser', Map({ uid, username }))
         .set('token', sid);
     }
+    case RESET_AUTH:
+      return state.set('isSubmitting', false);
     case USER_LOGOUT:
     case LOGIN.FAILURE:
       return initialState;

@@ -27,13 +27,11 @@ export default function FormStateReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE: {
       const { form, key, value } = action;
-      return state
-        .setIn([form, key], value);
+      return state.setIn([form, key], value);
     }
     case RESET: {
       const { form } = action;
-      return state
-        .set(form, initialState);
+      return state.set(form, initialState);
     }
     case RESET_ALL:
       return initialState;
