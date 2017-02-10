@@ -3,11 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableHighlight,
 } from 'react-native';
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
 import { palette } from '../../styles/config';
+import TouchableCell from '../../components/TouchableCell';
 
 const ThreadRow = ({
   status,
@@ -20,33 +20,31 @@ const ThreadRow = ({
   replies,
   onPress,
 }) => (
-  <TouchableHighlight
-    underlayColor={palette.underlayColor}
+  <TouchableCell
+    style={styles.row}
     onPress={onPress}
   >
-    <View style={styles.row}>
-      <Text style={[styles.title, styles[status]]}>
-        {subject}
-        {showForumName
-          ? <Text style={styles.subtitle}>&nbsp;[{forumName}]</Text>
-          : <Text style={styles.subtitle}>&nbsp;[{type}]</Text>}
-      </Text>
-      <View style={styles.content}>
-        <View style={styles.iconText}>
-          <Icon name="user" size={13} color={palette.grey} />
-          <Text style={styles.detail}>{author}</Text>
-        </View>
-        <View style={styles.iconText}>
-          <Icon name="speech" size={13} color={palette.grey} />
-          <Text style={styles.detail}>{replies}</Text>
-        </View>
-        <View style={styles.iconText}>
-          <Icon name="clock" size={13} color={palette.grey} />
-          <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
-        </View>
+    <Text style={[styles.title, styles[status]]}>
+      {subject}
+      {showForumName
+        ? <Text style={styles.subtitle}>&nbsp;[{forumName}]</Text>
+        : <Text style={styles.subtitle}>&nbsp;[{type}]</Text>}
+    </Text>
+    <View style={styles.content}>
+      <View style={styles.iconText}>
+        <Icon name="user" size={13} color={palette.grey} />
+        <Text style={styles.detail}>{author}</Text>
+      </View>
+      <View style={styles.iconText}>
+        <Icon name="speech" size={13} color={palette.grey} />
+        <Text style={styles.detail}>{replies}</Text>
+      </View>
+      <View style={styles.iconText}>
+        <Icon name="clock" size={13} color={palette.grey} />
+        <Text style={styles.detail}>{Moment().from(Moment.unix(timestamp))}</Text>
       </View>
     </View>
-  </TouchableHighlight>
+  </TouchableCell>
 );
 
 ThreadRow.propTypes = {
@@ -64,7 +62,7 @@ ThreadRow.propTypes = {
 
 const styles = StyleSheet.create({
   row: {
-    margin: 15,
+    padding: 15,
   },
   hot: {
     color: palette.orange,

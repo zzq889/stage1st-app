@@ -3,29 +3,27 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../styles/config';
+import TouchableCell from './TouchableCell';
 
 const TableCell = ({ text, accessoryType, onPress, ...props }) => {
   const styles = getStyles(props);
   return (
-    <TouchableHighlight
-      underlayColor={palette.underlayColor}
+    <TouchableCell
+      style={styles.row}
       onPress={onPress}
     >
-      <View style={styles.row} ref={(component) => { this._root = component; }} {...this.props}>
-        <Text style={styles.title}>{text}</Text>
-        <View style={styles.iconContainer}>
-          {
-            accessoryType === 'none'
-            ? null
-            : <Icon name="ios-arrow-forward" size={20} color={palette.grey} />
-          }
-        </View>
+      <Text style={styles.title}>{text}</Text>
+      <View style={styles.iconContainer}>
+        {
+          accessoryType === 'none'
+          ? null
+          : <Icon name="ios-arrow-forward" size={20} color={palette.grey} />
+        }
       </View>
-    </TouchableHighlight>
+    </TouchableCell>
   );
 };
 
@@ -39,6 +37,7 @@ TableCell.propTypes = {
 
 TableCell.defaultProps = {
   subscribed: false,
+  backgroundColor: palette.background,
 };
 
 const getStyles = ({ color, backgroundColor }) => StyleSheet.create({
