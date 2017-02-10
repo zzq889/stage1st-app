@@ -97,7 +97,8 @@ function htmlToElement(rawHtml, opts, done) {
 
         let linkPressHandler = null;
         if (node.name === 'a' && node.attribs && node.attribs.href) {
-          linkPressHandler = () => opts.linkHandler(entities.decodeHTML(node.attribs.href));
+          const url = entities.decodeHTML(node.attribs.href);
+          linkPressHandler = () => opts.linkHandler(url);
         }
 
         if (node.name === 'a') {

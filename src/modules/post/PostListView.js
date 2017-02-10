@@ -126,7 +126,10 @@ class PostListView extends Component {
 PostListView.propTypes = {
   thread: PropTypes.instanceOf(Map).isRequired,
   posts: PropTypes.instanceOf(List).isRequired,
-  tid: PropTypes.number.isRequired,
+  tid: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
   uid: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
