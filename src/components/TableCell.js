@@ -3,45 +3,41 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../styles/config';
+import TouchableCell from './TouchableCell';
 
-const TableCell = ({ text, accessoryType, onPress, ...props }) => {
+const TableCell = ({ text, accessoryType, ...props }) => {
   const styles = getStyles(props);
   return (
-    <TouchableHighlight
-      underlayColor={palette.underlayColor}
-      onPress={onPress}
+    <TouchableCell
+      style={styles.row}
+      {...props}
     >
-      <View style={styles.row} ref={(component) => { this._root = component; }} {...this.props}>
-        <Text style={styles.title}>{text}</Text>
-        <View style={styles.iconContainer}>
-          {
-            accessoryType === 'none'
-            ? null
-            : <Icon name="ios-arrow-forward" size={20} color={palette.grey} />
-          }
-        </View>
+      <Text style={styles.title}>{text}</Text>
+      <View style={styles.iconContainer}>
+        {
+          accessoryType === 'none'
+          ? null
+          : <Icon name="ios-arrow-forward" size={20} color={palette.grey} />
+        }
       </View>
-    </TouchableHighlight>
+    </TouchableCell>
   );
 };
 
 TableCell.propTypes = {
   text: PropTypes.string.isRequired,
   accessoryType: PropTypes.oneOf(['none', 'arrow']),
-  onPress: PropTypes.func,
   color: PropTypes.string,
-  backgroundColor: PropTypes.string,
 };
 
 TableCell.defaultProps = {
   subscribed: false,
 };
 
-const getStyles = ({ color, backgroundColor }) => StyleSheet.create({
+const getStyles = ({ color }) => StyleSheet.create({
   row: {
     height: 44,
     flex: 1,
@@ -49,7 +45,6 @@ const getStyles = ({ color, backgroundColor }) => StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor,
   },
   iconContainer: {
     marginRight: 15,

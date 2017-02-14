@@ -3,12 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
 import Moment from 'moment';
 import { palette } from '../../styles/config';
 import HtmlView from '../../components/HtmlView';
 import Avatar from '../../components/Avatar';
+import TouchableCell from '../../components/TouchableCell';
 
 const PostHistoryRow = ({
   subject,
@@ -20,7 +20,7 @@ const PostHistoryRow = ({
   type,
   onPress,
 }) => (
-  <TouchableOpacity
+  <TouchableCell
     style={styles.row}
     onPress={onPress}
   >
@@ -44,7 +44,7 @@ const PostHistoryRow = ({
         />
       ) : null}
     </View>
-  </TouchableOpacity>
+  </TouchableCell>
 );
 
 PostHistoryRow.propTypes = {
@@ -60,7 +60,8 @@ PostHistoryRow.propTypes = {
 
 const styles = StyleSheet.create({
   row: {
-    margin: 15,
+    padding: 15,
+    backgroundColor: palette.mint2,
   },
   subject: {
     fontSize: 16,

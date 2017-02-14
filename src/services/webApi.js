@@ -73,7 +73,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
 
   const response = await fetch(fullUrl, options);
   const json = await response.json();
-  if (!response.ok || !json.success) {
+  if (!response.ok || json.success === false) {
     const err = new Error(json.message);
     err.json = json;
     throw err;
@@ -198,3 +198,9 @@ export const reportPost = ({ pid, message }) =>
 // smiles
 export const fetchSmiles = () =>
   get('post/smiles', null, SCHEMA.smileySchema);
+
+// articles
+export const fetchArticles = ({ after, before }) => {
+  const wpRoot = getConfiguration('WP_ROOT');
+  return get(`${wpRoot}/posts`, { after, before }, SCHEMA.articleSchemaArray, d => d);
+};

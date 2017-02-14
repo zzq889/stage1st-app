@@ -24,6 +24,27 @@ import ProfileViewContainer from '../user/ProfileViewContainer';
 import HistoryTabView from '../user/HistoryTabView';
 import AboutView from '../about/AboutView';
 import NotificationTabView from '../notification/NotificationTabView';
+import NewsListViewContainer from '../news/NewsListViewContainer';
+import NewsDetailViewContainer from '../news/NewsDetailViewContainer';
+
+export const NewsTab = StackNavigator({
+  News: {
+    screen: NewsListViewContainer,
+    path: '/news',
+    navigationOptions: {
+      title: '新闻',
+    },
+  },
+  Article: {
+    screen: NewsDetailViewContainer,
+    path: '/news/:id',
+    navigationOptions: {
+      title: '正文',
+    },
+  },
+}, {
+  navigationOptions: { header },
+});
 
 export const FeedTab = StackNavigator({
   Subscribed: {
@@ -37,10 +58,6 @@ export const FeedTab = StackNavigator({
   navigationOptions: { header },
 });
 
-FeedTab.defaultProps = {
-  gestureResponseDistance,
-};
-
 export const ForumTab = StackNavigator({
   Forums: {
     screen: ForumTabViewContainer,
@@ -53,16 +70,12 @@ export const ForumTab = StackNavigator({
     screen: ThreadsTabViewContainer,
     path: '/threads/:fid',
     navigationOptions: {
-      title: ({ state: { params: { title } = {} } = {} }) => title,
+      title: ({ state }) => state.params.title,
     },
   },
 }, {
   navigationOptions: { header },
 });
-
-ForumTab.defaultProps = {
-  gestureResponseDistance,
-};
 
 export const SettingsTab = StackNavigator({
   Profile: {
@@ -104,11 +117,39 @@ export const SettingsTab = StackNavigator({
   navigationOptions: { header },
 });
 
+NewsTab.defaultProps = {
+  gestureResponseDistance,
+};
+
+FeedTab.defaultProps = {
+  gestureResponseDistance,
+};
+
+ForumTab.defaultProps = {
+  gestureResponseDistance,
+};
+
 SettingsTab.defaultProps = {
   gestureResponseDistance,
 };
 
 export const TabScreen = TabNavigator({
+  NewsTab: {
+    screen: NewsTab,
+    path: '/news',
+    navigationOptions: {
+      tabBar: () => ({
+        label: '新闻',
+        icon: ({ tintColor, focused }) => (
+          <Icon
+            name={focused ? 'ios-paper' : 'ios-paper-outline'}
+            size={30}
+            color={focused ? tintColor : palette.default}
+          />
+        ),
+      }),
+    },
+  },
   FeedTab: {
     screen: FeedTab,
     path: '/subscribed',

@@ -4,29 +4,28 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../../styles/config';
+import TouchableCell from '../../components/TouchableCell';
 
 const ForumRow = ({ name, isSubscribed, onPress, onSubscribePress }) => (
-  <TouchableHighlight
-    underlayColor={palette.underlayColor}
+  <TouchableCell
     onPress={onPress}
+    style={styles.row}
+    {...this.props}
   >
-    <View style={styles.row} ref={(component) => { this._root = component; }} {...this.props}>
-      <Text style={styles.title}>{name}</Text>
-      <TouchableOpacity
-        style={styles.iconContainer}
-        onPress={onSubscribePress}
-      >
-        {isSubscribed
-          ? <Icon style={styles.icon} name="ios-heart" size={20} color={palette.red} />
-          : <Icon style={styles.icon} name="ios-add" size={28} color={palette.default} />
-        }
-      </TouchableOpacity>
-    </View>
-  </TouchableHighlight>
+    <Text style={styles.title}>{name}</Text>
+    <TouchableOpacity
+      style={styles.iconContainer}
+      onPress={onSubscribePress}
+    >
+      {isSubscribed
+        ? <Icon style={styles.icon} name="ios-heart" size={20} color={palette.red} />
+        : <Icon style={styles.icon} name="ios-add" size={28} color={palette.default} />
+      }
+    </TouchableOpacity>
+  </TouchableCell>
 );
 
 ForumRow.propTypes = {
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
   row: {
     height: 54,
     flex: 1,
-    marginLeft: 15,
+    paddingLeft: 15,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',

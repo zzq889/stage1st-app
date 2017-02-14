@@ -26,6 +26,9 @@ import {
 import {
   watchLoadNotificationsPage,
 } from '../modules/notification/NotificationState';
+import {
+  watchLoadNewsPage,
+} from '../modules/news/NewsState';
 
 export default function* root() {
   yield [
@@ -44,5 +47,6 @@ export default function* root() {
     fork(watchLoadUserPage),
     fork(watchUserSign),
     fork(watchLoadNotificationsPage),
+    fork(watchLoadNewsPage),
   ];
 }

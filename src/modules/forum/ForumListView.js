@@ -34,6 +34,7 @@ class ForumListView extends Component {
   render() {
     return (
       <ImmutableListView
+        style={styles.container}
         immutableData={this.props.forums}
         renderRow={this.renderRow}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
@@ -52,15 +53,9 @@ ForumListView.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  iconContainer: {
+  container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    flex: 1,
-    margin: 8,
-    justifyContent: 'center',
+    backgroundColor: palette.background,
   },
   separator: {
     flex: 1,
