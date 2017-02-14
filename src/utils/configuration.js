@@ -9,7 +9,7 @@ const URL_ROOT = (__DEV__ && DEBUG) ? DEV_ROOT : PROD_ROOT;
 let configuration = Map({
   // Never put the slash at the end
   API_ROOT: `http://${URL_ROOT}/2b/api/app`,
-  WP_ROOT: `http://${URL_ROOT}/news/wp-json/wp/v2`,
+  WP_ROOT: `http://${DEV_ROOT}/news/wp-json/wp/v2`,
   STATIC_ROOT: `http://${URL_ROOT}/2b`,
   SITE: `http://${URL_ROOT}`,
   APP_NAME: 'Stage1 论坛',
