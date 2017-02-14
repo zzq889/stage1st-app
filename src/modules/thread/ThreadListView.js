@@ -68,7 +68,6 @@ class ThreadListView extends Component {
     return (
       <ImmutableListView
         style={styles.container}
-        ref={(c) => { this.listView = c; }}
         immutableData={threads}
         refreshControl={
           <RefreshControl
@@ -80,7 +79,6 @@ class ThreadListView extends Component {
         renderFooter={(loadType !== 'refresh' && loading) ? this.renderFooter : null}
         renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
         rowsDuringInteraction={15}
-        // onScroll={this.handleScroll}
         // InfiniteScrollView props
         renderScrollComponent={props => <InfiniteScrollView {...props} />}
         canLoadMore={!loading && !!nextPage}
