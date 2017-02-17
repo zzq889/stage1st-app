@@ -25,7 +25,8 @@ import HistoryTabView from '../user/HistoryTabView';
 import AboutView from '../about/AboutView';
 import NotificationTabView from '../notification/NotificationTabView';
 import NewsListViewContainer from '../news/NewsListViewContainer';
-import NewsDetailViewContainer from '../news/NewsDetailViewContainer';
+import ArticleViewContainer from '../news/ArticleViewContainer';
+import CommentComposeViewContainer from '../news/CommentComposeViewContainer';
 
 export const NewsTab = StackNavigator({
   News: {
@@ -36,7 +37,7 @@ export const NewsTab = StackNavigator({
     },
   },
   Article: {
-    screen: NewsDetailViewContainer,
+    screen: ArticleViewContainer,
     path: '/news/:id',
     navigationOptions: {
       title: '正文',
@@ -261,6 +262,14 @@ export const AppNavigator = StackNavigator({
     path: '/newThread/:fid',
     navigationOptions: {
       title: '发布主题',
+      header,
+    },
+  },
+  NewComment: {
+    screen: CommentComposeViewContainer,
+    path: '/post/:postId/write_comment',
+    navigationOptions: {
+      title: '写留言',
       header,
     },
   },

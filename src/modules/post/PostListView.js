@@ -20,7 +20,7 @@ import { postEmitter } from './PostState';
 class PostListView extends Component {
   componentWillMount() {
     this._subscription = postEmitter.addListener(
-      'POST_CREATION_SUCESS', () => this.props.loadPostPage('load'));
+      'POST_CREATION_SUCCESS', () => this.props.loadPostPage('load'));
     InteractionManager.runAfterInteractions(() => {
       this.props.loadPostPage();
       this.props.loadThreadInfo();

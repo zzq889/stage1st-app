@@ -3,7 +3,7 @@ import paginate from './paginate';
 import { THREAD } from '../thread/ThreadState';
 import { POST } from '../post/PostState';
 import { NOTIFICATION } from '../notification/NotificationState';
-import { ARTICLE } from '../news/NewsState';
+import { ARTICLE, COMMENT } from '../news/NewsState';
 
 // Updates the pagination data for different actions.
 export default combineReducers({
@@ -37,6 +37,14 @@ export default combineReducers({
       ARTICLE.REQUEST,
       ARTICLE.SUCCESS,
       ARTICLE.FAILURE,
+    ],
+  }),
+  commentsByKey: paginate({
+    mapActionToKey: ({ postId }) => postId,
+    types: [
+      COMMENT.REQUEST,
+      COMMENT.SUCCESS,
+      COMMENT.FAILURE,
     ],
   }),
 });

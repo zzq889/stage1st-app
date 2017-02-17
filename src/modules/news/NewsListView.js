@@ -29,6 +29,7 @@ class NewsListView extends Component {
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
+      id={rowData.getIn(['id'])}
       title={rowData.getIn(['title', 'rendered'])}
       excerpt={rowData.getIn(['excerpt', 'rendered'])}
       timestamp={rowData.get('date')}

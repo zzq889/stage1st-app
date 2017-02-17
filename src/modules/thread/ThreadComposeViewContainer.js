@@ -5,16 +5,18 @@ import { bindActionCreators } from 'redux';
 import ThreadComposeView from './ThreadComposeView';
 import DismissButton from '../../components/DismissButton';
 import { newThread, threadEmitter } from './ThreadState';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../../components/SubmitButton';
 import formConnect from '../form/formConnect';
 import validate from './threadValidate';
+
+const ThreadComposeButton = formConnect('threadComposeForm', validate)(SubmitButton);
 
 class ThreadComposeViewContainer extends PureComponent {
   static navigationOptions = {
     header: (navigation, defaultHeader) => ({
       ...defaultHeader,
       left: <DismissButton onPress={() => { threadEmitter.emit('DISMISS_THREAD_COMPOSE'); }} />,
-      right: <SubmitButton />,
+      right: <ThreadComposeButton onPress={() => { threadEmitter.emit('SUBMIT_THREAD'); }} />,
     }),
   }
   componentWillMount() {

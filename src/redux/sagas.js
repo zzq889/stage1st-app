@@ -28,6 +28,10 @@ import {
 } from '../modules/notification/NotificationState';
 import {
   watchLoadNewsPage,
+  watchLoadCommentsPage,
+  watchNewComment,
+  watchNewCommentSuccess,
+  watchNewCommentFailure,
 } from '../modules/news/NewsState';
 
 export default function* root() {
@@ -48,5 +52,9 @@ export default function* root() {
     fork(watchUserSign),
     fork(watchLoadNotificationsPage),
     fork(watchLoadNewsPage),
+    fork(watchLoadCommentsPage),
+    fork(watchNewComment),
+    fork(watchNewCommentSuccess),
+    fork(watchNewCommentFailure),
   ];
 }

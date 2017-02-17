@@ -7,13 +7,13 @@ import HtmlView from '../../components/HtmlView';
 import { palette } from '../../styles/config';
 import TouchableCell from '../../components/TouchableCell';
 
-const NewsRow = ({ title, excerpt, onPress }) => (
+const NewsRow = ({ id, title, excerpt, onPress }) => (
   <TouchableCell
     onPress={onPress}
     style={styles.row}
     {...this.props}
   >
-    <Text style={styles.text}>{title}</Text>
+    <Text style={styles.text}>{__DEV__ ? `[${id}] ${title}` : title}</Text>
     <HtmlView
       stylesheet={htmlStyles}
       value={excerpt}
@@ -22,6 +22,7 @@ const NewsRow = ({ title, excerpt, onPress }) => (
 );
 
 NewsRow.propTypes = {
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   excerpt: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
