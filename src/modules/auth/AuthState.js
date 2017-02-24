@@ -1,6 +1,7 @@
 import { put, call, takeEvery } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
+import * as Keychain from 'react-native-keychain';
 import { createRequestTypes, createAction } from '../../utils/actionHelper';
 import {
   userLogin as apiUserLogin,
@@ -38,6 +39,20 @@ export const resetAuth = () => createAction(RESET_AUTH);
 /** ***************************** Sagas *************************************/
 /** ****************************************************************************/
 
+function savePassword(username, password) {
+  return Keychain.setGenericPassword(username, password);
+}
+
+export async function readPassword() {
+  try {
+    const credentials = await Keychain.getGenericPassword();
+    return credentials;
+  } catch (error) {
+    console.warn('Keychain couldn\'t be accessed! Maybe no value set?', error);
+    throw error;
+  }
+}
+
 function* loginRequest({ username, password, questionid, answer }) {
   const args = { username, password, questionid, answer };
   const entity = loginEntity;
@@ -46,6 +61,7 @@ function* loginRequest({ username, password, questionid, answer }) {
     yield put(entity.request(args));
     const response = yield call(apiFn, args);
     yield put(entity.success(args, response));
+    yield call(savePassword, username, password);
     authEmitter.emit('LOGIN.SUCCESS');
   } catch (error) {
     const message = error.message || 'Something bad happened';
