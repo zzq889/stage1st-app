@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 
 import React, { Component } from 'react';
-import { BackAndroid } from 'react-native';
+import {
+  BackAndroid,
+} from 'react-native';
 import { connect } from 'react-redux';
 import {
   addNavigationHelpers,
@@ -252,7 +254,7 @@ export const AppNavigator = StackNavigator({
   },
   Login: {
     screen: LoginViewContainer,
-    path: '/login',
+    path: 'login',
     navigationOptions: {
       title: '登录',
       header,
