@@ -131,7 +131,6 @@ export const userLogin = ({ username, password, questionid, answer }) => {
   return post('user/login', { username, password });
 };
 
-
 export const userRegister = ({ username, password, email }) =>
   post('user/register', { username, password, email });
 

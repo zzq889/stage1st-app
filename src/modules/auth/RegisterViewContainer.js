@@ -1,19 +1,19 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import LoginView from './LoginView';
-import { resetAuth, userAuth } from './AuthState';
+import RegisterView from './RegisterView';
+import { resetAuth, userRegister } from './AuthState';
 import formConnect from '../form/formConnect';
-import { authValidate } from './authValidate';
+import { registerValidate } from './authValidate';
 
-export default formConnect('loginForm', authValidate)(connect(
+export default formConnect('registerForm', registerValidate)(connect(
   state => ({
     isSubmitting: state.getIn(['auth', 'isSubmitting']),
   }),
   (dispatch, { values }) => ({
     onSubmit: bindActionCreators(
-      userAuth.bind(null, values.toJS()),
+      userRegister.bind(null, values.toJS()),
       dispatch,
     ),
     resetAuth: () => dispatch(resetAuth()),
   }),
-)(LoginView));
+)(RegisterView));

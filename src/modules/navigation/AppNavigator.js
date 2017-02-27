@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { header, palette, gestureResponseDistance } from '../../styles/config';
 // import ColorViewContainer from '../colors/ColorViewContainer';
 import LoginViewContainer from '../auth/LoginViewContainer';
+import RegisterViewContainer from '../auth/RegisterViewContainer';
 import ForumTabViewContainer from '../forum/ForumTabViewContainer';
 import ThreadsTabViewContainer from '../thread/ThreadsTabViewContainer';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
@@ -254,6 +255,14 @@ export const AppNavigator = StackNavigator({
     path: '/login',
     navigationOptions: {
       title: '登录',
+      header,
+    },
+  },
+  Register: {
+    screen: RegisterViewContainer,
+    path: '/register',
+    navigationOptions: {
+      title: '注册',
       header,
     },
   },

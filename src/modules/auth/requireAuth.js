@@ -24,6 +24,10 @@ export default function requireAuth(WrappedComponent) {
       this.props.navigation.navigate('Login');
     }
 
+    showRegister = () => {
+      this.props.navigation.navigate('Register');
+    }
+
     render() {
       const { isLoggedIn, ...otherProps } = this.props;
       if (isLoggedIn) {
@@ -34,6 +38,9 @@ export default function requireAuth(WrappedComponent) {
           <Text style={styles.beforeText}>该页面需要登录才能浏览</Text>
           <TouchableOpacity onPress={this.showLogin} style={styles.button}>
             <Text style={styles.buttonText}>登录</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={this.showRegister} style={[styles.button, styles.secondary]}>
+            <Text style={styles.buttonText}>注册</Text>
           </TouchableOpacity>
         </View>
       );
@@ -65,10 +72,14 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 40,
+    marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: palette.primary,
     ...rounded,
+  },
+  secondary: {
+    backgroundColor: palette.secondary,
   },
   buttonText: {
     color: palette.white,

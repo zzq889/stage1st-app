@@ -18,6 +18,7 @@ import {
 } from '../modules/post/PostState';
 import {
   watchUserAuth,
+  watchUserRegister,
 } from '../modules/auth/AuthState';
 import {
   watchLoadUserPage,
@@ -48,6 +49,7 @@ export default function* root() {
     fork(watchNewPost),
     fork(watchNewPostSuccess),
     fork(watchUserAuth),
+    fork(watchUserRegister),
     fork(watchLoadUserPage),
     fork(watchUserSign),
     fork(watchLoadNotificationsPage),

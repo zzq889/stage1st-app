@@ -1,10 +1,15 @@
-import { put, call, takeEvery } from 'redux-saga/effects';
+import { call, takeEvery } from 'redux-saga/effects';
 import { Map } from 'immutable';
 import { EventEmitter } from 'fbemitter';
 import * as Keychain from 'react-native-keychain';
-import { createRequestTypes, createAction } from '../../utils/actionHelper';
+import {
+  fetchEntity,
+  createAction,
+  createRequestTypes,
+} from '../../utils/actionHelper';
 import {
   userLogin as apiUserLogin,
+  userRegister as apiUserRegister,
 } from '../../services/webApi';
 import { USER, USER_SIGN_REQ } from '../user/UserState';
 
@@ -17,6 +22,7 @@ export const authEmitter = new EventEmitter();
 // Actions
 export const LOGIN = createRequestTypes('LOGIN');
 export const USER_AUTH = 'AuthState/USER_AUTH';
+export const USER_REGISTER = 'AuthState/USER_REGISTER';
 export const USER_LOGOUT = 'AuthState/USER_LOGOUT';
 export const RESET_AUTH = 'AuthState/RESET_AUTH';
 
@@ -29,9 +35,8 @@ export const loginEntity = {
     LOGIN.FAILURE, { ...args, error }),
 };
 
-export const userAuth = args =>
-  createAction(USER_AUTH, { ...args });
-
+export const userAuth = args => createAction(USER_AUTH, { ...args });
+export const userRegister = args => createAction(USER_REGISTER, { ...args });
 export const userLogout = () => createAction(USER_LOGOUT);
 export const resetAuth = () => createAction(RESET_AUTH);
 
@@ -53,22 +58,21 @@ export async function readPassword() {
   }
 }
 
-function* loginRequest({ username, password, questionid, answer }) {
+const loginRequest = ({ username, password, questionid, answer }) => {
   const args = { username, password, questionid, answer };
-  const entity = loginEntity;
-  const apiFn = apiUserLogin;
-  try {
-    yield put(entity.request(args));
-    const response = yield call(apiFn, args);
-    yield put(entity.success(args, response));
+  return fetchEntity(loginEntity, apiUserLogin, args, function* cb() {
     yield call(savePassword, username, password);
     authEmitter.emit('LOGIN.SUCCESS');
-  } catch (error) {
-    const message = error.message || 'Something bad happened';
-    // console.warn(message);
-    yield put(entity.failure(args, message));
-  }
-}
+  });
+};
+
+const registerRequest = ({ username, password, email }) => {
+  const args = { username, password, email };
+  return fetchEntity(loginEntity, apiUserRegister, args, function* cb() {
+    yield call(savePassword, username, password);
+    authEmitter.emit('LOGIN.SUCCESS');
+  });
+};
 
 /** ****************************************************************************/
 /** ***************************** WATCHERS *************************************/
@@ -76,6 +80,10 @@ function* loginRequest({ username, password, questionid, answer }) {
 
 export function* watchUserAuth() {
   yield takeEvery(USER_AUTH, loginRequest);
+}
+
+export function* watchUserRegister() {
+  yield takeEvery(USER_REGISTER, registerRequest);
 }
 
 /** ****************************************************************************/

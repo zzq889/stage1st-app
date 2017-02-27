@@ -1,6 +1,21 @@
 import { Map } from 'immutable';
 
-const validate = (values) => {
+export const registerValidate = (values) => {
+  // IMPORTANT: values is an Immutable.Map here!
+  const errors = {};
+  if (!values.get('email')) {
+    errors.username = 'Required';
+  }
+  if (!values.get('username')) {
+    errors.password = 'Required';
+  }
+  if (!values.get('password')) {
+    errors.password = 'Required';
+  }
+  return Map(errors);
+};
+
+export const authValidate = (values) => {
   // IMPORTANT: values is an Immutable.Map here!
   const errors = {};
   if (!values.get('username')) {
@@ -16,5 +31,3 @@ const validate = (values) => {
   }
   return Map(errors);
 };
-
-export default validate;
