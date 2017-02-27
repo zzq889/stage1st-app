@@ -22,11 +22,14 @@ export function createAction(type, payload = {}) {
 // apiFn  : api.fetchUser | api.fetchRepo | ...
 // id     : login | fullName
 // url    : next page url. If not provided will use pass it to apiFn
-export function* fetchEntity(entity, apiFn, args) {
+export function* fetchEntity(entity, apiFn, args, success) {
   try {
     yield put(entity.request(args));
     const response = yield call(apiFn, args);
     yield put(entity.success(args, response));
+    if (success) {
+      yield call(success);
+    }
   } catch (error) {
     const message = error.message || 'Something bad happened';
     // console.warn(message);

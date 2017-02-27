@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { header, palette, gestureResponseDistance } from '../../styles/config';
 // import ColorViewContainer from '../colors/ColorViewContainer';
 import LoginViewContainer from '../auth/LoginViewContainer';
+import RegisterViewContainer from '../auth/RegisterViewContainer';
 import ForumTabViewContainer from '../forum/ForumTabViewContainer';
 import ThreadsTabViewContainer from '../thread/ThreadsTabViewContainer';
 import ThreadListViewContainer from '../thread/ThreadListViewContainer';
@@ -25,7 +26,8 @@ import HistoryTabView from '../user/HistoryTabView';
 import AboutView from '../about/AboutView';
 import NotificationTabView from '../notification/NotificationTabView';
 import NewsListViewContainer from '../news/NewsListViewContainer';
-import NewsDetailViewContainer from '../news/NewsDetailViewContainer';
+import ArticleViewContainer from '../news/ArticleViewContainer';
+import CommentComposeViewContainer from '../news/CommentComposeViewContainer';
 
 export const NewsTab = StackNavigator({
   News: {
@@ -36,7 +38,7 @@ export const NewsTab = StackNavigator({
     },
   },
   Article: {
-    screen: NewsDetailViewContainer,
+    screen: ArticleViewContainer,
     path: '/news/:id',
     navigationOptions: {
       title: '正文',
@@ -256,11 +258,27 @@ export const AppNavigator = StackNavigator({
       header,
     },
   },
+  Register: {
+    screen: RegisterViewContainer,
+    path: '/register',
+    navigationOptions: {
+      title: '注册',
+      header,
+    },
+  },
   NewThread: {
     screen: ThreadComposeViewContainer,
     path: '/newThread/:fid',
     navigationOptions: {
       title: '发布主题',
+      header,
+    },
+  },
+  NewComment: {
+    screen: CommentComposeViewContainer,
+    path: '/post/:postId/write_comment',
+    navigationOptions: {
+      title: '写留言',
       header,
     },
   },

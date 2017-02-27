@@ -6,31 +6,38 @@ import {
   View,
 } from 'react-native';
 import { Map } from 'immutable';
+import { newsEmitter } from './NewsState';
 import { palette, keyboardVerticalOffset } from '../../styles/config';
 import TextField from '../../components/TextField';
 import DismissButton from '../../components/DismissButton';
 import SubmitButton from '../../components/SubmitButton';
-import { postEmitter } from './PostState';
+import formConnect from '../form/formConnect';
 
-export default class PostComposeView extends Component {
+const CommentComposeButton = formConnect('commentComposeForm')(SubmitButton);
+
+export default class CommentComposeView extends Component {
   static navigationOptions = {
     header: (navigation, defaultHeader) => ({
       ...defaultHeader,
       left: <DismissButton navigation={navigation} />,
-      right: <SubmitButton onPress={() => { postEmitter.emit('SUBMIT_POST'); }} />,
+      right: (
+        <CommentComposeButton onPress={() => { newsEmitter.emit('SUBMIT_COMMENT'); }} />
+      ),
     }),
   }
 
   state = { value: null };
 
-  componentWillMount() {
-    this._subscription = postEmitter.addListener(
-      'SUBMIT_POST', () => this.props.onSubmit());
-    postEmitter.once('POST_CREATION_SUCCESS', this.dismiss);
+  componentDidMount() {
+    this._subscription = newsEmitter.addListener('SUBMIT_COMMENT', () => {
+      this.props.onSubmit();
+    });
+    newsEmitter.once('COMMENT_CREATION_SUCCESS', this.dismiss);
   }
 
   componentWillUnmount() {
     this._subscription.remove();
+    this.props.reset();
   }
 
   dismiss = () => {
@@ -71,7 +78,7 @@ export default class PostComposeView extends Component {
   }
 }
 
-PostComposeView.propTypes = {
+CommentComposeView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   values: PropTypes.instanceOf(Map),
   onChange: PropTypes.func.isRequired,

@@ -1,19 +1,22 @@
 import React, { PropTypes } from 'react';
 import {
   Text,
-  TouchableOpacity,
   StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
-import { postEmitter } from './PostState';
-import { palette } from '../../styles/config';
+import { palette } from '../styles/config';
 
-const SubmitButton = ({ invalid, submitting }) => {
+const SubmitButton = ({ invalid, submitting, ...props }) => {
   const disabled = invalid || submitting;
+  if (submitting) {
+    return <ActivityIndicator />;
+  }
   return (
     <TouchableOpacity
       style={styles.iconContainer}
       disabled={disabled}
-      onPress={() => { postEmitter.emit('submitPost'); }}
+      {...props}
     >
       <Text style={disabled ? [styles.text, styles.disabled] : styles.text}>发布</Text>
     </TouchableOpacity>

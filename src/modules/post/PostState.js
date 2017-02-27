@@ -117,7 +117,7 @@ export function* watchNewPost() {
 export function* watchNewPostSuccess() {
   while (true) {
     yield take(POST_CREATION.SUCCESS);
-    postEmitter.emit('POST_CREATION_SUCESS');
+    postEmitter.emit('POST_CREATION_SUCCESS');
   }
 }
 

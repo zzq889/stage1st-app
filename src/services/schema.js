@@ -50,6 +50,8 @@ export const notificationSchemaArray = [notificationSchema];
 
 export const articleSchema = new schema.Entity('articles');
 export const articleSchemaArray = [articleSchema];
+export const commentSchema = new schema.Entity('comments');
+export const commentSchemaArray = [commentSchema];
 
 channelSchema.define({
   child: [forumSchema],

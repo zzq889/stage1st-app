@@ -18,6 +18,7 @@ import {
 } from '../modules/post/PostState';
 import {
   watchUserAuth,
+  watchUserRegister,
 } from '../modules/auth/AuthState';
 import {
   watchLoadUserPage,
@@ -28,6 +29,10 @@ import {
 } from '../modules/notification/NotificationState';
 import {
   watchLoadNewsPage,
+  watchLoadCommentsPage,
+  watchNewComment,
+  watchNewCommentSuccess,
+  watchNewCommentFailure,
 } from '../modules/news/NewsState';
 
 export default function* root() {
@@ -44,9 +49,14 @@ export default function* root() {
     fork(watchNewPost),
     fork(watchNewPostSuccess),
     fork(watchUserAuth),
+    fork(watchUserRegister),
     fork(watchLoadUserPage),
     fork(watchUserSign),
     fork(watchLoadNotificationsPage),
     fork(watchLoadNewsPage),
+    fork(watchLoadCommentsPage),
+    fork(watchNewComment),
+    fork(watchNewCommentSuccess),
+    fork(watchNewCommentFailure),
   ];
 }

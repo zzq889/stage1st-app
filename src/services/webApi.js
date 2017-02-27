@@ -75,6 +75,7 @@ async function callApi(token, method, endpoint, body, schema, mapResponseToKey) 
   const json = await response.json();
   if (!response.ok || json.success === false) {
     const err = new Error(json.message);
+    err.status = response.status;
     err.json = json;
     throw err;
   }
@@ -129,7 +130,6 @@ export const userLogin = ({ username, password, questionid, answer }) => {
   }
   return post('user/login', { username, password });
 };
-
 
 export const userRegister = ({ username, password, email }) =>
   post('user/register', { username, password, email });
@@ -202,5 +202,19 @@ export const fetchSmiles = () =>
 // articles
 export const fetchArticles = ({ after, before }) => {
   const wpRoot = getConfiguration('WP_ROOT');
-  return get(`${wpRoot}/posts`, { after, before }, SCHEMA.articleSchemaArray, d => d);
+  return get(`${wpRoot}/wp/v2/posts`, { after, before }, SCHEMA.articleSchemaArray, d => d);
+};
+
+export const fetchComments = ({ postId }) => {
+  const wpRoot = getConfiguration('WP_ROOT');
+  return get(`${wpRoot}/wp/v2/comments`, { post: postId }, SCHEMA.commentSchemaArray, d => d);
+};
+
+export const createComment = ({ postId, author, content }) => {
+  const wpRoot = getConfiguration('WP_ROOT');
+  return post(`${wpRoot}/mixslice_plugin/v1/comment`, {
+    comment_post_ID: postId,
+    comment_author: author,
+    comment_content: content,
+  });
 };
