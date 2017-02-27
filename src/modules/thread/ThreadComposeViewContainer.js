@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { InteractionManager } from 'react-native';
 import { List } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,6 +9,7 @@ import { newThread, threadEmitter } from './ThreadState';
 import SubmitButton from '../../components/SubmitButton';
 import formConnect from '../form/formConnect';
 import validate from './threadValidate';
+import { loadForumPage } from '../forum/ForumState';
 
 const ThreadComposeButton = formConnect('threadComposeForm', validate)(SubmitButton);
 
@@ -21,6 +23,9 @@ class ThreadComposeViewContainer extends PureComponent {
   }
   componentWillMount() {
     this._subscription = threadEmitter.once('THREAD_CREATION_SUCCESS', this.dismiss);
+    InteractionManager.runAfterInteractions(() => {
+      this.props.loadForumPage();
+    });
   }
 
   componentWillUnmount() {
@@ -42,6 +47,7 @@ class ThreadComposeViewContainer extends PureComponent {
 }
 
 ThreadComposeViewContainer.propTypes = {
+  loadForumPage: PropTypes.func.isRequired,
   reset: PropTypes.func.isRequired,
   navigation: PropTypes.shape({
     goBack: PropTypes.func.isRequired,
@@ -67,6 +73,7 @@ export default formConnect('threadComposeForm', validate)(connect(
         newThread.bind(null, values.set('fid', fid).toJS()),
         dispatch,
       ),
+      loadForumPage: bindActionCreators(loadForumPage.bind(null, fid), dispatch),
     };
   },
 )(ThreadComposeViewContainer));

@@ -16,7 +16,13 @@ export default class ThreadsTabView extends PureComponent {
       const fid = navigation.state.params.fid;
       return {
         ...defaultHeader,
-        right: (Number.isInteger(fid) ? <ComposeButton fid={fid} navigation={navigation} /> : null),
+        right: (Number.isInteger(fid)
+        ? <ComposeButton
+          onPress={() => {
+            navigation.navigate('NewThread', { fid });
+          }}
+        />
+        : null),
       };
     },
   }
