@@ -10,6 +10,7 @@ import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './NewsRow';
+import debounce from '../../utils/debounce';
 
 class NewsListView extends Component {
 
@@ -33,13 +34,13 @@ class NewsListView extends Component {
       title={rowData.getIn(['title', 'rendered'])}
       excerpt={rowData.getIn(['excerpt', 'rendered'])}
       timestamp={rowData.get('date')}
-      onPress={() => {
+      onPress={debounce(() => {
         this.props.navigation.navigate('Article', {
           id: rowData.get('id'),
           url: rowData.get('link'),
         });
         highlightRow(sectionID, rowID);
-      }}
+      },200)}
     />
   )
 

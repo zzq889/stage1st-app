@@ -11,6 +11,7 @@ import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ImmutableListView from 'react-native-immutable-list-view';
 import Row from './ThreadRow';
 import { palette } from '../../styles/config';
+import debounce from  '../../utils/debounce';
 
 class ThreadListView extends Component {
   componentWillMount() {
@@ -53,13 +54,13 @@ class ThreadListView extends Component {
       status={rowData.get('statusicon')}
       replies={rowData.get('replies')}
       views={rowData.get('views')}
-      onPress={() => {
+      onPress={debounce(() => {
         this.props.navigation.navigate('Posts', {
           tid: rowData.get('tid'),
           title: rowData.get('subject'),
         });
         highlightRow(sectionID, rowID);
-      }}
+      },200)}
     />
   )
 

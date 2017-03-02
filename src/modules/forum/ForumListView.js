@@ -7,18 +7,19 @@ import { List } from 'immutable';
 import ImmutableListView from 'react-native-immutable-list-view';
 import { palette } from '../../styles/config';
 import Row from './ForumRow';
+import debounce from '../../utils/debounce';
 
 class ForumListView extends Component {
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
-      onPress={() => {
+      onPress={debounce(() => {
         this.props.navigation.navigate('Threads', {
           fid: rowData.get('fid'),
           title: rowData.get('name'),
         });
         highlightRow(sectionID, rowID);
-      }}
+      },200)}
       isSubscribed={rowData.get('isSubscribed')}
       onSubscribePress={() => {
         const fid = rowData.get('fid');
