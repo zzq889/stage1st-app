@@ -14,6 +14,10 @@ import Avatar from '../../components/Avatar';
 import { palette } from '../../styles/config';
 
 class PostRow extends Component {
+  state = {
+    showsUserDetail: false,
+  }
+
   componentWillUnmount() {
     timer.clearTimeout(this);
   }
@@ -21,15 +25,13 @@ class PostRow extends Component {
   debounce(fnc, delay) {
     let timeout = null;
     return (...args) => {
-      if(timeout){
+      if (timeout) {
         timer.clearTimeout(this);
       }
-      timeout = timer.setTimeout(this, 'debounce', fnc, delay);
-    }
-  }
-
-  state = {
-    showsUserDetail: false,
+      timeout = timer.setTimeout(this, 'debounce', () => {
+        fnc.apply(this, args);
+      }, delay);
+    };
   }
 
   toggleUserDetail = () => {
@@ -77,7 +79,7 @@ class PostRow extends Component {
         <View style={styles.actions}>
           <TouchableOpacity
             hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
-            onPress={this.debounce(onReplyPress,200)}
+            onPress={this.debounce(onReplyPress, 200)}
           >
             <View style={styles.iconView}>
               <Icon name="reply" size={16} color={palette.secondary} />

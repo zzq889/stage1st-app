@@ -7,8 +7,8 @@ import {
 } from 'react-native';
 import { palette } from '../styles/config';
 
-class TouchableCell extends React.Component{
-  constructor(){
+class TouchableCell extends React.Component {
+  constructor() {
     super();
     this.debounce.bind(this);
   }
@@ -20,27 +20,28 @@ class TouchableCell extends React.Component{
   debounce(fnc, delay) {
     let timeout = null;
     return (...args) => {
-      if(timeout){
+      if (timeout) {
         timer.clearTimeout(this);
       }
-      timeout = timer.setTimeout(this, 'debounce', fnc, delay);
-    }
+      timeout = timer.setTimeout(this, 'debounce', () => {
+        fnc.apply(this, args);
+      }, delay);
+    };
   }
 
   render() {
     const { style, backgroundColor, children, onPress, ...props } = this.props;
-    return(
+    return (
       <View style={styles.container}>
         <TouchableOpacity
           style={[styles.row, backgroundColor && { backgroundColor }, style]}
           delayPressIn={30}
-          onPress = {this.debounce(onPress, 230)}
+          onPress={this.debounce(onPress, 230)}
           {...props}
         >
           {children}
         </TouchableOpacity>
       </View>
-
     );
   }
 }
@@ -49,6 +50,7 @@ TouchableCell.propTypes = {
   style: PropTypes.number,
   children: PropTypes.node,
   backgroundColor: PropTypes.string,
+  onPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({

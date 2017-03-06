@@ -6,12 +6,12 @@ import {
 } from 'react-native';
 import timer from 'react-native-timer';
 
-class ToolbarItem extends React.Component{
-  constructor(){
+class ToolbarItem extends React.Component {
+  constructor() {
     super();
     this.debounce.bind(this);
   }
-  
+
   componentWillUnmount() {
     timer.clearTimeout(this);
   }
@@ -19,27 +19,29 @@ class ToolbarItem extends React.Component{
   debounce(fnc, delay) {
     let timeout = null;
     return (...args) => {
-      if(timeout){
+      if (timeout) {
         timer.clearTimeout(this);
       }
-      timeout = timer.setTimeout(this, 'debounce', fnc, delay);
-    }
+      timeout = timer.setTimeout(this, 'debounce', () => {
+        fnc.apply(this, args);
+      }, delay);
+    };
   }
 
-  render(){
+  render() {
     const { style, stretch, children, onPress, ...props } = this.props;
-    return(
+    return (
       <TouchableOpacity
         hitSlop={{ left: 10, right: 10, top: 0, bottom: 0 }}
         style={stretch ? [styles.container, styles.stretch] : styles.container}
-        onPress={this.debounce(onPress,200)}
+        onPress={this.debounce(onPress, 200)}
         {...props}
       >
         <View style={[styles.tabItem, style]}>
           {children}
         </View>
       </TouchableOpacity>
-    )
+    );
   }
 }
 
@@ -47,6 +49,7 @@ ToolbarItem.propTypes = {
   style: PropTypes.number,
   children: PropTypes.node,
   stretch: PropTypes.bool,
+  onPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
