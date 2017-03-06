@@ -4,23 +4,52 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import timer from 'react-native-timer';
 
-const ToolbarItem = ({ style, stretch, children, ...props }) => (
-  <TouchableOpacity
-    hitSlop={{ left: 10, right: 10, top: 0, bottom: 0 }}
-    style={stretch ? [styles.container, styles.stretch] : styles.container}
-    {...props}
-  >
-    <View style={[styles.tabItem, style]}>
-      {children}
-    </View>
-  </TouchableOpacity>
-);
+class ToolbarItem extends React.Component {
+  constructor() {
+    super();
+    this.debounce.bind(this);
+  }
+
+  componentWillUnmount() {
+    timer.clearTimeout(this);
+  }
+
+  debounce(fnc, delay) {
+    let timeout = null;
+    return (...args) => {
+      if (timeout) {
+        timer.clearTimeout(this);
+      }
+      timeout = timer.setTimeout(this, 'debounce', () => {
+        fnc.apply(this, args);
+      }, delay);
+    };
+  }
+
+  render() {
+    const { style, stretch, children, onPress, ...props } = this.props;
+    return (
+      <TouchableOpacity
+        hitSlop={{ left: 10, right: 10, top: 0, bottom: 0 }}
+        style={stretch ? [styles.container, styles.stretch] : styles.container}
+        onPress={this.debounce(onPress, 200)}
+        {...props}
+      >
+        <View style={[styles.tabItem, style]}>
+          {children}
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
 
 ToolbarItem.propTypes = {
   style: PropTypes.number,
   children: PropTypes.node,
   stretch: PropTypes.bool,
+  onPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
