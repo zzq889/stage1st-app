@@ -7,12 +7,27 @@ import {
 } from 'react-native';
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/Entypo';
+import timer from 'react-native-timer';
 import HtmlView from '../../components/HtmlView';
 // import Image from '../../components/Image';
 import Avatar from '../../components/Avatar';
 import { palette } from '../../styles/config';
 
 class PostRow extends Component {
+  componentWillUnmount() {
+    timer.clearTimeout(this);
+  }
+
+  debounce(fnc, delay) {
+    let timeout = null;
+    return (...args) => {
+      if(timeout){
+        timer.clearTimeout(this, timeout);
+      }
+      timeout = timer.setTimeout(this, 'debounce', fnc, delay);
+    }
+  }
+
   state = {
     showsUserDetail: false,
   }
@@ -62,7 +77,7 @@ class PostRow extends Component {
         <View style={styles.actions}>
           <TouchableOpacity
             hitSlop={{ left: 15, right: 15, top: 15, bottom: 15 }}
-            onPress={onReplyPress}
+            onPress={this.debounce(onReplyPress,200)}
           >
             <View style={styles.iconView}>
               <Icon name="reply" size={16} color={palette.secondary} />
