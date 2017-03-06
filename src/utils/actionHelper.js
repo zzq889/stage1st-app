@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import { put, call } from 'redux-saga/effects';
+import { put, select, call } from 'redux-saga/effects';
 import { NavigationActions } from 'react-navigation';
 
 const REQUEST = 'REQUEST';
@@ -17,6 +17,11 @@ export function createRequestTypes(base) {
 export function createAction(type, payload = {}) {
   return { type, ...payload };
 }
+
+const getRouteName = (state) => {
+  const nav = state.get('nav');
+  return nav.routes[nav.index].routeName;
+};
 
 // resuable fetch Subroutine
 // entity :  user | repo | starred | stargazers
@@ -35,9 +40,12 @@ export function* fetchEntity(entity, apiFn, args, success) {
     const message = error.message || 'Something bad happened';
     // console.warn(message);
     yield put(entity.failure(args, message));
+    // show login modal if invalid accessToken
     if (error.json && error.json.code === 501) {
-      // re-auth
-      yield put(NavigationActions.navigate({ routeName: 'Login' }));
+      const routeName = yield select(getRouteName);
+      if (routeName !== 'Login') {
+        yield put(NavigationActions.navigate({ routeName: 'Login' }));
+      }
     }
   }
 }
