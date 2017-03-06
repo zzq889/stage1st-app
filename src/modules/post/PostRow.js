@@ -22,7 +22,7 @@ class PostRow extends Component {
     let timeout = null;
     return (...args) => {
       if(timeout){
-        timer.clearTimeout(this, timeout);
+        timer.clearTimeout(this);
       }
       timeout = timer.setTimeout(this, 'debounce', fnc, delay);
     }
