@@ -15,7 +15,7 @@ import TextField from '../../components/TextField';
 import PreImage from '../../../images/pre.png';
 import CircleView from '../../components/CircleView';
 import DismissButton from '../../components/DismissButton';
-import { authEmitter } from './AuthState';
+import { authEmitter, readPassword } from './AuthState';
 import QuestionPicker from './QuestionPicker';
 
 const questions = fromJS([
@@ -38,6 +38,7 @@ class LoginView extends Component {
   }
 
   componentWillMount() {
+    this._loadCredential();
     this.props.resetAuth('isSubmitting', false);
     this._subscription = authEmitter.once('LOGIN.SUCCESS', this.dismiss);
   }
@@ -45,6 +46,14 @@ class LoginView extends Component {
   componentWillUnmount() {
     this.props.reset();
     this._subscription.remove();
+  }
+
+  async _loadCredential() {
+    const credentials = await readPassword();
+    if (credentials) {
+      this.props.onChange('username', credentials.username);
+      this.props.onChange('password', credentials.password);
+    }
   }
 
   dismiss = () => {

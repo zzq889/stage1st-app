@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { put, call } from 'redux-saga/effects';
+import { NavigationActions } from 'react-navigation';
 
 const REQUEST = 'REQUEST';
 const SUCCESS = 'SUCCESS';
@@ -34,5 +35,9 @@ export function* fetchEntity(entity, apiFn, args, success) {
     const message = error.message || 'Something bad happened';
     // console.warn(message);
     yield put(entity.failure(args, message));
+    if (error.json && error.json.code === 501) {
+      // re-auth
+      yield put(NavigationActions.navigate({ routeName: 'Login' }));
+    }
   }
 }
