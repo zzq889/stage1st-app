@@ -16,7 +16,6 @@ import { palette } from '../../styles/config';
 import Row from './PostRow';
 import PostToolbar from './PostToolbar';
 import { postEmitter } from './PostState';
-import debounce from '../../utils/debounce';
 
 class PostListView extends Component {
   componentWillMount() {
@@ -56,7 +55,7 @@ class PostListView extends Component {
       timestamp={rowData.get('dateline')}
       grouptitle={rowData.get('grouptitle')}
       e={rowData.get('e')}
-      onReplyPress={debounce(() => this.showReply(rowData.get('pid')),200)}
+      onReplyPress={() => this.showReply(rowData.get('pid'))}
       isHighlighted={rowData.get('position') === this.props.highlightPosition}
     />
   );
@@ -117,7 +116,7 @@ class PostListView extends Component {
           pageNo={pageNo}
           totalPage={totalPage}
           jumpToPage={jumpToPage}
-          onReplyPress={debounce(() => this.showReply(),200)}
+          onReplyPress={() => this.showReply()}
         />
       </View>
     );
