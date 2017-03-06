@@ -4,7 +4,6 @@
 	"recommendations": [
 		// Extension identifier format: ${publisher}.${name}. Example: vscode.csharp
 		"vsmobile.vscode-react-native",
-		"dbaeumer.vscode-eslint",
-		"joelday.docthis"
+		"dbaeumer.vscode-eslint"
 	]
 }
