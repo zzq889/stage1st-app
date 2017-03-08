@@ -82,7 +82,7 @@ class ThreadListView extends Component {
         // InfiniteScrollView props
         renderScrollComponent={props => <InfiniteScrollView {...props} />}
         canLoadMore={!loading && !!nextPage}
-        distanceToLoadMore={0}
+        distanceToLoadMore={30}
         onLoadMoreAsync={this._loadMoreContentAsync}
       />
     );
