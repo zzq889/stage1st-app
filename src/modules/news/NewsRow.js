@@ -1,23 +1,24 @@
 import React, { PropTypes } from 'react';
+import moment from 'moment';
 import {
   Text,
   StyleSheet,
+  View,
+  Image,
 } from 'react-native';
 import HtmlView from '../../components/HtmlView';
 import { palette } from '../../styles/config';
 import TouchableCell from '../../components/TouchableCell';
 
-const NewsRow = ({ id, title, excerpt, onPress }) => (
-  <TouchableCell
-    onPress={onPress}
-    style={styles.row}
-    {...this.props}
-  >
-    <Text style={styles.text}>{__DEV__ ? `[${id}] ${title}` : title}</Text>
-    <HtmlView
-      stylesheet={htmlStyles}
-      value={excerpt}
-    />
+const NewsRow = ({ id, title, excerpt, onPress, imageURL, timestamp }) => (
+  <TouchableCell onPress={onPress} style={styles.coloums} {...this.props}>
+    <Image style={styles.thumbnail} source={imageURL ? { uri: imageURL } : require('../../../images/pepperoni.png')} />
+    <View style={styles.row}>
+      <Text style={styles.title}>
+        {__DEV__ ? `[${id}] ${title}` : title}
+      </Text>
+      <HtmlView stylesheet={htmlStyles} value={moment(timestamp).format('MM-DD-YYYY, hh:mm:ss')} />
+    </View>
   </TouchableCell>
 );
 
@@ -26,6 +27,8 @@ NewsRow.propTypes = {
   title: PropTypes.string.isRequired,
   excerpt: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
+  imageURL: PropTypes.string.isRequired,
+  timestamp: PropTypes.string.isRequired,
 };
 
 NewsRow.defaultProps = {
@@ -34,20 +37,35 @@ NewsRow.defaultProps = {
 
 const htmlStyles = StyleSheet.create({
   text: {
+    flex: 1,
     fontSize: 15,
     color: palette.deepMint,
   },
 });
 
 const styles = StyleSheet.create({
-  row: {
+  coloums: {
+    paddingLeft: 10,
     flex: 1,
-    padding: 15,
+    flexDirection: 'row',
   },
-  text: {
-    fontSize: 17,
+  row: {
+    flex: 2,
+    padding: 10,
+  },
+  title: {
+    flex: 2,
+    fontSize: 18,
     color: palette.foreground,
     marginBottom: 5,
+  },
+
+  thumbnail: {
+    flex: 1,
+    margin: 10,
+    width: null,
+    height: 80,
+    resizeMode: 'contain',
   },
 });
 
