@@ -6,6 +6,7 @@ import {
   InteractionManager,
 } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
+import ScrollTabBar from '../../components/ScrollTabBar';
 import ForumListViewContainer from './ForumListViewContainer';
 import { palette } from '../../styles/config';
 
@@ -45,6 +46,7 @@ export default class ForumTabView extends Component {
     return (
       <ScrollableTabView
         style={styles.container}
+        renderTabBar={props => <ScrollTabBar {...props} />}
         tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
         tabBarTextStyle={{ fontSize: 15 }}
         tabBarActiveTextColor={palette.primary}
