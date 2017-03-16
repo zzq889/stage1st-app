@@ -57,14 +57,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 10,
     marginBottom: 10,
-    borderRadius: 3,
+    marginLeft: 5,
+    // borderRadius: 0,
   },
   thumbnail: {
-    width: 120,
-    height: 80,
+    width: 110,
+    height: 75,
   },
   row: {
-    flex: 10,
+    flex: 8,
     padding: 10,
   },
   title: {

@@ -33,7 +33,7 @@ class NewsListView extends Component {
       title={rowData.getIn(['title', 'rendered'])}
       excerpt={rowData.getIn(['excerpt', 'rendered'])}
       timestamp={rowData.get('date')}
-      imageURL={(rowData.getIn(['betterFeaturedImage', 'mediaDetails', 'sizes', 'thumbnail', 'sourceUrl']))}
+      imageURL={(rowData.getIn(['betterFeaturedImage', 'mediaDetails', 'sizes', 'postThumbnail', 'sourceUrl']))}
       onPress={() => {
         this.props.navigation.navigate('Article', {
           id: rowData.get('id'),
