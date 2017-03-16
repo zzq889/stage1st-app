@@ -12,9 +12,11 @@ import TouchableCell from '../../components/TouchableCell';
 
 const NewsRow = ({ id, title, excerpt, onPress, imageURL, timestamp }) => (
   <TouchableCell onPress={onPress} style={styles.coloums} {...this.props}>
-    <Image style={styles.thumbnail} source={imageURL ? { uri: imageURL } : require('../../../images/pepperoni.png')} />
+    <View style={styles.imageWrapper}>
+      <Image style={styles.thumbnail} source={imageURL ? { uri: imageURL } : require('../../../images/pepperoni.png')} />
+    </View>
     <View style={styles.row}>
-      <Text style={styles.title}>
+      <Text style={styles.title} numberOfLines={2}>
         {__DEV__ ? `[${id}] ${title}` : title}
       </Text>
       <HtmlView stylesheet={htmlStyles} value={moment(timestamp).format('MM-DD-YYYY, hh:mm:ss')} />
@@ -38,19 +40,31 @@ NewsRow.defaultProps = {
 const htmlStyles = StyleSheet.create({
   text: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 12,
     color: palette.deepMint,
+    alignSelf: 'flex-end',
   },
 });
 
 const styles = StyleSheet.create({
   coloums: {
-    paddingLeft: 10,
     flex: 1,
+    paddingLeft: 5,
     flexDirection: 'row',
   },
+  imageWrapper: {
+    flex: 4,
+    overflow: 'hidden',
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 3,
+  },
+  thumbnail: {
+    width: 120,
+    height: 80,
+  },
   row: {
-    flex: 2,
+    flex: 10,
     padding: 10,
   },
   title: {
@@ -58,14 +72,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: palette.foreground,
     marginBottom: 5,
-  },
-
-  thumbnail: {
-    flex: 1,
-    margin: 10,
-    width: null,
-    height: 80,
-    resizeMode: 'contain',
   },
 });
 
