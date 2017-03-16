@@ -25,6 +25,10 @@ export const channelSchema = new schema.Entity('channels', {}, {
 
 export const forumSchema = new schema.Entity('forums', {}, {
   idAttribute: 'fid',
+  processStrategy: (entity) => {
+    entity.name = replaceHtmlEntites(entity.name);
+    return entity;
+  },
 });
 
 export const typeSchema = new schema.Entity('types', {}, {
