@@ -6,10 +6,19 @@ import {
 } from 'react-native';
 import Moment from 'moment';
 import Icon from 'react-native-vector-icons/SimpleLineIcons';
+import PinIcon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../../styles/config';
 import TouchableCell from '../../components/TouchableCell';
 
+const iconMap = {
+  hot: 'ios-bonfire',
+  pinned: 'ios-star',
+  closed: 'ios-closed',
+  digest: 'ios-color-wand',
+};
+
 const ThreadRow = ({
+  statusicon,
   status,
   subject,
   showForumName,
@@ -25,6 +34,7 @@ const ThreadRow = ({
     onPress={onPress}
   >
     <Text style={[styles.title, styles[status]]}>
+      {iconMap[statusicon] ? <PinIcon name={iconMap[statusicon]} size={15} /> : null}
       {subject}
       {showForumName
         ? <Text style={styles.subtitle}>&nbsp;[{forumName}]</Text>
@@ -48,6 +58,7 @@ const ThreadRow = ({
 );
 
 ThreadRow.propTypes = {
+  statusicon: PropTypes.string.isRequired,
   subject: PropTypes.string.isRequired,
   status: PropTypes.string,
   showForumName: PropTypes.bool,

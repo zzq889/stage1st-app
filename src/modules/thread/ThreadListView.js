@@ -53,6 +53,7 @@ class ThreadListView extends Component {
       status={rowData.get('statusicon')}
       replies={rowData.get('replies')}
       views={rowData.get('views')}
+      statusicon={rowData.get('statusicon')}
       onPress={() => {
         this.props.navigation.navigate('Posts', {
           tid: rowData.get('tid'),
