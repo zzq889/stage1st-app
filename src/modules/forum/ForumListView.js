@@ -12,6 +12,7 @@ class ForumListView extends Component {
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
       name={rowData.get('name')}
+      todaypostsNum={rowData.get('todayposts')}
       onPress={() => {
         this.props.navigation.navigate('Threads', {
           fid: rowData.get('fid'),

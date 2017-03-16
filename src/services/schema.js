@@ -64,4 +64,4 @@ forumSchema.define({
 export const forumSchemaArray = new schema.Array({
   channel: channelSchema,
   forum: forumSchema,
-}, input => (input.child ? 'channel' : 'forum'));
+}, input => (input.child.length > 0 ? 'channel' : 'forum'));
