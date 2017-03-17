@@ -33,7 +33,7 @@ class ThreadListView extends Component {
 
   handleScroll = (event) => {
     // TODO: event.nativeEvent.contentOffset.y
-    console.log(event.nativeEvent.contentOffset.y);
+    // console.log(event.nativeEvent.contentOffset.y);
   }
 
   renderFooter = () => (
