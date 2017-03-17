@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import {
   StyleSheet,
   InteractionManager,
+  Platform,
 } from 'react-native';
 import { List } from 'immutable';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -36,6 +37,8 @@ export default class ThreadsTabView extends PureComponent {
   render() {
     return (
       <ScrollableTabView
+        locked={Platform.OS === 'android'}
+        prerenderingSiblingsNumber={2}
         style={styles.container}
         renderTabBar={props => <ScrollTabBar {...props} />}
         tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}

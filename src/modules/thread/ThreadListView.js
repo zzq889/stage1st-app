@@ -74,6 +74,7 @@ class ThreadListView extends Component {
           <RefreshControl
             refreshing={loadType === 'refresh' && loading}
             onRefresh={() => this.props.loadThreadPage('refresh')}
+            title={'...努力加载中...'}
           />
         }
         renderRow={this.renderRow}
