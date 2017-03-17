@@ -50,7 +50,8 @@ export const gestureResponseDistance = 50;
 
 export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 
-export const header = {
+export const header = (navigation, defaultHeader) => ({
+  ...defaultHeader,
   style: {
     backgroundColor: palette.black,
   },
@@ -59,7 +60,7 @@ export const header = {
   titleStyle: {
     textAlign: 'center',
   },
-};
+});
 
 export const defaultAlertStyle = {
   text: { color: palette.foreground },
