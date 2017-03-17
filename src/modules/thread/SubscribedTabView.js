@@ -14,9 +14,7 @@ export default class SubscribedTabView extends PureComponent {
   static navigationOptions = {
     header: (navigation, defaultHeader) => ({
       ...defaultHeader,
-      right: (
-        <ThreadComposeButton />
-      ),
+      right: <ThreadComposeButton />,
     }),
   }
 
