@@ -19,6 +19,7 @@ const baseColors = {
   mint2: '#E6EAD9',
   mint3: '#CFD9BF',
   deepMint: '#A3A78E',
+  lightMint: '#b1c641',
 };
 
 export const palette = {
@@ -53,7 +54,7 @@ export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 export const header = (navigation, defaultHeader) => ({
   ...defaultHeader,
   style: {
-    backgroundColor: palette.black,
+    backgroundColor: palette.lightMint,
   },
   tintColor: palette.inverted,
   visible: true,

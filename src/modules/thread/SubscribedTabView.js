@@ -39,6 +39,7 @@ export default class SubscribedTabView extends PureComponent {
     return (
       <ScrollableTabView
         style={styles.container}
+        prerenderingSiblingsNumber={2}
         renderTabBar={props => <ScrollTabBar {...props} />}
         tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
         tabBarTextStyle={{ fontSize: 15 }}
