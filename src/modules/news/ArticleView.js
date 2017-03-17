@@ -38,6 +38,7 @@ export default class ArticleView extends PureComponent {
           <Text style={styles.detail}>{Moment(date).format('ll LT')}</Text>
           <HtmlView
             value={content}
+            isContent
           />
         </View>
         <View style={styles.commentContainer}>
