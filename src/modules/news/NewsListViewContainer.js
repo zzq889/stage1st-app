@@ -5,7 +5,10 @@ import { loadNewsPage } from './NewsState';
 
 export default connect(
   state => ({
-    news: state.getIn(['entities', 'articles'], List()).toList(),
+    news: state
+    .getIn(['entities', 'articles'], List())
+    .sortBy(news => news.get('date'))
+    .reverse(),
   }),
   { loadNewsPage },
 )(NewsListView);
