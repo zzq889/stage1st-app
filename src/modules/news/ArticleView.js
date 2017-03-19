@@ -38,12 +38,12 @@ export default class ArticleView extends PureComponent {
           <Text style={styles.detail}>{Moment(date).format('ll LT')}</Text>
           <HtmlView
             value={content}
+            isContent
           />
         </View>
         <View style={styles.commentContainer}>
           <View style={styles.commentHeader}>
             <Button
-              style={styles.composeButton}
               title={'写留言'}
               color={palette.primary}
               onPress={() => {
@@ -53,16 +53,17 @@ export default class ArticleView extends PureComponent {
           </View>
           {comments.map(comment => (
             <View key={comment.get('id')} style={styles.commentRow}>
-              <Avatar style={styles.avatar} uid={'0'} />
               <View style={styles.commentContent}>
-                <Text style={styles.author}>{comment.get('authorName')}</Text>
                 <HtmlView
                   stylesheet={{ text: { color: palette.black, fontSize: 16 } }}
                   value={comment.getIn(['content', 'rendered'])}
                 />
-                <Text style={styles.timestamp}>
-                  {Moment().from(Moment(comment.get('date')))}
-                </Text>
+                <View style={styles.commentMeta}>
+                  <Text style={styles.timestamp}>
+                    {Moment().from(Moment(comment.get('date')))}
+                  </Text>
+                  <Text style={styles.author}>{comment.get('authorName')}</Text>
+                </View>
               </View>
             </View>
           ))}
@@ -124,16 +125,30 @@ const styles = StyleSheet.create({
   commentHeader: {
     padding: 15,
   },
+  commentContent: {
+    flex: 1,
+    borderBottomColor: palette.deepMint,
+    borderBottomWidth: 0,
+    borderBottomLeftRadius: 3,
+    borderBottomRightRadius: 3,
+  },
   commentRow: {
     marginBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
     flexDirection: 'row',
+  },
+  commentMeta: {
+    flexDirection: 'row-reverse',
+    marginTop: 5,
+    marginBottom: 10,
   },
   avatar: {
     marginRight: 10,
   },
   author: {
-    fontSize: 16,
-    color: palette.transGrey,
+    marginRight: 5,
+    color: palette.primary,
   },
   timestamp: {
     color: palette.deepMint,

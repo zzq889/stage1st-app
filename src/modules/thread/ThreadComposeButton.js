@@ -23,7 +23,7 @@ export default class ThreadComposeButton extends PureComponent {
   showActionSheet = () => {
     const options = [
       ...this.props.forums.map(forum => forum.get('name')),
-      '取消',
+      this.props.forums.size > 0 ? '取消' : '去订阅，再来发帖',
     ];
 
     const cancelButtonIndex = this.props.forums.size;
@@ -46,9 +46,10 @@ export default class ThreadComposeButton extends PureComponent {
   }
 
   render() {
-    return (
-      <ComposeButton onPress={this.showActionSheet} />
-    );
+    if (this.props.forums.size > 0) {
+      return <ComposeButton onPress={this.showActionSheet} />;
+    }
+    return null;
   }
 }
 

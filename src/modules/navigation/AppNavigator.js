@@ -230,7 +230,7 @@ export const MasterNavigator = StackNavigator({
     screen: PostListViewContainer,
     path: '/posts/:tid',
     navigationOptions: {
-      title: 'Posts',
+      title: ({ state }) => state.params.title,
       header,
     },
   },

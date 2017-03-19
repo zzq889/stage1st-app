@@ -2,7 +2,7 @@ import { Map } from 'immutable';
 
 const DEBUG = true;
 const DEV_ROOT = 's165.asuscomm.com:20080';
-const PROD_ROOT = 'app.saraba1st.com';
+const PROD_ROOT = 's165.asuscomm.com:20080'; // app.saraba1st.com
 
 const URL_ROOT = (__DEV__ && DEBUG) ? DEV_ROOT : PROD_ROOT;
 

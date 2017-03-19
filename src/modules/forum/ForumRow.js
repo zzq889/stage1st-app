@@ -9,13 +9,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { palette } from '../../styles/config';
 import TouchableCell from '../../components/TouchableCell';
 
-const ForumRow = ({ name, isSubscribed, onPress, onSubscribePress }) => (
+const ForumRow = ({ name, todaypostsNum, isSubscribed, onPress, onSubscribePress }) => (
   <TouchableCell
     onPress={onPress}
     style={styles.row}
     {...this.props}
   >
-    <Text style={styles.title}>{name}</Text>
+    <View>
+      <Text style={styles.title}>{name}</Text>
+      <Text style={styles.subtitle}>今日发表: {todaypostsNum}</Text>
+    </View>
     <TouchableOpacity
       style={styles.iconContainer}
       onPress={onSubscribePress}
@@ -30,6 +33,7 @@ const ForumRow = ({ name, isSubscribed, onPress, onSubscribePress }) => (
 
 ForumRow.propTypes = {
   name: PropTypes.string.isRequired,
+  todaypostsNum: PropTypes.string.isRequired,
   isSubscribed: PropTypes.bool,
   onPress: PropTypes.func.isRequired,
   onSubscribePress: PropTypes.func,
@@ -57,6 +61,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 17,
     color: palette.foreground,
+  },
+
+  subtitle: {
+    marginTop: 5,
+    fontSize: 12,
+    color: palette.underlayColor,
   },
 });
 

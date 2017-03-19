@@ -19,6 +19,7 @@ const baseColors = {
   mint2: '#E6EAD9',
   mint3: '#CFD9BF',
   deepMint: '#A3A78E',
+  lightMint: '#b1c641',
 };
 
 export const palette = {
@@ -39,6 +40,7 @@ export const palette = {
   toolbar: baseColors.mint3,
   tabbar: baseColors.mint2,
   separator: baseColors.mint3,
+  titleBarColor: baseColors.lightMint,
   // separator: '#8E8E8E',
 };
 
@@ -53,10 +55,13 @@ export const keyboardVerticalOffset = Platform.OS === 'ios' ? 64 : 80;
 export const header = (navigation, defaultHeader) => ({
   ...defaultHeader,
   style: {
-    backgroundColor: palette.black,
+    backgroundColor: palette.titleBarColor,
   },
   tintColor: palette.inverted,
   visible: true,
+  titleStyle: {
+    textAlign: 'center',
+  },
 });
 
 export const defaultAlertStyle = {

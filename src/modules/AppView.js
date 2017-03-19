@@ -28,7 +28,7 @@ const AppView = ({ isReady }) => {
         <AppWithNavigationState />
       </ActionSheetProvider>
       {Platform.OS === 'ios' && <StatusBar barStyle="light-content" animated />}
-      {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
+      {Platform.OS === 'android' && <StatusBar barStyle="light-content" backgroundColor={palette.titleBarColor} animated />}
       {__DEV__ && <DeveloperMenu />}
     </View>
   );

@@ -33,7 +33,7 @@ class ThreadListView extends Component {
 
   handleScroll = (event) => {
     // TODO: event.nativeEvent.contentOffset.y
-    console.log(event.nativeEvent.contentOffset.y);
+    // console.log(event.nativeEvent.contentOffset.y);
   }
 
   renderFooter = () => (
@@ -53,6 +53,7 @@ class ThreadListView extends Component {
       status={rowData.get('statusicon')}
       replies={rowData.get('replies')}
       views={rowData.get('views')}
+      statusicon={rowData.get('statusicon')}
       onPress={() => {
         this.props.navigation.navigate('Posts', {
           tid: rowData.get('tid'),
@@ -73,6 +74,7 @@ class ThreadListView extends Component {
           <RefreshControl
             refreshing={loadType === 'refresh' && loading}
             onRefresh={() => this.props.loadThreadPage('refresh')}
+            title={'...努力加载中...'}
           />
         }
         renderRow={this.renderRow}

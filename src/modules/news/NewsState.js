@@ -72,13 +72,16 @@ const getArticles = state => state.getIn(['entities', 'articles']);
 // const getComments = (state, postId) => state.getIn(['pagination', 'commentsByKey', postId]);
 
 function* loadArticles({ loadType }) {
-  const articles = yield select(getArticles);
-  if (!articles || !articles.size) {
-    yield call(fetchArticles, { loadType });
-  } else if (loadType === 'refresh') {
-    const after = articles.sortBy(article => article.get('date')).first().get('date');
-    yield call(fetchArticles, { loadType, after, refresh: true });
-  } else if (loadType === 'loadmore') {
+  const articles = yield select(getArticles); // Get articles in global state
+  if (!articles || !articles.size) { // if no articles are preloaded in state
+    const page = 1;
+    const perPage = 100;
+    yield call(fetchArticles, { loadType, page, perPage });
+  } else if (loadType === 'refresh') { // if is refresh action
+    const page = 1;
+    const perPage = 100;
+    yield call(fetchArticles, { loadType, page, perPage });
+  } else if (loadType === 'loadmore') { // currently not used
     const before = articles.sortBy(article => article.get('date')).last().get('date');
     yield call(fetchArticles, { before });
   }

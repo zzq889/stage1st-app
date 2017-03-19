@@ -80,5 +80,5 @@ export function post(endpoint, body, ...args) {
 /** ****************************************************************************/
 
 // articles
-export const fetchArticles = ({ before, after }) =>
-  get('posts', { before, after }, [SCHEMA.articleSchema]);
+// export const fetchArticles = ({ before, after }) =>
+//   get('posts', { before, after }, [SCHEMA.articleSchema]);

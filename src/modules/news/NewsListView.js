@@ -25,7 +25,7 @@ class NewsListView extends Component {
     // manually.
     // This function does not have a return value.
     this.props.loadNewsPage('loadmore');
-  }
+  };
 
   renderRow = (rowData, sectionID, rowID, highlightRow) => (
     <Row
@@ -33,6 +33,7 @@ class NewsListView extends Component {
       title={rowData.getIn(['title', 'rendered'])}
       excerpt={rowData.getIn(['excerpt', 'rendered'])}
       timestamp={rowData.get('date')}
+      imageURL={(rowData.getIn(['betterFeaturedImage', 'mediaDetails', 'sizes', 'postThumbnail', 'sourceUrl']))}
       onPress={() => {
         this.props.navigation.navigate('Article', {
           id: rowData.get('id'),
@@ -41,7 +42,7 @@ class NewsListView extends Component {
         highlightRow(sectionID, rowID);
       }}
     />
-  )
+  );
 
   render() {
     const { news, loading, loadType, nextPage } = this.props;

@@ -1,5 +1,5 @@
 import React, { PropTypes, PureComponent } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { Set } from 'immutable';
 import { EventEmitter } from 'fbemitter';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
@@ -14,9 +14,7 @@ export default class SubscribedTabView extends PureComponent {
   static navigationOptions = {
     header: (navigation, defaultHeader) => ({
       ...defaultHeader,
-      right: (
-        <ThreadComposeButton />
-      ),
+      right: <ThreadComposeButton />,
     }),
   }
 
@@ -41,6 +39,8 @@ export default class SubscribedTabView extends PureComponent {
     return (
       <ScrollableTabView
         style={styles.container}
+        prerenderingSiblingsNumber={2}
+        locked={Platform.OS === 'android'}
         renderTabBar={props => <ScrollTabBar {...props} />}
         tabBarUnderlineStyle={{ height: 2, backgroundColor: palette.primary }}
         tabBarTextStyle={{ fontSize: 15 }}

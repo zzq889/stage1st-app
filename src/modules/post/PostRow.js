@@ -74,6 +74,7 @@ class PostRow extends Component {
           <HtmlView
             style={styles.content}
             value={message}
+            isContent
           />
         ) : null}
         <View style={styles.actions}>

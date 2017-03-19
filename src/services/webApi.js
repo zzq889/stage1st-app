@@ -200,9 +200,9 @@ export const fetchSmiles = () =>
   get('post/smiles', null, SCHEMA.smileySchema);
 
 // articles
-export const fetchArticles = ({ after, before }) => {
+export const fetchArticles = ({ page, perPage }) => {
   const wpRoot = getConfiguration('WP_ROOT');
-  return get(`${wpRoot}/wp/v2/posts`, { after, before }, SCHEMA.articleSchemaArray, d => d);
+  return get(`${wpRoot}/wp/v2/posts`, { page, per_page: perPage, order: 'desc' }, SCHEMA.articleSchemaArray, d => d);
 };
 
 export const fetchComments = ({ postId }) => {

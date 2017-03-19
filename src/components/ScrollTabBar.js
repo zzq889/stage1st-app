@@ -7,18 +7,32 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 
 class ScrollTabBar extends PureComponent {
+  componentWillReceiveProps(nextProps) {
+    const { width } = Dimensions.get('window');
+    if (nextProps.activeTab !== this.props.activeTab) {
+      const changedAxis = (nextProps.activeTab - 1) * (this.scrollViewLength / nextProps.tabs.length) - (width / 3);
+      this.scrollView.scrollTo({ x: changedAxis <= 0 ? 0 : changedAxis });
+    }
+  }
+
   renderTab = (name, page, isTabActive, onPressHandler) => {
     const { activeTextColor, inactiveTextColor, textStyle } = this.props;
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? 'bold' : 'normal';
-
+    const { width } = Dimensions.get('window');
     return (
       <TouchableOpacity
         key={page}
-        onPress={() => onPressHandler(page)}
+        onPress={() => {
+          const changedAxis = (page - 1) * (this.scrollViewLength / this.props.tabs.length) - (width / 3);
+
+          this.scrollView.scrollTo({ x: changedAxis <= 0 ? 0 : changedAxis });
+          onPressHandler(page);
+        }}
       >
         <View style={[isTabActive ? styles.activeTab : styles.tab, this.props.tabStyle]}>
           <Text style={[{ color: textColor, fontWeight }, textStyle]}>
@@ -27,7 +41,7 @@ class ScrollTabBar extends PureComponent {
         </View>
       </TouchableOpacity>
     );
-  }
+  };
 
   render() {
     return (
@@ -35,6 +49,9 @@ class ScrollTabBar extends PureComponent {
         <ScrollView
           ref={(c) => { this.scrollView = c; }}
           horizontal
+          onContentSizeChange={(contentWidth, contentHeight) => {
+            this.scrollViewLength = contentWidth;
+          }}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.content}
         >
