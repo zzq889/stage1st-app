@@ -46,9 +46,10 @@ export default class ThreadComposeButton extends PureComponent {
   }
 
   render() {
-    return (
-      <ComposeButton onPress={this.showActionSheet} />
-    );
+    if (this.props.forums.size > 0) {
+      return <ComposeButton onPress={this.showActionSheet} />;
+    }
+    return null;
   }
 }
 

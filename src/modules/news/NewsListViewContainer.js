@@ -8,7 +8,8 @@ export default connect(
     news: state
     .getIn(['entities', 'articles'], List())
     .sortBy(news => news.get('date'))
-    .reverse(),
+    .reverse()
+    .toList(),
   }),
   { loadNewsPage },
 )(NewsListView);
