@@ -20,6 +20,7 @@ import { palette } from '../styles/config';
 const boldStyle = { fontWeight: '500' };
 const italicStyle = { fontStyle: 'italic' };
 const codeStyle = { fontFamily: 'Menlo' };
+const htmlWidth = Dimensions.get('window').width * 0.92;
 
 const baseStyles = StyleSheet.create({
   b: boldStyle,
@@ -132,15 +133,14 @@ class HtmlView extends Component {
     const script = `
             <script>
         window.location.hash = 1;
-        // prevent double click in browser
         var oMeta = document.createElement('meta');
-        oMeta.name='viewport'
-        oMeta.content='user-scalable=0'
+        oMeta.name='viewport';
+        oMeta.content='user-scalable=0';
         document.getElementsByTagName('head')[0].appendChild(oMeta);
         var calculator = document.createElement("div");
         calculator.id = "height-calculator";
         calculator.setAttribute("style", "background-color: ${palette.background}"); 
-        document.body.setAttribute("style", "background-color: ${palette.background}");               
+        document.body.setAttribute("style", "background-color: ${palette.background}");
         while (document.body.firstChild) {
             calculator.appendChild(document.body.firstChild);      
         }
@@ -148,44 +148,41 @@ class HtmlView extends Component {
         var imgs = document.getElementsByTagName('img');
         var embeds = document.getElementsByTagName('embed');
         for (var j = 0; j < embeds.length; ++j) {
-          embeds[j].style.display = 'none'
+          embeds[j].style.display = 'none';
           }        
         for (var i = 0; i < imgs.length; ++i) {
           var img = imgs[i];
-          img.style.display = 'block'          
-          img.style.height = 'auto'
-          img.style.width = 'auto'
-          img.style.maxWidth = calculator.clientWidth          
-          if (img.width && Number(img.width > calculator.clientWidth)) {
-            img.width = calculator.clientWidth
-          }
+          img.style.display = 'block';
+          img.style.height = 'auto';
+          img.style.width = 'auto';
+          img.style.maxWidth = ("${htmlWidth}" + 'px');
           if (img.getAttribute('smilieid')) {
-            var uri = img.src;
-            // var assembledUri = '/' +uri;
-             var assembledUri = uri.match(new RegExp('/^\//')) ? "${staticRoot}" + uri : "${staticRoot}" + '/' + uri;
+            var uri = img.getAttribute('src');
+            img.id = 'smile' + i;
+            var assembledUri = uri.match(new RegExp('/^\//')) ? "${staticRoot}" + uri : "${staticRoot}" + '/' + uri;
             assembledUri = uri.match(new RegExp('/^http/')) ? uri : assembledUri;
             assembledUri = assembledUri.replace(new RegExp('//attachments/(?!forum)/'), '/attachments/forum/');
-            img.style.marginBottom = 0
+            img.style.marginBottom = 0;
             img.setAttribute("src", assembledUri);        
           }
           if (img.srcset) {
             var images = img.srcset.split(',');
-            var usedImage = String(images[1]).split(' ').filter(function(n) {return Boolean(n)})
+            var usedImage = String(images[1]).split(' ').filter(function(n) {return Boolean(n)});
             var tmpImg = document.createElement("img");
-            var tmpDiv = document.createElement("div");  
-            tmpDiv.style.display = 'flex'    
-            tmpDiv.style.justifyContent = 'center'
-            tmpImg.src = usedImage[0]
-            tmpImg.style.marginBottom = '10px'              
-            tmpImg.style.display = 'block'          
-            tmpImg.style.objectFit = 'contain'
-            tmpImg.style.maxWidth = calculator.clientWidth - 10
-            tmpDiv.append(tmpImg)            
-            img.parentNode.append(tmpDiv)
-            img.style.display = 'none'
+            var tmpDiv = document.createElement("div");
+            tmpDiv.id= "tmp" + String(i);
+            tmpDiv.style.display = 'flex';
+            tmpDiv.style.justifyContent = 'center';
+            tmpImg.src = usedImage[0];
+            tmpImg.style.marginBottom = '10px';
+            tmpImg.style.display = 'block';
+            tmpImg.style.maxWidth = ("${htmlWidth}" + 'px');
+            tmpDiv.appendChild(tmpImg);
+            img.parentNode.appendChild(tmpDiv);
+            img.style.display = 'none';
           }
         }
-        var i =0
+        var i =0;
         function updateHeight() {
             document.title = calculator.clientHeight;
             window.location.hash = ++i;
@@ -195,29 +192,31 @@ class HtmlView extends Component {
             setTimeout(updateHeight, 1000);
         });
         window.addEventListener("resize", updateHeight);
-        window.onclick = function (e) {
-            e.preventDefault()    
+        window.addEventListener("click", function(e) {
+            e.preventDefault();
             if (e.target.localName == 'a') {
-                window.postMessage(e.target.href)
+               window.postMessage(e.target.href);
             }
-        }
+        });
         </script>
     `;
     const style = `
           <style>
       body, html, #height-calculator {
-          background-color: ${palette.background}
+          background-color: ${palette.background};
           margin: 0;
           padding: 0;
           outline: none;
+          overflow-x:hidden;
+          width:100%;
       }
       #height-calculator {
-          background-color: ${palette.background}
+          background-color: ${palette.background};
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
-          padding: 0;          
+          padding: 0;     
       }
       </style>
     `;
@@ -229,10 +228,11 @@ class HtmlView extends Component {
         style={{
           height: this.state.height,
           backgroundColor: palette.background,
-          width: Dimensions.get('window').width * 0.92,
+          width: htmlWidth,
         }}
         javaScriptEnabled
         domStorageEnabled
+        startInLoadingState
         automaticallyAdjustContentInsets={false}
         dataDetectorTypes={'none'}
         scrollEnabled={false}

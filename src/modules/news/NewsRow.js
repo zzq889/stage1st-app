@@ -29,7 +29,7 @@ NewsRow.propTypes = {
   title: PropTypes.string.isRequired,
   excerpt: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
-  imageURL: PropTypes.string.isRequired,
+  imageURL: PropTypes.string,
   timestamp: PropTypes.string.isRequired,
 };
 
